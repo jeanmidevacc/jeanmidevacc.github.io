@@ -196,7 +196,7 @@ img {
   cursor: pointer;
   font-family: $helveticaNeue;
   font-weight: 300;
-  font-size: 28px;
+  font-size: 30px;
   letter-spacing: 1px;
 }
 
@@ -212,7 +212,7 @@ img {
 
 nav {
   float: right;
-  margin-top: 23px; // @TODO: Vertically middle align
+  margin-top: 30px; // @TODO: Vertically middle align
   font-family: $helveticaNeue;
   font-size: 18px;
 
@@ -224,7 +224,7 @@ nav {
   }
 
   a {
-    margin-left: 20px;
+    margin-left: 15px;
     color: $darkGray;
     text-align: right;
     font-weight: 300;
@@ -277,6 +277,39 @@ nav {
   border-bottom: 1px solid #ddd;
   background-color: $lightGray;
 }
+
+
+
+.projects > .project {
+  padding-bottom: 2em;
+  border-bottom: 1px solid $lightGray;
+}
+
+.projects > .project:last-child {
+  padding-bottom: 1em;
+  border-bottom: none;
+}
+
+.project {
+  blockquote {
+    margin: 1.8em .8em;
+    border-left: 2px solid $gray;
+    padding: 0.1em 1em;
+    color: $gray;
+    font-size: 22px;
+    font-style: italic;
+  }
+
+  .comments {
+    margin-top: 10px;
+  }
+
+  .read-more {
+    text-transform: uppercase;
+    font-size: 15px;
+  }
+}
+
 
 footer {
   padding: 20px 0;
