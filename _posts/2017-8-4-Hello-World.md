@@ -11,4 +11,4 @@ I hope that you will enjoy the reading of my blog.
 
 <img src="https://media.giphy.com/media/k39w535jFPYrK/giphy.gif" class="center-image">
 
-*image_caption*
+{% include image.html url="https://media.giphy.com/media/k39w535jFPYrK/giphy.gif" description="My cat, Robert Downey Jr." %}
