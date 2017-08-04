@@ -9,4 +9,5 @@ I am working in a digital innovation team as a data scientist , so my main subje
 
 I hope that you will enjoy the reading of my blog.
 
-<center>![Alt Text](https://media.giphy.com/media/k39w535jFPYrK/giphy.gif)</center>
+
+<img src="https://media.giphy.com/media/k39w535jFPYrK/giphy.gif" class="center-image">
