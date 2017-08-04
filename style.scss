@@ -271,15 +271,6 @@ nav {
   }
 }
 
-.wrapper-footer {
-  margin-top: 50px;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  background-color: $lightGray;
-}
-
-
-
 .projects > .project {
   padding-bottom: 2em;
   border-bottom: 1px solid $lightGray;
@@ -309,6 +300,23 @@ nav {
     font-size: 15px;
   }
 }
+
+
+
+
+
+
+
+.wrapper-footer {
+  margin-top: 50px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  background-color: $lightGray;
+}
+
+
+
+
 
 
 footer {
