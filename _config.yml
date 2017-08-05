@@ -84,3 +84,23 @@ exclude:
   - LICENSE
   - README.md
   - CNAME
+defaults:
+  - # _posts
+    scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: true
+      read_time: true
+      comments: true
+      share: true
+      related: true
+  - # _projects
+    scope:
+      path: ""
+      type: talks
+    values:
+      layout: single
+      author_profile: false
+      share: true

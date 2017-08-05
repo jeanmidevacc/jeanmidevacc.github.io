@@ -8,7 +8,8 @@
 @import "reset";
 @import "variables";
 // Syntax highlighting @import is at the bottom of this file
-
+//max-width: 1000px;
+//padding: 0 10px;
 /**************/
 /* BASE RULES */
 /**************/
@@ -25,7 +26,7 @@ body {
 
 .container {
   margin: 0 auto;
-  max-width: 740px;
+  max-width: 1000px;
   padding: 0 10px;
   width: 100%;
 }
@@ -167,10 +168,11 @@ img {
 
 .wrapper-masthead {
   margin-bottom: 50px;
+  background-color: $lightGray;
 }
 
 .masthead {
-  padding: 20px 0;
+  padding: 20px 0px;
   border-bottom: 1px solid $lightGray;
 
   @include mobile {
@@ -227,7 +229,7 @@ img {
 
 nav {
   float: right;
-  margin-top: 30px; // @TODO: Vertically middle align
+  margin-top: 40px; // @TODO: Vertically middle align
   font-family: $helveticaNeue;
   font-size: 18px;
 
@@ -292,11 +294,6 @@ nav {
   border-bottom: 1px solid #ddd;
   background-color: $lightGray;
 }
-
-
-
-
-
 
 footer {
   padding: 20px 0;
