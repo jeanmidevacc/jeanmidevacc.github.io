@@ -14,15 +14,13 @@ A place to include any other types of information that you'd like to include abo
 
 [email@domain.com](mailto:email@domain.com)
 
-<h1>Pure Css responsive <span>timeline</span></h1>
-
 <div class="container_t">
-
    <div class="timeline-block timeline-block-right">
       <div class="marker_t"></div>
       <div class="timeline-content">
-         <h3>First Year</h3>
-         <span>Some work experience</span>
+        <img src="/images/logo/edf.png" alt="Sample photo" height="50" width="100">
+         <h3>Actually - July 2017</h3>
+         <span>Data scientist & R&D engineer</span>
          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate.</p>
       </div>
    </div>
@@ -41,7 +39,7 @@ A place to include any other types of information that you'd like to include abo
       <div class="timeline-content">
          <h3>Third Year</h3>
          <span>Some work experience</span>
-         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate.</p>
+         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate.</p>
       </div>
    </div>
 
@@ -63,6 +61,7 @@ A place to include any other types of information that you'd like to include abo
       </div>
    </div>
 </div>
+
 
 <center>
 <h2>Technologies used</h2>
