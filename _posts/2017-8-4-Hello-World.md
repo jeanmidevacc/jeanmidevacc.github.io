@@ -7,7 +7,7 @@ Hello reader , and welcome to my blog.
 
 My name is Jean-Michel and I am currently a data scientist for EDF energy in England .I am not English as you can read with my super writing skills i am French (basically from the best country in the world 😁)
 
-<center><img src="https://media.giphy.com/media/3o6Mbpr6efZdNVXSQU/giphy.gif"></center>
+<center><img src="https://media.giphy.com/media/Mayhw4Px7zfnW/giphy.gif"></center>
 
 I am beginning today my blog/website for different reasons:
 - Need of some kind of portfolio for my career/projects
