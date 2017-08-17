@@ -3,7 +3,7 @@ layout: page
 description: "Data mining in progress..."
 header-img: "img/header_img/data_process.jpg"
 ---
-<h1>Last posts</h1>
+<h1>Latest posts</h1>
 {% for post in paginator.posts %}
 <div class="post-preview">
     <a href="{{ post.url | prepend: site.baseurl }}">
@@ -35,5 +35,5 @@ header-img: "img/header_img/data_process.jpg"
     {% endif %}
 </ul>
 {% endif %}
-<h1>Last tweets</h1>
+<h1>Latest tweets</h1>
 <a class="twitter-timeline" href="https://twitter.com/Daignanjm" data-tweet-limit="5">Tweets by TwitterDev</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8" ></script>
