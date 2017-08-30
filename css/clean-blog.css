@@ -402,3 +402,14 @@ img::-moz-selection {
 body {
   webkit-tap-highlight-color: #0085a1;
 }
+
+.profile-picture {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    border-radius:50%;
+    /* background-color: #6FC3CC; */
+}
+
+
+/*timeline*/

@@ -5,14 +5,14 @@ email: your-email@yourdomain.com
 copyright_name: jmdaignan
 description: "A portfolio to present my vision on some subjects and to presennt some of my projects"
 baseurl: ""
-url: "http://yourdomain.com"
+url: "jmdaignan.com"
 twitter_username: Daignanjm
 github_username:  jeanmidevacc
 email_username:  your-email@yourdomain.com
 
 # Google Analytics
 # To enable google analytics, uncomment below line with a valid Google Tracking ID
-google_tracking_id: UA-104903671-1
+google_tracking_id: 'UA-104903671-1'
 
 # Build settings
 markdown: kramdown
