@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: true
 title: How to deploy a Messenger bot in Python
 ---
 
