@@ -15,7 +15,7 @@ I am beginning today my blog/website for different reasons:
 - Be the foundation for my Medium profile
 - Nice coding project
 
-Like I said I am currently a data scientist and my job since the beginning of my career (quite young) it's to develop solutions for smart grid/home/device projects (take a look on my [background](../about)).
+Like I said I am currently a data scientist and my job since the beginning of my career (quite young) it's to develop solutions for smart grid/home/device projects (take a look on my [background](../../../../../about)).
 
 In this blog I will mostly talk about digital stuff (surely more data oriented) and present some of my personal projects.
 
@@ -26,4 +26,4 @@ I hope that you will enjoy the reading of my blog.
 <center><img src="https://media.giphy.com/media/k39w535jFPYrK/giphy.gif"></center>
 
 
-PS : By the way this website is hosting in Github , I am using the service [Github Pages]("https://pages.github.com/") with the framework [Jekyll]("https://jekyllrb.com/") and the foundation of this blog is a git fork from the [repository]("https://github.com/barryclark/jekyll-now") of [Barry Clark]("https://github.com/barryclark").
+PS : By the way this website is hosting in Github , I am using the service [Github Pages](https://pages.github.com/) with the framework [Jekyll](https://jekyllrb.com/) and the foundation of this blog is a git fork from the [repository](https://github.com/BlackrockDigital/startbootstrap-clean-blog-jekyll) that I found after the reading of this [blog](https://iamtrask.github.io/).
