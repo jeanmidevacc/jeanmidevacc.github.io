@@ -12,9 +12,9 @@ In this article, there will be a description of the data used for this project, 
 # Exploration of the dataset
 
 In this case, the data to create the model are from:
-- RTE, the energy network manager in France they have created an [open data platform]("https://rte-opendata.opendatasoft.com/explore/dataset/cdc_conso/?disjunctive.qualite") to access different datasets on the network
-- The [GEOFLA dataset]("http://professionnels.ign.fr/geofla") that give you informations on the number of inhabitants in the city and the area
-- [Weather underground]("https://www.wunderground.com/"). I have to scrap this data source from the website (I focus my scraping on the weather stations from the airports) and I pick the weather stations that have enough data during the period measured by RTE.I focus my data analytics on the outdoor temperature and the wind speed.
+- RTE, the energy network manager in France they have created an [open data platform](https://rte-opendata.opendatasoft.com/explore/dataset/cdc_conso/?disjunctive.qualite) to access different datasets on the network
+- The [GEOFLA dataset](http://professionnels.ign.fr/geofla) that give you informations on the number of inhabitants in the city and the area
+- [Weather underground](https://www.wunderground.com/). I have to scrap this data source from the website (I focus my scraping on the weather stations from the airports) and I pick the weather stations that have enough data during the period measured by RTE.I focus my data analytics on the outdoor temperature and the wind speed.
 
 For the weather condition, I choose to create a national weather dataset where basically each region has his weather station associated , these stations are weighted by the number of people that are in this region (this information is coming from the GEOFLA dataset).To make the data analysis, I choose to convert the average power consumed from RTE in energy (in MWh).
 
@@ -37,7 +37,7 @@ A study of the consumption of the month of the year and the day of the week.
 <img src="{{ site.baseurl }}/img/posts/energy_forecast/month_dayweek.png" />
 </center>
 
-This two figures are perfect to illustrate that the daily consumption is linked to the moment of the year and the day of the week. But this insight are not enough to create a forecast model, a very popular approach that is used to make a forecast of the energy consumption is the study of the daily consumption in function of the average daily outdoor temperature. This technic is called PTG for Power Temperature Gradient and you can find a lot of publications that are based on this [approach]("http://www.ibpsa.org/proceedings/BS2015/p2854.pdf").
+This two figures are perfect to illustrate that the daily consumption is linked to the moment of the year and the day of the week. But this insight are not enough to create a forecast model, a very popular approach that is used to make a forecast of the energy consumption is the study of the daily consumption in function of the average daily outdoor temperature. This technic is called PTG for Power Temperature Gradient and you can find a lot of publications that are based on this [approach](http://www.ibpsa.org/proceedings/BS2015/p2854.pdf).
 
 In the following figure there is a representation of this model used for the forecast.
 <center>
@@ -52,13 +52,13 @@ To create the model, the dataset will be split between training set and test set
 - 585 samples for the test set
 
 This is a regression problem, so the following models from scikit learn are going to be tested:
-- [Polynomial regressor]("http://scikit-learn.org/stable/auto_examples/linear_model/plot_polynomial_interpolation.html")
-- [Random forest regressor]("http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html")
-- [Decision tree regressor]("http://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeRegressor.html")
-- [K-nearest neighbours]("http://scikit-learn.org/stable/modules/neighbors.html")
-- [Neural network MLP regressor]("http://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPRegressor.html")
+- [Polynomial regressor](http://scikit-learn.org/stable/auto_examples/linear_model/plot_polynomial_interpolation.html)
+- [Random forest regressor](http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html)
+- [Decision tree regressor](http://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeRegressor.html)
+- [K-nearest neighbours](http://scikit-learn.org/stable/modules/neighbors.html)
+- [Neural network MLP regressor](http://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPRegressor.html)
 
-This is a personal selection of different models and there is plenty of other models to try but for a start I think that was enough. I have to tune the different models and find the best parameters to used, I used a k-fold approach on the training set (I created ten folds) to test the different parameters. [I invited you to check my report to see the choices done on the parameters for the different models]("https://github.com/jeanmidevacc/udacity_mlen/blob/master/capstone/report.pdf").
+This is a personal selection of different models and there is plenty of other models to try but for a start I think that was enough. I have to tune the different models and find the best parameters to used, I used a k-fold approach on the training set (I created ten folds) to test the different parameters. [I invited you to check my report to see the choices done on the parameters for the different models](https://github.com/jeanmidevacc/udacity_mlen/blob/master/capstone/report.pdf).
 
 To test the impact of the input in the models, I tested different inputs:
 - only outdoor temperature
@@ -103,7 +103,7 @@ This figure show us that the size of the training set has a clear impact on the 
 # Half hourly forecast
 For this part, we will used all the results found previously (the used of the time features essentially). I will test the same models than for the daily forecast and used the same metrics.
 
-My benchmark model will be the [ARIMA model]("https://machinelearningmastery.com/arima-for-time-series-forecasting-with-python/").this model is quite popular to forecast time series (but need to not randomized the sets).These sets are composed of:
+My benchmark model will be the [ARIMA model](https://machinelearningmastery.com/arima-for-time-series-forecasting-with-python/).this model is quite popular to forecast time series (but need to not randomized the sets).These sets are composed of:
 - 112176 samples for the training set
 - 28080 samples for the test set
 
@@ -130,4 +130,4 @@ This work was used to complete my nanodegree, this is my approach, not the only 
 <h6><i>Sortez les bazookas</i></h6>
 </center>
 
-I invite you to used the [datasets]("https://github.com/jeanmidevacc/udacity_mlen/tree/master/capstone/data") of this project to try to create your own (better?!) model and if you have any comments write it below.
+I invite you to used the [datasets](https://github.com/jeanmidevacc/udacity_mlen/tree/master/capstone/data) of this project to try to create your own (better?!) model and if you have any comments write it below.
