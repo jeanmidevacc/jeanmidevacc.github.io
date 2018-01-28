@@ -3,15 +3,16 @@ layout: post
 comments: true
 published: true
 title: Make a forecast system of the French national energy consumption
-subtitle: Use of scikit learn to complete a Udacity nanodegreee capstone
+subtitle: Use of scikit learn to complete a Udacity nanodegree capstone
 ---
-Hello readers, for this article I am going to explain my approach to create a forecast system of the French (metropolitan) energy consumption. This kind of problematics is more or less related to part of my job at EDF Energy but this works has been done in my free time to complete my machine engineer nanodegree of [Udacity](www.udacity.com).
+Hello readers, for this article I am going to explain my approach to create a forecast system of the French (metropolitan) energy consumption. This kind of problematics is more or less related to part of my job at EDF Energy but this works has been done in my free time to complete my machine engineer nanodegree of [Udacity](https://www.udacity.com).
 
 In this article, there will be a description of the data used for this project, an explanation of the approach used to make a daily forecast of the consumption and the half hourly version.
 
 # Exploration of the dataset
 
 In this case, the data to create the model are from:
+
 - RTE, the energy network manager in France they have created an [open data platform](https://rte-opendata.opendatasoft.com/explore/dataset/cdc_conso/?disjunctive.qualite) to access different datasets on the network
 - The [GEOFLA dataset](http://professionnels.ign.fr/geofla) that give you informations on the number of inhabitants in the city and the area
 - [Weather underground](https://www.wunderground.com/). I have to scrap this data source from the website (I focus my scraping on the weather stations from the airports) and I pick the weather stations that have enough data during the period measured by RTE.I focus my data analytics on the outdoor temperature and the wind speed.
@@ -61,6 +62,7 @@ This is a regression problem, so the following models from scikit learn are goin
 This is a personal selection of different models and there is plenty of other models to try but for a start I think that was enough. I have to tune the different models and find the best parameters to used, I used a k-fold approach on the training set (I created ten folds) to test the different parameters. [I invited you to check my report to see the choices done on the parameters for the different models](https://github.com/jeanmidevacc/udacity_mlen/blob/master/capstone/report.pdf).
 
 To test the impact of the input in the models, I tested different inputs:
+
 - only outdoor temperature
 - outdoor temperature and wind speed
 - outdoor temperature and month of the year and day of the week
@@ -104,6 +106,7 @@ This figure show us that the size of the training set has a clear impact on the 
 For this part, we will used all the results found previously (the used of the time features essentially). I will test the same models than for the daily forecast and used the same metrics.
 
 My benchmark model will be the [ARIMA model](https://machinelearningmastery.com/arima-for-time-series-forecasting-with-python/).this model is quite popular to forecast time series (but need to not randomized the sets).These sets are composed of:
+
 - 112176 samples for the training set
 - 28080 samples for the test set
 
@@ -119,6 +122,7 @@ In my problem the result of the model are bad. In the following table there is s
 |Neural network MLP|0.93|156.28|
 
 This final table, show us that the benchmark model is quite easy to beat. The neural network is very slow to construct but two models seems very good to used for our problem:
+
 - the decision tree regressor
 - the K-nearest neighbour
 
