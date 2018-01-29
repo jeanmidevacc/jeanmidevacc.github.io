@@ -96,7 +96,7 @@ First step on this study is to find the best period to make the comparison. In m
 <h6><i>Count of households per day</i></h6>
 </center>
 
-**Notes**: There is clearly an augmentation of the number of available households since the start of the study in end 2011, the peak is reach in 2013. A good period for our study could be 2013 (and i choose this one). But it's now important to know the distribution of the available days for this period in the households of the experiment, in the following figure there is a representation of this distribution in a boxplot.
+**Notes**: There is clearly an increase of the number of available households since the start of the study in end 2011, the peak is reach in 2013. A good period for our study could be 2013 (and i choose this one). But it's now important to know the distribution of the available days for this period in the households of the experiment, in the following figure there is a representation of this distribution in a boxplot.
 
 <center>
 <img src="{{ site.baseurl }}/img/posts/london_sm/boxplot_availalbedayhousehold.png" />
