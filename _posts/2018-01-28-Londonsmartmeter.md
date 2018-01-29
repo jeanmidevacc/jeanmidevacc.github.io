@@ -2,7 +2,7 @@
 layout: post
 comments: true
 published: true
-title: Smart meters in London (Part1): Description and first insights  
+title: Smart meters in London (Part1) - Description and first insights  
 subtitle: Description of the data and first insights on the electrical consumption
 header-img: img/header_img/london_image.jpg
 ---
