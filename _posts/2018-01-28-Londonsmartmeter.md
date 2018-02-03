@@ -107,25 +107,84 @@ The decision has been done to use the Households that possess at least 357 days,
 
 ## Overview of the panel
 
-One of the first realisation is to display the global consumption of these households during the year of 2013, in the following figure there is the daily global consumption of these households during the period.
+One of the first realisation is to display the average consumption per day of these households during the year of 2013, in the following figure there is the average global consumption of these households during the period.
 
 <center>
 <img src="{{ site.baseurl }}/img/posts/london_sm/timeseries_sumall.png" />
-<h6><i>Daily consumption of the households</i></h6>
+<h6><i>Average daily consumption of the households </i></h6>
 </center>
 
 **Notes**: This is obvious that there is a link between the electrical consumption and the day of the year (same result than in my [previous article]("http://jmdaignan.com/2017/10/20/Make-a-forecast-system-of-the-national-energy-consumption/")). The seasonal effect is very clear so in this panel there is a lot of people that are using the electricity as an heating source. If the average daily outdoor temperature and the total daily consumption of the panel are crossed, the following figure display the relation:
 <center>
 <img src="{{ site.baseurl }}/img/posts/london_sm/ptg_like.png" />
-<h6><i>Daily consumption X Outdoor temperature</i></h6>
+<h6><i>Daily consumption X Outdoor temperature (in red the ptg of the global behaviour) </i></h6>
+</center>
+
+This general observation offers a clear vision that the PTG (The red plot) from the [previous article]("http://jmdaignan.com/2017/10/20/Make-a-forecast-system-of-the-national-energy-consumption/") can ba calculated for each household.In the following figure, there is a representation of the daily consumption and the ptg associated to this household (and theri r² score).
+<center>
+<img src="{{ site.baseurl }}/img/posts/london_sm/ptg_randomhouseholds.png" />
+<h6><i>Consumption X outdoor temperature for random households (in red the associated ptg model for the household and in yellow the general ptg)</i></h6>
+</center>
+
+**Notes**: This is a good illustration that for some households the r² score is working great (this household should have a electric system) but for some households it doesn't work at all. The general model issued from the average daily consumption (the yellow curve) illustrates that average daily consumption doesn't represent the general behaviour of the households.In the folowing figure there is the scatter plot of the pivot temperature in function of the r² score.
+
+<center>
+<img src="{{ site.baseurl }}/img/posts/london_sm/ptg_result.png" />
+<h6><i>Pivot temperature X r² score</i></h6>
+</center>
+
+
+
+
+
+
+Another way to identify the households that have an electric heating system could be to compare the average consumption during the winter and the summer and make a simple ratio between these two consumptions.The data have been crossed with the informations of the households, and there is an extract of the new dataset.
+
+<center>
+<img src="{{ site.baseurl }}/img/posts/london_sm/df_crossdata.png" />
+<h6><i>Preview of the dataset</i></h6>
+</center>
+
+In this dataframe, there is:
+
+- model_a the slope of the ptg model (in the winter part)
+- model_b the intersection of the ptg models
+- model_x0 the temperature of regime switch
+- r2score the r² score of the ptg model on the household
+- season_0 the average consumption in winter
+- season_1 the average consumption in spring
+- season_2 the average consumption in summer
+- season_3 the average consumption in autumn
+- ratio_winter_summer the ratio of the consumption winter/ration_winter_summer
+- stdorToU the type of tariff
+- Acorn the ACORN group
+- Acorn_grouped tha aggregated ACORN groups
+
+
+There is a serious amount of data to cross so in the following figure there is a pair plot that cross all this data andfilter thme in function of the Acorn_grouped.
+<center>
+<img src="{{ site.baseurl }}/img/posts/london_sm/pairplot_dfcross.png" />
+<h6><i>Pairplot of the different parameters </i></h6>
+</center>
+
+**Notes**: There is no obvious relation between all this index that defined the households except between the season_0 and the model_b but this two are winter related so that's normal.But there is no link between these indexes and the Acorn_grouped, the result is similar with the Acorn, that's a shame.
+
+<center>
+<img src="https://media.giphy.com/media/Ob7p7lDT99cd2/giphy.gif" />
 </center>
 
 # Next steps
 As you can see this first exploration of the dataset has highlighted a lot of characteristic of the electrical consumption in London like the influence of the weather in this consumption.
 
 Some ideas for the next analytics:
+
 - Cross the ACORN data and the smart meter data
 - Try to forecast the consumption of the different households
 - Add new datasets like:
   - [EPC]("https://epc.opendatacommunities.org/docs/api") data from London
   - extra data on London like some underground or train strike during the period
+- Make some clusterings in the households data and the energy profiles, as you can see in the following heatmap there is a "pattern" in the total consumption of these households.
+<center>
+<img src="{{ site.baseurl }}/img/posts/london_sm/heatmap.png" />
+<h6><i>Heatmap of the total consumption in function of the day of the year</i></h6>
+</center>
