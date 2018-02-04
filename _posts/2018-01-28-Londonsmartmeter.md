@@ -187,3 +187,5 @@ As you can see this first exploration of the dataset has highlighted some charac
 <img src="{{ site.baseurl }}/img/posts/london_sm/heatmap.png" />
 <h6><i>Heatmap of the average consumption in function of the day of the year</i></h6>
 </center>
+
+**You can find all the code to make this article in this [GitHub repo](https://github.com/jeanmidevacc/london_smartmeter)**
