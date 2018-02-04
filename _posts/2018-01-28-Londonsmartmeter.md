@@ -148,18 +148,18 @@ Another way to identify the households that have an electric heating system coul
 
 In this dataframe, there is:
 
-- model_a the slope of the ptg model (in the winter part)
-- model_b the intersection of the ptg models
-- model_x0 the temperature of regime switch
-- r2score the r² score of the ptg model on the household
-- season_0 the average consumption in winter
-- season_1 the average consumption in spring
-- season_2 the average consumption in summer
-- season_3 the average consumption in autumn
-- ratio_winter_summer the ratio of the consumption winter/ration_winter_summer
-- stdorToU the type of tariff
-- Acorn the ACORN group
-- Acorn_grouped tha aggregated ACORN groups
+- **model_a** the slope of the ptg model (in the winter part)
+- **model_b** the intersection of the ptg models
+- **model_x0** the temperature of regime switch
+- **r2score** the r² score of the ptg model on the household
+- **season_0** the average consumption in winter
+- **season_1** the average consumption in spring
+- **season_2** the average consumption in summer
+- **season_3** the average consumption in autumn
+- **ratio_winter_summer** the ratio of the consumption winter/ration_winter_summer
+- **stdorToU** the type of tariff
+- **Acorn** the ACORN group
+- **Acorn_grouped** tha aggregated ACORN groups
 
 
 There is a serious amount of data to cross so in the following figure there is a pairplot that cross all this data andfilter thme in function of the Acorn_grouped.
