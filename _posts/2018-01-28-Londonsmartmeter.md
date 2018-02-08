@@ -109,7 +109,7 @@ First step on this study is to find the best period to make the comparison. In m
 <h6><i>Boxplot of the number of available days for the study in 2013</i></h6>
 </center>
 
-The decision has been done to use the Households that possess at least 357 days, so on the original dataset that represents a **lost of 38 households** on the 5566 available in the dataset that's totally acceptable (less than 1%).
+The decision has been done to use the Households that possess at least 357 days, so on the original dataset that represents a **lost of 632 households** on the 5566 available in the dataset that's totally acceptable.
 
 ## Overview of the panel
 
