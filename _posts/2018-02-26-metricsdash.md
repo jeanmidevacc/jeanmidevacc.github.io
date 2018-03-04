@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-published: true
+published: false
 title: Monitoring of my personalised metrics  
 subtitle: Create a data pipeline on AWS and an introduction to Dash by plotly
 header-img: img/header_img/chris-barbalis-panel_low.jpg
