@@ -198,7 +198,7 @@ list_activities=response.json()
 
 ## Crossfit data (Google drive API)
 
-I am currently practicing crossfit since August 2018, as I said previously, I am monitoring my trainings in a spreadsheet on Google sheets.
+I am currently practicing crossfit since August 2017, as I said previously, I am monitoring my trainings in a spreadsheet on Google sheets.
 
 <center>
 <img src="{{ site.baseurl }}/img/posts/dash_data/capture_gs.png" />
@@ -305,7 +305,7 @@ Let's have a look on crossfit data.
 
 ## Crossfit data
 
-I am practicing crossfit since August 2018, 3 times per week and I am definetly not a pro. In the following figure, there is a visualisation of the total weight carried during a session in function of the number of repetitions.
+I am practicing crossfit since August 2017, 3 times per week and I am definetly not a pro. In the following figure, there is a visualisation of the total weight carried during a session in function of the number of repetitions.
 
 <center>
 <img src="{{ site.baseurl }}/img/posts/dash_data/crossfitsessions_pastyear.png" />
