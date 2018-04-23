@@ -1,8 +1,8 @@
 ---
 layout: post
 comments: true
-published: true
-title: Crossfit open 2018
+published: false
+title: WIP Crossfit open 2018 WIP
 subtitle: Introduction to webscraping
 header-img: img/header_img/victor-freitas-546919-unsplash.jpg
 ---
@@ -50,18 +50,42 @@ So why I want to use this case for my introduction to web scraping:
 In this case I decided to scrap the following elements:
 - the [leaderboard pages](https://games.crossfit.com/leaderboard/open/2018?division=1&region=0&scaled=0&sort=0&occupation=0&page=1) for this article we will just working on the result for 2018 but if you want the approach for the previous year i invited you to look this [article](https://towardsdatascience.com/my-first-battle-with-web-scraping-77e15954d13b) on the topic
 - the [athletes pages](https://games.crossfit.com/athlete/153604), because every athlete have a oage with some interesting informations
-_ the [gym pages](https://games.crossfit.com/affiliate/3220) that contains some details on the location of the athletes
+- the [gym pages](https://games.crossfit.com/affiliate/3220) that contains some details on the location of the athletes
+
+
+## the leaderboard pages
+
+There is no proper need to scrap the webpage, the API that is used by the frontend can be called directly by a simple get request. Thanks to @pedro to notice this.There is just a need to mention in the request:
+- the code of the division
+- if the leaderboard concern the scald or not scalad applications
+- the page of the api (athat you can get form the reauest of the first page)
+
+In the next par,there is the request to execute.
+
+{% highlight python %}
+
+request_tosend="https://games.crossfit.com/competitions/api/v1/competitions/open/{}/leaderboards?division={}&region=0&scaled={}&sort=0&occupation=0&page={}".format(year,division,scaled,i+1)
+response_data=requests.get(request_tosend).json()
+
+{% endhighlight %}
+
 
 ## Athlete pages
+
+In this case the athlete web page looks the screenshot in the following figure
 <center>
 <img src="{{ site.baseurl }}/img/posts/crossfit/crossfit_athletespage.png" />
-<h6><i>Example Athlete page</i></h6>
+<h6><i>Example of an athlete page</i></h6>
 </center>
+
+And at then botoom of the page, there is some benchmarl for some exercices.
 
 <center>
 <img src="{{ site.baseurl }}/img/posts/crossfit/stat_athlete.png" />
-<h6><i>Example Athlete page</i></h6>
+<h6><i>Benchmark of exercices</i></h6>
 </center>
+
+So I decided to scrap the page for all the athletes that participate to the open during the last 5 years and that represent more than 700000 pages to scrap, to optimize the collection I decided to parallelise to the process and i use the following code to get the data for one page.
 
 
 {% highlight python %}
@@ -104,11 +128,14 @@ def get_athletesdetails(competitorid):
 
 
 ## gym pages
+
+In rthe case of the gym page, the number of informations to collect is less important than for the athlete, in the following figure there is a screenshot of the page of a gym.
 <center>
 <img src="{{ site.baseurl }}/img/posts/crossfit/gym_details.png" />
 <h6><i>Example Athlete page</i></h6>
 </center>
 
+The script will focus on the details on the header of the page, that concern the location. The number of pages to scrap in this case is around 10000 pages , and the following code has been used to do that.
 
 {% highlight python %}
 
@@ -134,6 +161,18 @@ def get_affiliatedetails(affiliateid):
     return dict_affiliate
 
 {% endhighlight %}
+
+
+## Ethic behind the process
+
+As you have read there is a lot of data that have been collected by my system , it's legal or not.
+
+If i refer to the common belief, it's an internet so it's free that's fine well it seesm that it's more complicated than that i refer to [this artcile](https://benbernardblog.com/web-scraping-and-crawling-are-perfectly-legal-right/), it seems that I did something illegal because i didn't respect the term of use of the website so Idecided to contact Crossfit Inc to warn of what I have done and get ther feedback on it (i contacted the organisation by their form, some email related to privacy etc).
+
+I have no feedback from them on this subject so as the englis expression says:
+**Silent is consent**
+
+Let's have a look on some global insight of the dataset.
 
 # Insights on the Crossfit open
 
