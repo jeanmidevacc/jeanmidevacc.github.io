@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-published: true
+published: false
 title: WIP Crossfit open 2018 WIP
 subtitle: Introduction to webscraping
 header-img: img/header_img/victor-freitas-546919-unsplash.jpg
