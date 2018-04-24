@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-published: false
+published: true
 title: WIP Crossfit open 2018 WIP
 subtitle: Introduction to webscraping
 header-img: img/header_img/victor-freitas-546919-unsplash.jpg
@@ -21,7 +21,7 @@ This program seems to have been invited in the 2000's by Greg Glassman and Laure
 
 I invite to take to some videos on the [crossfit inc channel on youtube](https://www.youtube.com/channel/UCtcQ6TPwXAYgZ1Mcl3M1vng) to have a better view of what could be the exercices to do during a session.
 
-In my case I am rpacticing crossfit since August 2018, three times per week and I liked it honestly when I started I was looking the sport as some brutes that were doing gym exercice at high intensity.
+In my case I am practicing crossfit since August 2018, three times per week and I liked it honestly when I started I was looking the sport as some brutes that were doing gym exercice at high intensity.
 
 <center>
 <img src="https://media.giphy.com/media/iw3QWgT77aC1G/giphy.gif" />
@@ -268,6 +268,33 @@ Ranking
 
 
 # Dashboard with Tableau Public
+
+
+# Weight model estimator
+
+
+<center>
+<img src="{{ site.baseurl }}/img/posts/crossfit/linearmodel_example.png" />
+<h6><i>Illustration of a linear relation between two exercices</i></h6>
+</center>
+
+
+
+<center>
+<img src="{{ site.baseurl }}/img/posts/crossfit/heatmap_linearmodel.png" />
+<h6><i>rscore matrix for the different benchmark</i></h6>
+</center>
+
+
+<center>
+<img src="{{ site.baseurl }}/img/posts/crossfit/linearmodel_weight.png" />
+<h6><i>rscore matrix for the different benchmark</i></h6>
+</center>
+
+<center>
+<img src="{{ site.baseurl }}/img/posts/crossfit/matrix_adjust_weight.png" />
+<h6><i>Adjustment matrix </i></h6>
+</center>
 
 
 # Next steps
