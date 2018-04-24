@@ -167,7 +167,7 @@ def get_affiliatedetails(affiliateid):
 
 As you have read there is a lot of data that have been collected by my system , it's legal or not.
 
-If i refer to the common belief, it's an internet so it's free that's fine well it seesm that it's more complicated than that i refer to [this artcile](https://benbernardblog.com/web-scraping-and-crawling-are-perfectly-legal-right/), it seems that I did something illegal because i didn't respect the term of use of the website so Idecided to contact Crossfit Inc to warn of what I have done and get ther feedback on it (i contacted the organisation by their form, some email related to privacy etc).
+If i refer to the common belief, it's an internet so it's free that's fine well it seesm that it's more complicated than that i refer to [this artcile](https://benbernardblog.com/web-scraping-and-crawling-are-perfectly-legal-right/), it seems that I did something illegal because i didn't respect the term of use of the website so I decided to contact Crossfit Inc to warn of what I have done and get ther feedback on it (i contacted the organisation by their form, some email related to privacy etc).
 
 I have no feedback from them on this subject so as the englis expression says:
 **Silent is consent**
@@ -246,6 +246,14 @@ It is interesting to see that Brazil is the seonc coutnry with the most number o
 
 <center>
 <img src="{{ site.baseurl }}/img/posts/crossfit/countcompetitor_countrytop9-US.png" />
+<h6><i>Count of athletes that are did the open in Rx'd/scaled/both</i></h6>
+</center>
+
+
+## Relationship between the exercice benchmark stats
+
+<center>
+<img src="{{ site.baseurl }}/img/posts/crossfit/heatmap_linearmodel.png" />
 <h6><i>Count of athletes that are did the open in Rx'd/scaled/both</i></h6>
 </center>
 
