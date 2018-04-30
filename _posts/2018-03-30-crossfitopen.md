@@ -7,7 +7,7 @@ subtitle: Introduction to web scraping
 header-img: img/header_img/victor-freitas-546919-unsplash.jpg
 ---
 
-Hello in this article, I am going to give some leads on how to create a web scraping system that has been used to collect some data from the [Crossfit games website of Reebok]("https://games.crossfit.com/regionals")
+Hello in this article, I am going to give some leads on how to create a web scraping system that has been used to collect some data from the [Crossfit games website of Reebok](https://games.crossfit.com/regionals)
 
 
 # Introduction to Crossfit
@@ -21,7 +21,7 @@ This program seems to have been invited in the 2000's by Greg Glassman and Laure
 
 I invite you to take a look to some videos on the [Crossfit Inc channel on youtube](https://www.youtube.com/channel/UCtcQ6TPwXAYgZ1Mcl3M1vng) to have a better view of what could be the exercises to do during a session.
 
-In my case I am practicing crossfit since August 2018, three times per week and I liked it honestly when I started I was looking the sport as some brutes that were doing gym exercises at high intensity.
+In my case I am practicing crossfit since August 2017, three times per week and I liked it honestly when I started I was looking the sport as some brutes that were doing gym exercises at high intensity.
 
 More seriously, I was a little bit afraid by the intensity of the exercises that from my point of view could hurt people pretty badly, but this sport is made for everybody no need to be Superman to practice crossfit.
 
@@ -56,7 +56,7 @@ In this case I decided to scrap the following elements:
 - the [athletes pages](https://games.crossfit.com/athlete/153604), because every athlete have a page with some interesting informations
 - the [gym pages](https://games.crossfit.com/affiliate/3220) that contains some details on the location of the gym
 
-To collect the data from this website, I used the package called [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/), that is quite popular for the webscraping in Python. In the following sections there will be a description of the data collected and the code associated.
+To collect the data from this website, I used the package called [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/), that is quite popular for the web scraping in Python. In the following sections there will be a description of the data collected and the code associated.
 
 **You can find all functions explained in this part in this [GitHub repository](https://github.com/jeanmidevacc/crossfit_webscraping)**.
 
