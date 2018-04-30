@@ -7,7 +7,7 @@ subtitle: Introduction to web scraping
 header-img: img/header_img/victor-freitas-546919-unsplash.jpg
 ---
 
-Hello in this article, I am going to give some leads on how to create a web scraping system that has been used to collect some data from the [Crossfit games website of Reebok](https://games.crossfit.com/regionals)
+Hello in this article, I am going to give some leads on how to create web scraping system that has been used to collect some data from the [Crossfit games website of Reebok](https://games.crossfit.com/regionals)
 
 
 # Introduction to Crossfit
@@ -17,7 +17,7 @@ The Crossfit is defined as
 ```a strength and conditioning program consisting mainly of a mix of aerobic exercise, calisthenics (body weight exercises), and Olympic weightlifting
 ```
 
-This program seems to have been invited in the 2000's by Greg Glassman and Lauren Jenai, and the sport is licensied under the name of **CrossFit, Inc**.
+This program seems to have been invited in the 2000's by Greg Glassman and Lauren Jenai, and the sport is licensed under the name of **CrossFit, Inc**.
 
 I invite you to take a look to some videos on the [Crossfit Inc channel on youtube](https://www.youtube.com/channel/UCtcQ6TPwXAYgZ1Mcl3M1vng) to have a better view of what could be the exercises to do during a session.
 
@@ -25,9 +25,9 @@ In my case I am practicing crossfit since August 2017, three times per week and 
 
 More seriously, I was a little bit afraid by the intensity of the exercises that from my point of view could hurt people pretty badly, but this sport is made for everybody no need to be Superman to practice crossfit.
 
-The strength is that every exercises can be scaled in term of weight, movement in function of your need (physical condition, injuries) but the only goal is to complete the exercise. Never give up could be the motto of crossfit.
+The strength is that every exercise can be scaled in term of weight, movement in function of your need (physical condition, injuries) but the only goal is to complete the exercise. Never giving up could be the motto of crossfit.
 
-The selection for the world cup championship are quite simple, there is 3 phases in the process:
+The selection for the world cup championship is quite simple, there is 3 phases in the process:
 
 - The **Open**, everybody can participate to this qualification, the division are defined by age and gender and if you are not on an affiliate gym that can validate your performance you can film it and send it to the organisers.
 - The **Regionals**, where the best from the Open will compete to be selected for the **Games**
@@ -36,14 +36,14 @@ The selection for the world cup championship are quite simple, there is 3 phases
 For this article, the data collection will be only the open 2018 data that can be found at this [address](https://games.crossfit.com/open).The Open are defined by:
 
 - a period of 5 weeks, where every week a new wod (workout of the day) is announced
-- there is 4 days to try to make the best score to the wod
+- there are 4 days to try to make the best score to the wod
 
 
 So why I want to use this case for my introduction to web scraping:
 
 - I read a [cool article](https://towardsdatascience.com/my-first-battle-with-web-scraping-77e15954d13b) on the scraping of the Crossfit games website
 - I found the presentation of the leaderboard quite limited in term of comparison
-- I wanted to make a web scraping exercise since a long time
+- I wanted to make a web scraping exercise for a long time
 
 So let's dive in it.
 
@@ -52,8 +52,8 @@ So let's dive in it.
 
 In this case I decided to scrap the following elements:
 
-- the [leaderboard pages](https://games.crossfit.com/leaderboard/open/2018?division=1&region=0&scaled=0&sort=0&occupation=0&page=1) for this article we will just working on the result for 2018 but if you want the approach for the previous year I invite you to look this [article](https://towardsdatascience.com/my-first-battle-with-web-scraping-77e15954d13b) on the topic
-- the [athletes pages](https://games.crossfit.com/athlete/153604), because every athlete have a page with some interesting informations
+- the [leaderboard pages](https://games.crossfit.com/leaderboard/open/2018?division=1&region=0&scaled=0&sort=0&occupation=0&page=1) for this article we will just be working on the result for 2018 but if you want the approach for the previous year I invite you to look this [article](https://towardsdatascience.com/my-first-battle-with-web-scraping-77e15954d13b) on the topic
+- the [athletes pages](https://games.crossfit.com/athlete/153604), because every athlete has a page with some interesting informations
 - the [gym pages](https://games.crossfit.com/affiliate/3220) that contains some details on the location of the gym
 
 To collect the data from this website, I used the package called [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/), that is quite popular for the web scraping in Python. In the following sections there will be a description of the data collected and the code associated.
@@ -101,7 +101,7 @@ So I decided to scrap the page for all the athletes that participated to the ope
 
 ## The gym pages
 
-In the case of the gym page, the number of informations to collect is less important than for the athletes, in the following figure there is a screenshot of the page of a gym.
+In the case of the gym page, the amount of informations to collect is less important than for the athletes, in the following figure there is a screenshot of the page of a gym.
 <center>
 <img src="{{ site.baseurl }}/img/posts/crossfit/gym_details.png" />
 <h6><i>Example of a gym page</i></h6>
@@ -141,14 +141,14 @@ In this part, it will be mostly a very general overview on the Open event. The a
 <h6><i>Gender repartition</i></h6>
 </center>
 
-It is good to see that there is quite a similar number of  men (56.8%) and the women (43.2%) (Similar as what I can see during my training) that was engaged in the Open. Let's see now the repartition of the age.
+It is good to see that there is quite a similar number of  men (56.8%) and the women (43.2%) (similar as what I can see during my training) that was engaged in the Open. Let's see now the repartition of the age.
 
 <center>
 <img src="{{ site.baseurl }}/img/posts/crossfit/boxplot_age.png" />
 <h6><i>Box plot of the age of the athletes (in function of the gender)</i></h6>
 </center>
 
-The distribution of the age are quite similar between the gender, the athletes with an age greater than 60 are considered as outliers. Another point to notice is that the average age of the athletes is greater than 30 years old, this is could be maybe the mark of :
+The distribution of the age is quite similar between the gender, the athletes with an age greater than 60 are considered as outliers. Another point to notice is that the average age of the athletes is greater than 30 years old, this is could be maybe the mark of:
 
 - need of experience to participate to the Open (but I will not bet on that)
 - the price to be a member of a box is too high
@@ -172,7 +172,7 @@ I used for this a part of the data from the athletes pages, I filtered the outli
 <h6><i> Morphology of the athletes </i></h6>
 </center>
 
-The general physic of the athlete seems to be :
+The general physic of the athlete seems to be:
 
 - a weight around 80 kg
 - a height around 180 cm
@@ -196,39 +196,39 @@ As we can see there is:
 - there is a huge gap between the USA and the second country (like 200 000 athletes)
 - the second country with the most important number of athletes it's not a country it's the association of all the athletes that was just filming their wod.
 - a clear interest from the athletes in Brazil and part of the commonwealth
-- the number of athlete engaged in Europe is less important
+- the number of athletes engaged in Europe is less important
 
 Let's see now some details on the gym that was scoring the athletes.
 
 ## Analysis of the gym/box data
 
-So to be clear the USA have an important number of gym/athletes engaged in the event. In the following there is a comparison between the number of gyms in the USA and the number of gyms and the 9 others countries with the more gym engaged.
+So to be clear the USA have an important number of gyms/athletes engaged in the event. In the following there is a comparison between the number of gyms in the USA and the number of gyms and the 9 others countries with the more gym engaged.
 
 <center>
 <img src="{{ site.baseurl }}/img/posts/crossfit/countaffiliate_countrytop10.png" />
 <h6><i>Top 10 count of gym</i></h6>
 </center>
 
-The USA is crushing  the other countries litteraly. In the following figure, there is an illustration of the number of gym in the others countries.
+The USA is crushing  the other countries literally. In the following figure, there is an illustration of the number of gyms in the others countries.
 
 <center>
 <img src="{{ site.baseurl }}/img/posts/crossfit/countaffiliate_countrytop9-US.png" />
 <h6><i>Number of gyms in the others top10 countries</i></h6>
 </center>
 
-It's interesitng to see that (there is a lot of similarity between the atlhete number and the gym number, that's normal):
+It's interesting to see that (there is a lot of similarity between the athlete number and the gym number, that's normal):
 
 - Brazil has an important number of gyms
 - the Commonwealth (Canada,UK,Australia) is present
 - France is leading Europe in the ranking (but the Italy is close)
 
-I can continue to make a lot of graph with this data, so I decided to make an interactive dashboard that I can make evolved easily at any time and for that I will use [Tableau](https://www.tableau.com/)
+I can continue to make a lot of graphs with this data, so I decided to make an interactive dashboard that I can make evolved easily at any time and for that I will use [Tableau](https://www.tableau.com/)
 
 # Dashboard on Tableau Public
 
-Tableau Public is a service that have been by a company developed in 2003 in Mountain view based on the work of Stanford university (vizQL). The company has been introduced in 2013 at the NYSE and count 2400 employees (2015 number).
+Tableau Public is a service that have been by a company developed in 2003 in Mountain view based on the work of Stanford university (vizQL). The company was introduced in 2013 at the NYSE and count 2400 employees (2015 number).
 
-There is different products developed by a Tableau, but the purpose of this tool is to facilitate the exchange of data informations across the business by the creation and the sharing of dashboard.
+There are different products developed by a Tableau, but the purpose of this tool is to facilitate the exchange of data informations across the business by the creation and the sharing of the dashboard.
 
 I invite to take a look on their website to have more details on the products, for this project I used Tableau public to create the following dashboard.
 
@@ -241,19 +241,19 @@ To finish I wanted to go further on the data and just focused on the benchmark e
 
 ## Relationship between the exercises
 
-To analyse the data I had to eliminate the outliers value so to do that I add the choice:
+To analyse the data, I had to eliminate the outliers value so to do that I add the choice:
 
 - use the dbscan to detect the outliers after normalisation of the data (efficient but a little bit long to apply it on all the athlete with the data)
-- use the statistic approach based on the quantile, and delete the value that were below the 5% quantile limit and above the 95% quantile
+- use the statistic approach based on the quantile and delete the value that were below the 5% quantile limit and above the 95% quantile
 
-I found visually some correlation between the exercise, as the following figure illustrates the relation.
+I visually found some correlation between the exercise, as the following figure illustrates the relation.
 
 <center>
 <img src="{{ site.baseurl }}/img/posts/crossfit/linearmodel_example.png" />
 <h6><i>Illustration of a linear relation between two exercises</i></h6>
 </center>
 
-So I wanted to apply the research of correlation (a linear relation) to all the exercises, I applied a linear model on 1000 athletes , and I tested the model on 250 athletes to see if the model was good enough. I used the r score as an index to evaluate the efficiency of the models.
+So I wanted to apply the research of correlation (a linear relation) to all the exercises, I applied a linear model on 1,000 athletes, and I tested the model on 250 athletes to see if the model was good enough. I used the r score as an index to evaluate the efficiency of the models.
 
 <center>
 <img src="{{ site.baseurl }}/img/posts/crossfit/heatmap_linearmodel.png" />
@@ -276,7 +276,7 @@ To have a better idea of the impact of a weight modification on one exercise, I 
 
 # Conclusion and next steps
 
-This project was super interesting, the scraping of a website is definitely very practical to collect data, and there was some insights to get from this dataset (by a quick analysis).
+This project was superinteresting, the scraping of a website is definitely very practical to collect data, and there was some insights to get from this dataset (by a quick analysis).
 
 
 The next steps for this project are:
