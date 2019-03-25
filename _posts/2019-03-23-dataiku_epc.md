@@ -24,7 +24,7 @@ The installation of the free edition is very simple and you can install it on al
 
 # Describe the data
 
-For this project, i am going to use the following data sources:
+For this project, I am going to use the following data sources:
 
 - [EPC](https://epc.opendatacommunities.org/docs/api): That is a collection of multiples performance certificates in the UK (around 15 millions)
 - [Nomis data](https://www.nomisweb.co.uk/query/select/getdatasetbytheme.asp?opt=3&theme=&subgrp=): Website that is a collection of multiple informations In the UK collected during the different census (most recent is the one of 2011)
@@ -60,7 +60,7 @@ Let start now Dataiku DSS.
 
 # Data processing in DSS
 
-All the data extracted for this project are csv files, in the following gif there is an illustration of the process to create a dataset in DSS.
+All the data extracted for this project are csv files, in the following animation there is an illustration of the process to create a dataset in DSS.
 
 <center>
 <img src="https://media.giphy.com/media/ulnXzrS8kVppwZkxsg/giphy.gif" />
@@ -122,7 +122,7 @@ Et voila we have the data of the EPC aggregated to a district level , that give 
 
 This data can be easily joined with the data of Nomis with the join function.
 
-I used some in house functions of dataku to do the join, groupby but i could have use:
+I used some in house functions of DSS to do the join, groupby but I could have use:
 
 - A python or R script to build the dataset
 - SQL script if it was SQL tables
@@ -140,23 +140,23 @@ This is an animation of a dashboard that I build with DSS.
 <img src="https://media.giphy.com/media/5QYlWs9chlKX0ZZZfq/giphy.gif" />
 </center>
 
-The building of this dashboard is much easier than a Tableau one (my opinion), but there is this drag and drop approach to build each graph.
+The building of this dashboard is much easier than a Tableau one (my opinion), but they are sharing this drag and drop approach to build each graph that is very useful.
 
-There is way to make analysis directly from the dataset with the lab tool where in house function can be used (to determine correlation for exemple) or used some script to analyse data , in this case i choose python to make some plot.
+There is way to make some analysis directly from the dataset with the lab tool where in house functions can be used (to determine correlation for example) or used some script to analyse data, in this case I choose python to make some plot with seaborn.
 
 <center>
 <img src="https://media.giphy.com/media/70kgukXMQ5opJQMete/giphy.gif" />
 </center>
 
-The analysis part is really cool and I think that it could fit a lot of need, but the other part that is really impressive the ML part to build model.
+The analysis part is really cool and I think that it could fit a lot of needs, but the other part that is really impressive is the ML part to build model based on the data processed.
 
 # Model serving in DSS
 
-So there is multiple ways to build a model , but first let’s define a purpose for this part and I will say:
+So there is multiple ways to build a model, but first let’s define a purpose for this part:
 
 **“Build an energy rating estimator based on the location, the total floor area and the type of heating of the household”**
 
-There is three “levels” that DSS gives you to build a model but let’s be honest it’s the same interface just that your journey on the model part start higher in the hierarchy of the page.
+There is three “levels” that DSS gives you to build a model but let’s be honest it’s the same interface just that your journey on the model configuration part start higher in the hierarchy of the menu.
 
 <center>
 <img src="{{ site.baseurl }}/img/posts/dss_uk/choose_model3.png" />
@@ -171,40 +171,40 @@ In the menu to build the model there is the possibility to:
 - Prepare the training and testing sets
 - Choose the evaluation metric
 - Pick up the features
-- Choose the model and the parameter for the grid search
-- Compare the model after the testing part
+- Choose the models and the parameters for the grid search
+- Compare the models after the testing part
 
-There is a simple animation that is presenting the features of the model builder.
+There is a simple animation that is making an overview of the features of the model builder.
 
 <center>
 <img src="https://media.giphy.com/media/5n9tq7otvq3mnq0zqK/giphy.gif" />
 </center>
 
-The interesting part is that you could use pre built functions (I presumed that scikit learn functions) , or write your own python code. The tools to test the model is really impressive in term of visualisation of the process and the result.
+The interesting part is that you could use pre built functions (I presumed that scikit learn functions), or write your own python code. The tool to test the model is really impressive in terms of visualisation of the process and the results.
 
-A good point is the visualisation of the results with for example for a decision tree that is really easy to understandand decompose with this tool.
+A good point is the visualisation of the results with for example for a decision tree that is really easy to understand (decompose with this tool).
 
 <center>
 <img src="{{ site.baseurl }}/img/posts/dss_uk/decisiontree_ukdss.png" />
 </center>
 
-After that you find the right model there is an API builder to embedded the model. In this space you can define some test request to see the model in action.
+After that you find the right model there is an API builder to embed the model. In this space you can define some test requests to see the model in action.
 
 <center>
 <img src="https://media.giphy.com/media/Ylw99xCkx3y5UpN3aD/giphy.gif" />
 </center>
 
-To expose the model, the feature is not activated for the free version but it seems pretty intuitive.
+To expose the model, the feature is not activated for the free version (or i miss to use it) but it seems pretty intuitive.
 
 Now it’s time to conclude.
 
 # Feedback on the project
 
-I will highly recommend to people that are working/interesting on the energy sector to dive in the EPC data because they are a very good source of knowledge on house market in the UK. **In general and it’s very painful for me the most french guy abroad to say that but the UK government is doing a great job to collect and share data** and there is very interesting datasets on the government platform that could be used by data scientists (in France we are very late on this topic but the things are changing slowly).
+I will highly recommend to people that are working/interesting on the energy sector to dive in the EPC data because they are a very good source of knowledge on house market in the UK. **In general and it’s very painful for me the most French guy abroad to say that but the UK government is doing a great job to collect and share data** and there is very interesting datasets on the government platform that could be used by data scientists (in France we are very late on this topic but things are changing slowly).
 
-For Dataiku DSS, it is a **great tool for data scientist experimented or not, I can feel that this tool has been designed by data scientists for data scientists** and there is so much features that I didn’t used like all the collaboration part, the deep learning etc. There is multiple in house functions to make the data processing easier, that’s really cool but it could become a burden if for example Dataiku decides to drop theses features (or make it premium) , if data people doesn’t know how to do a join a groupby etc the data pipeline transfer could be difficult but I really like the fact that Dataiku doesn't stuck the user with their in house functions and let the possibility other way to manipulate data like (with SQL for example).
+For Dataiku DSS, it is a **great tool for data scientist experimented or not, I can feel that this tool has been designed by data scientists for data scientists** and there is so much features that I didn’t used like all the collaboration part, the deep learning etc. There is multiples in house functions to make the data processing easier, that’s really cool but it could become a burden if for example Dataiku decides to drop theses features (or make it premium) , if data people doesn’t know how to do a join a groupby etc the data pipeline transfer could be difficult but I really like the fact that Dataiku doesn't stuck the user with their in house functions and let the possibility other way to manipulate data like (with SQL for example).
 
-**In my day to day job do DSS can fill MY need, NO because I have currently multiple tools at my disposal to do my job and I need flexibility on the data side and on the development side to experiment and deploy things** but this tool is definitely worth trying because it can fill the needs of data teams who doesn’t have my needs (and they are numerous around the world).
+**In my day to day job do DSS can fill MY need ?, NO because I have currently multiple tools at my disposal to do my job and I need flexibility on the data side and on the development side to experiment and deploy things** but this tool is definitely worth trying because it can fill the needs of data teams who doesn’t have my needs (and they are numerous around the world).
 
 <center>
 <img src="{{ site.baseurl }}/img/posts/dss_uk/dataiku_logo.png" />
