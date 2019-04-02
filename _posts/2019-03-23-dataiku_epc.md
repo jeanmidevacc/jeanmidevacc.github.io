@@ -7,7 +7,6 @@ title: Energy in the UK - Analysis of the energy performance certificates
 subtitle: An overview to Dataiku Data Science Studio (DSS 5.1) and the EPC dataset
 read_time : 15
 feature_image: /header_img/uk_image
-show_related_posts: true
 ---
 
 Since I published the article on the London smart meter and the possible analysis of the data, I am receiving regularly messages of people that are interesting to connect the smart meter data and the energy efficiency of the household monitors. I wrote in this article that **there is no direct way to connect the smart meter data , the acorn and the energy efficiency of the household** but there is still some interesting things to do with other datasets around energy and energy efficiency of an household.

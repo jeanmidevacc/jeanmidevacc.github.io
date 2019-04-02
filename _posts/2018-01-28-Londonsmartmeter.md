@@ -7,7 +7,6 @@ title: Energy in the UK - Analysis of smart meter data in London
 subtitle: Description of the data and first insights on the electrical consumption
 read_time : 9
 feature_image: /header_img/london_image
-show_related_posts: true
 ---
 
 Hello, the goal of this article is to offer a clear description of the dataset that I uploaded in November 2017 on [Kaggle](https://www.kaggle.com/jeanmidev/smart-meters-in-london) followed by some insights on the dataset.

@@ -5,7 +5,6 @@ published: true
 categories: tooling
 title: How to deploy a Messenger bot in Python
 read_time : 8
-show_related_posts: true
 ---
 
 Hello reader, in this article I will explain my approach to deploy a chatbot in Python on the Messenger platform.

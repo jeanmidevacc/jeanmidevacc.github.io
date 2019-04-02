@@ -6,7 +6,6 @@ categories: dsml
 title: Make a forecast system of the French national energy consumption
 subtitle: Use of scikit learn to complete a Udacity nanodegree capstone
 read_time : 12
-show_related_posts: true
 ---
 
 Hello readers, for this article I am going to explain my approach to create a forecast system of the French (metropolitan) energy consumption. This kind of problematics is more or less related to part of my job at EDF Energy but this works has been done in my free time to complete my machine engineer nanodegree of [Udacity](https://www.udacity.com).
