@@ -2,10 +2,17 @@
 layout: post
 comments: true
 published: true
+categories: tooling
 title: Building a dashboard with Dash (plotly), AWS and Heroku  
 subtitle: Create a data pipeline and a dashboard to display personal informations
-header-img: img/header_img/carlos-muza-84523-unsplash.jpg
+read_time : 11
+feature_image: /header_img/carlos-muza-84523-unsplash
+show_related_posts: true
 ---
+
+
+
+
 **You can find the template for this dashboard in this [Github repository](https://github.com/jeanmidevacc/dash_template_dashboard).**
 
 Hello, in this article I am going to explain the process that I followed to create a dashboard that displayed some personal informations. To realise this project, I decide to use [Dash](https://github.com/plotly/dash) a Python framework that has been developed by [Plotly](https://plot.ly/) a canadian company that develop the library Plotly to make interactive data visualisation.

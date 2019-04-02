@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Writer Theme | How to deploy a Messenger bot in Python</title>
+    <meta name="description" content="Hello reader, in this article I will explain my approach to deploy a chatbot in Python on the Messenger platform.">
+
+    <link rel="stylesheet" href="/css/main.css">
+
+    <link rel="canonical" href="http://localhost:4000/How-to-deploy-a-Messenger-bot-in-Python">
+    <link rel="alternate" type="application/rss+xml" title="Writer Theme" href="http://localhost:4000/feed.xml" />
+
+    <!--[if lt IE 9]>
+        <script src="/js/vendor/html5shiv.min.js"></script>
+    <![endif]-->
+</head>
+
+
+  <body class="">
+    <!-- if the user has javascript disabled they can still use the menu -->
+<noscript>
+    <div class="no-js-menu clearfix">
+        <ul>
+            
+                <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+            
+                <li><i class="fa fa-anchor"></i><a href="/about">About</a></li>
+            
+                <li><i class="fa fa-plane"></i><a href="/contact">Contact</a></li>
+            
+        </ul>
+    </div>
+</noscript>
+<!-- end no script -->
+
+    <header class="hero-image" style="background-image: url(/img/.jpg);">
+    <span class="menu-trigger animated fadeInDown">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </span>
+
+    <div id="menu-target">
+    <ul>
+        
+            <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+        
+            <li><i class="fa fa-anchor"></i><a href="/about">About</a></li>
+        
+            <li><i class="fa fa-plane"></i><a href="/contact">Contact</a></li>
+        
+    </ul>
+</div>
+
+</header>
+
+<main class="container">
+    <div class="row">
+        <div class="col-xs-12 single-content">
+            <p class="meta">
+                <a href=""></a> in <a href='/category/tooling'>Tooling</a> <i class="link-spacer"></i> <i class="fa fa-bookmark"></i> 8 minutes
+            </p>
+
+            <h1>How to deploy a Messenger bot in Python</h1>
+            <h2></h2>
+            <p>Hello reader, in this article I will explain my approach to deploy a chatbot in Python on the Messenger platform.</p>
+
+<h1 id="genesis-of-the-project">Genesis of the project</h1>
+<p>This idea to deploy a chatbot comes from different articles that I read on how non developer create a resume bot to assist them during their job search and have a vey nice digital and original front page.</p>
+
+<p>One of the nicest example that I saw was the HireElibot.</p>
+<center>
+<img src="/img/posts/zappa_messenger/content/HireEliBot_messenger_code_1196843487068415.png" style="width: 200px;" />
+</center>
+
+<p>This chatbot that you can find on Messenger, is quite cool and I wanted to make one to assist me in my future job search (or at least a skeleton for a future chatbot).</p>
+
+<p>I am definetly not a proper developer; but I am a coder (as a data scientist/maker can be) and a Python lover (a lot of colleagues try to push me to use node.js for this project but I refused) so I decided to try to make my own chatbot in Python.</p>
+
+<p>I tried different approaches to complete this project that I am going to explain right now.</p>
+
+<h1 id="first-approach--telegram--python">First approach : Telegram + Python</h1>
+
+<p>My first approach was to try to find how to deploy a chatbot in a platform and make it available on different devices.</p>
+
+<p>My research leads me to the course of Gareth Dwyer on <a href="https://www.codementor.io/garethdwyer/building-a-telegram-bot-using-python-part-1-goi5fncay">Codementor</a>.</p>
+
+<center>
+ <img src="https://process.filestackapi.com/cache=expiry:max/resize=width:1050/compress/8xBGD3aKTDuWnCiubdc3" style="width: 300px;" />
+ </center>
+
+<p><strong>Opinion</strong>: The course is really good and it gives a nice overview of the usage of the Telegram api to make a very simple chatbot. I used this approach to create a weather chatbot that will use the <a href="https://developers.google.com/maps/?hl=fr">Google maps api</a> and the <a href="https://darksky.net/dev/">dark sky api</a>, you can find in this <a href="https://github.com/jeanmidevacc/weatherforecast_telegrambot">Github repository</a> the chatbot.</p>
+
+<p>But it’s a very simple approach (with a while loop), and the Telegram platform is not the most popular as you can see.</p>
+
+<center><img src="https://media.giphy.com/media/xT39D1rKL92e8SQY3m/giphy.gif" /></center>
+
+<p>So I decided to use the Messenger platform and try to find the way to deploy the bot on a server or at least avoid the “dirty” while loop with a webhook approach.</p>
+
+<h1 id="second-approach--messenger--heroku--python">Second approach : Messenger + Heroku + Python</h1>
+
+<p>In this part my research leads me to the blog of <a href="https://blog.hartleybrody.com/">Hartley Brody</a> and his post <a href="https://blog.hartleybrody.com/fb-messenger-bot/">“Facebook Messenger Bot Tutorial: Step-by-Step Instructions for Building a Basic Facebook Chat Bot”</a>.</p>
+
+<p>The article and the code are very clear, but basically the idea is to deploy a Flask application that can receive the data send by the user (by the use of webhook) and answer in consequence at the interactions.</p>
+
+<p><strong>Opinion</strong>:The course is really clear and I am a Flask defender so that’s cool but the usage of Heroku in his free version is quite limited, I have to ping my Heroku app every 10 minutes to avoid that she fall asleep. I can pay to continue to use a proper Heroku application but I found the pricing quite high for just a chatbot.</p>
+
+<p>Like most of my backend is stored in the Amazon Web Services services (dynamodb, RDS, S3), I try to find an approach that could help me to use the AWS structure and be not too expensive and I found the perfect solution for me.</p>
+
+<h1 id="my-approach">My approach</h1>
+<p>My options on AWS to deploy the Flask application were:</p>
+<ul>
+  <li>EC2 instance</li>
+  <li>Elastic beanstalk</li>
+  <li>Lambda</li>
+</ul>
+
+<p>The two first options were still in the same range of price that Heroku and I found the Elastic beanstalk approach very restricted. So my choice went on the AWS Lambda service.</p>
+
+<p>To deploy the Flask application on a lambda I have to find a dependency that permit that. Amazon has one it’s call <a href="https://github.com/aws/chalice">Chalice</a>.I tested this library for some other api projects, it’s good but I have to translate all my code from the Flask Framework to the Chalice framework so …</p>
+
+<center><img src="https://media.giphy.com/media/ToMjGpx9F5ktZw8qPUQ/giphy.gif" /></center>
+
+<p>But my research leads me to a super alternative at chalice called <a href="https://www.zappa.io/">Zappa</a> and guess what : it’s working perfectly.</p>
+
+<p>To deploy a Messenger chatbot in a AWS Lambda you can follow the following process (that you can find in this <a href="https://github.com/jeanmidevacc/messenger-bot-python-flask-zappa-amazon">github repository</a>).</p>
+
+<h1 id="process">Process</h1>
+
+<h2 id="step-1--setup-a-facebook-application-setup">Step 1 : Setup a Facebook application setup</h2>
+<ul>
+  <li>Setup a <a href="https://developers.facebook.com">Facebook application</a> in the developer portal</li>
+  <li>Add a messenger product in the application</li>
+</ul>
+<center>
+<img src="/img/posts/zappa_messenger/pictures/setup_app.png" />
+</center>
+<ul>
+  <li>Create a Facebook page</li>
+  <li>Add a “send message” button to the page</li>
+</ul>
+<center>
+<img src="/img/posts/zappa_messenger/pictures/addmessagebutton.png" />
+</center>
+<ul>
+  <li>Select the page that you have created (and accept the profile have access blah blah blah)</li>
+</ul>
+<center>
+<img src="/img/posts/zappa_messenger/pictures/settings_messenger_product.png" />
+</center>
+<ul>
+  <li>Keep the access token that has been assigned for the application</li>
+</ul>
+
+<h2 id="step-2--create-your-flask-application">Step 2 : Create your Flask application</h2>
+<ul>
+  <li>Create a virtual environment with the command virtualenv in my case <strong>zappa_env</strong></li>
+  <li>Activate the environment with <code class="highlighter-rouge">activate zappa_env</code></li>
+  <li>Install the dependencies <code class="highlighter-rouge">pip install zappa flask awscli</code></li>
+  <li>Clone the content of my repository in a separate folder of your environment</li>
+</ul>
+<center>
+<img src="/img/posts/zappa_messenger/pictures/environnment.png" />
+</center>
+<ul>
+  <li>Replace the <code class="highlighter-rouge">access_token</code> in the application.py file by the access token of your application</li>
+  <li>Think to a <code class="highlighter-rouge">verify_token</code></li>
+</ul>
+
+<h2 id="step-3--deploy-the-application-on-aws">Step 3 : Deploy the application on AWS</h2>
+<ul>
+  <li>Use the command <code class="highlighter-rouge">zappa init</code> in your project folder</li>
+  <li>In this tutorial you can accept the default parameter that zappa offer you to complete the process but if you want to add some specifications go for it</li>
+  <li>Check if in your project folder there is a zappa_settings.json file</li>
+  <li>Your application is now initialize so we can deploy the app with the command <code class="highlighter-rouge">zappa deploy dev</code></li>
+  <li>Let’s the deployment begin (chill out).</li>
+</ul>
+<center><img src="https://media.giphy.com/media/xEGqih6o0meyY/giphy.gif" /></center>
+
+<h2 id="step-4--finish-to-complete-the-facebook-application-setup">Step 4 : Finish to complete the Facebook application setup</h2>
+<p>On the Messenger settings page you have to setup the webhooks</p>
+<ul>
+  <li>Copy paste the url of your app on the callback url field</li>
+  <li>Add the <code class="highlighter-rouge">verify_token</code> that you thinked before</li>
+  <li>Verify and save</li>
+  <li>Subscribe the webhook to your Facebook page events</li>
+</ul>
+<center>
+<img src="/img/posts/zappa_messenger/pictures/subscribe_webhook.png" />
+</center>
+
+<h2 id="step-5--update-you-application">Step 5 : Update you application</h2>
+<ul>
+  <li>To finish you need to update the <code class="highlighter-rouge">verify_token</code> variable on the application.py files by the token that you create previously</li>
+  <li>Update the app with the command <code class="highlighter-rouge">zappa update dev</code></li>
+</ul>
+
+<h2 id="step-6--test-it">Step 6 : Test it</h2>
+<center>
+<img src="/img/posts/zappa_messenger/pictures/test_bot.png" />
+</center>
+
+<h1 id="feedback">Feedback</h1>
+<p>So with this approach you can have a Messenger chatbot that you can deploy easily without a server with a very limited cost.</p>
+
+<p>I hope that this article that present my approach to deploy a chatbot will help you and if you have any remarks on my works contact me.</p>
+
+<h1 id="resources">Resources</h1>
+<ul>
+  <li><a href="https://www.codementor.io/garethdwyer/building-a-telegram-bot-using-python-part-1-goi5fncay">Gareth Dwyer course </a></li>
+  <li><a href="https://github.com/jeanmidevacc/weatherforecast_telegrambot">Telegram weather bot</a></li>
+  <li><a href="https://github.com/jeanmidevacc/messenger-bot-python-flask-zappa-amazon">Messenger bot with Python</a></li>
+  <li><a href="https://blog.hartleybrody.com/fb-messenger-bot/">Facebook Messenger Bot Tutorial: Step-by-Step Instructions for Building a Basic Facebook Chat Bot</a> by Hartley Brody</li>
+  <li><a href="https://andrich.blog/2017/02/12/first-steps-with-aws-lambda-zappa-flask-and-python/">First step with Zappa Flask and Python 3</a> by Oliver Andrich</li>
+  <li><a href="https://www.zappa.io/">Zappa</a></li>
+</ul>
+
+
+        </div><!-- main-content/col -->
+    </div> <!--/row -->
+
+</main> <!-- /container -->
+
+<footer class="single">
+    <div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-2">
+            <img src="/img/.jpg" class="user-icon " alt="user-image">
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="category-list">
+                <p>Published <span>Sep 18, 2017</span></p>
+                <p><a href=""></a> in <a href='/category/tooling'>Tooling</a></p>
+
+                <div class="other-catergories">
+                    <h3>Also found in</h3>
+
+                    <ul>
+                        
+                        <li>
+                            <a href='/category/tooling'>Tooling</a>
+                            
+                        </li>
+                        
+                    </ul>
+                </div>
+
+            </div>
+        </div><!-- end col -->
+        <div class="col-xs-12 col-sm-4">
+            <div class="social">
+                <p>Share this article</a>
+                <div class="social-links">
+                    <a class="social-icon" href="#" data-platform="twitter" data-message="" data-url="http://localhost:4000/How-to-deploy-a-Messenger-bot-in-Python"><i class="fa fa-twitter"></i></a>
+
+                    <a class="social-icon" href="#" data-platform="facebook" data-message="" data-url="http://localhost:4000/How-to-deploy-a-Messenger-bot-in-Python"><i class="fa fa-facebook-official"></i></a>
+                    <a class="social-icon" data-platform="mail"  href="mailto:help@writer-theme.com?body=http://localhost:4000/How-to-deploy-a-Messenger-bot-in-Python"><i class="fa fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+    </div><!-- end row -->
+</div>
+
+
+    
+        <div class="row read-another-section">
+    
+        
+        <a href="/dataiku_epc"><div class="col-sm-6 col-md-2 no-gutter read-another-container">
+            <div class="overlay"></div>
+            <img src='/img/.jpg'>
+            <h3 class="read-another">Energy in the UK - Analysis of the energy performance certificates</h3>
+        </div></a>
+        
+    
+        
+        <a href="/pubg1"><div class="col-sm-6 col-md-2 no-gutter read-another-container">
+            <div class="overlay"></div>
+            <img src='/img/.jpg'>
+            <h3 class="read-another">Build a data pipeline on AWS to collect PUBG data</h3>
+        </div></a>
+        
+    
+        
+        <a href="/crossfitopen"><div class="col-sm-6 col-md-2 no-gutter read-another-container">
+            <div class="overlay"></div>
+            <img src='/img/.jpg'>
+            <h3 class="read-another">Analysis of the Crossfit Open 2018</h3>
+        </div></a>
+        
+    
+        
+        <a href="/metricsdash"><div class="col-sm-6 col-md-2 no-gutter read-another-container">
+            <div class="overlay"></div>
+            <img src='/img/.jpg'>
+            <h3 class="read-another">Building a dashboard with Dash (plotly), AWS and Heroku</h3>
+        </div></a>
+        
+    
+        
+        <a href="/Londonsmartmeter"><div class="col-sm-6 col-md-2 no-gutter read-another-container">
+            <div class="overlay"></div>
+            <img src='/img/.jpg'>
+            <h3 class="read-another">Energy in the UK - Analysis of smart meter data in London</h3>
+        </div></a>
+        
+    
+        
+        <a href="/Make-a-forecast-system-of-the-national-energy-consumption"><div class="col-sm-6 col-md-2 no-gutter read-another-container">
+            <div class="overlay"></div>
+            <img src='/img/.jpg'>
+            <h3 class="read-another">Make a forecast system of the French national energy consumption</h3>
+        </div></a>
+        
+    
+        
+    
+</div>
+    
+</footer>
+
+
+    <script src='/js/vendor/modernizr.custom.32229-2.8-respondjs-1-4-2.js'></script>
+    <script src="/js/vendor/jquery-1.11.2.min.js"></script>
+    <script src='/js/vendor/jquery.jpanelmenu.min.js'></script>
+    <script type='application/javascript' src='/js/vendor/fastclick.min.js'></script>
+    
+    <script src=' /js/main.js'></script>
+  </body>
+
+</html>

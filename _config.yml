@@ -1,25 +1,20 @@
 # Site settings
-title: The odd data guy
-header-img: img/home-bg.jpg
-email: your-email@yourdomain.com
-copyright_name: jmdaignan
-description: "A portfolio to present my vision on some subjects and to present some of my projects"
-baseurl: ""
-# url: "jmdaignan.com"
-twitter_username: Daignanjm
-github_username:  jeanmidevacc
-# email_username:  your-email@yourdomain.com
+title: the odd data guy
+email: help@writer-theme.com
+description: > # My blog.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site
+enable_retina: false
+permalink: :title
+nav_list:
+  Home : ['Home', '/', 'fa-home']
+  About : ['About', '/about', 'fa-anchor']
+  Contact : ['Contact', '/contact', 'fa-plane']
+single_footer: ''
+footer_links:
+    About: ['About', '/about']
+    Writer: ['Writer 2016', '/about']
 
-# Google Analytics
-# To enable google analytics, uncomment below line with a valid Google Tracking ID
-google_tracking_id: 'UA-104903671-1'
 
 # Build settings
-markdown: kramdown
-highlighter: rouge
-permalink: pretty
-paginate: 5
-exclude: ["node_modules"]
-
-gems: [jekyll-paginate, jekyll-feed]
-# gems: [jekyll-paginate]
+# markdown: kramdown

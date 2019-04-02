@@ -1,0 +1,1893 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Writer Theme</title>
+    <description>focussed on typography, minimal design and
+ quality photography built using the Jekyll platform.
+</description>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Mon, 01 Apr 2019 21:53:40 -0400</pubDate>
+    <lastBuildDate>Mon, 01 Apr 2019 21:53:40 -0400</lastBuildDate>
+    <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>Energy in the UK - Analysis of the energy performance certificates</title>
+        <description>&lt;p&gt;Since I published the article on the London smart meter and the possible analysis of the data, I am receiving regularly messages of people that are interesting to connect the smart meter data and the energy efficiency of the household monitors. I wrote in this article that &lt;strong&gt;there is no direct way to connect the smart meter data , the acorn and the energy efficiency of the household&lt;/strong&gt; but there is still some interesting things to do with other datasets around energy and energy efficiency of an household.&lt;/p&gt;
+
+&lt;p&gt;I wanted since a long time make an article on interesting tool that I tested in my previous job, that is call DSS from &lt;a href=&quot;https://www.dataiku.com/&quot;&gt;Dataiku&lt;/a&gt;, that is very interesting for people that are working with data. In this article I am going to present this tool, and these other datasets.&lt;/p&gt;
+
+&lt;h1 id=&quot;whats-dataiku-dss&quot;&gt;What’s Dataiku DSS&lt;/h1&gt;
+
+&lt;p&gt;Dataiku DSS is a product developed by the French company Dataiku that is defined on their website as &lt;strong&gt;a “collaborative data science software platform for teams of data scientists, data analysts, and engineers to explore, prototype, build, and deliver their own data products more efficiently”&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;To make it simple it is a tool to simplify the processing and sharing of data/model in a company, I really invite you to take a look on their &lt;a href=&quot;https://www.dataiku.com/&quot;&gt;website&lt;/a&gt; that is describing a lot of business cases and the functionalities of the platform. But what’s important to know is that there is &lt;a href=&quot;https://www.dataiku.com/dss/trynow/enterprise-edition/&quot;&gt;two kinds of edition of the platform&lt;/a&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The &lt;strong&gt;free edition&lt;/strong&gt; : that I am using for this project that is hosted on my machine (but there is a version that can be hosted freely on dataiku server too)&lt;/li&gt;
+  &lt;li&gt;The &lt;strong&gt;enterprise edition&lt;/strong&gt; : that is offering more data connectors (Hive, etc) and less limitations, there is no price announced on the site because I think it’s based on the client needs but from the rumors that i heard it’s not cheap. But there is a 2 week free trial to test the service.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The installation of the free edition is very simple and you can install it on all the possible OS. I am going to dive in the functionalities of the software after the presentation of the data.&lt;/p&gt;
+
+&lt;h1 id=&quot;describe-the-data&quot;&gt;Describe the data&lt;/h1&gt;
+
+&lt;p&gt;For this project, I am going to use the following data sources:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://epc.opendatacommunities.org/docs/api&quot;&gt;EPC&lt;/a&gt;: That is a collection of multiples performance certificates in the UK (around 15 millions)&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.nomisweb.co.uk/query/select/getdatasetbytheme.asp?opt=3&amp;amp;theme=&amp;amp;subgrp=&quot;&gt;Nomis data&lt;/a&gt;: Website that is a collection of multiple informations In the UK collected during the different census (most recent is the one of 2011)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let’s see a more details description of the datasets.&lt;/p&gt;
+
+&lt;h2 id=&quot;epc&quot;&gt;EPC&lt;/h2&gt;
+
+&lt;p&gt;So first what’s an EPC ? It’s kind of simple it is an energy performance rating of an household , there is an example in the following figure.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dss_uk/epcrating-example.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;It’s like the one that can be find on appliance for example, and it need to be refresh at each new tenant or landlord. The data source that is opened by the ministry of Housing, Communities &amp;amp; Local Government is very complete (more than 15 millions certificates) , and there is more than just a simple rating on this data (&lt;a href=&quot;https://epc.opendatacommunities.org/docs/guidance#glossary&quot;&gt;data dictionnary&lt;/a&gt;), there is informations on the glazing, the energy consumption the floor area etc.&lt;/p&gt;
+
+&lt;h2 id=&quot;nomis-data&quot;&gt;Nomis data&lt;/h2&gt;
+
+&lt;p&gt;The Nomis website “is a service provided by the Office for National Statistics, ONS, to give free access to the most detailed and up-to-date UK labour market statistics from official sources “, and on this website there is multiple informations on the UK citizens collected during different census. There is multiple informations with a good level of details and the data of the census are mostly used to create the ACORN group that was defining in my article on the smart meter.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dss_uk/extract_nomis.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;From this portal I extracted informations on the UK citizens at a district level on their :&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Occupation&lt;/li&gt;
+  &lt;li&gt;Qualification&lt;/li&gt;
+  &lt;li&gt;NS-SEC (National Statisitc-Socio Economic Classification)&lt;/li&gt;
+  &lt;li&gt;Population&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let start now Dataiku DSS.&lt;/p&gt;
+
+&lt;h1 id=&quot;data-processing-in-dss&quot;&gt;Data processing in DSS&lt;/h1&gt;
+
+&lt;p&gt;All the data extracted for this project are csv files, in the following animation there is an illustration of the process to create a dataset in DSS.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;https://media.giphy.com/media/ulnXzrS8kVppwZkxsg/giphy.gif&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;Files can be easily drag and drop in DSS , and you can have an overview of the data, the quality etc. In the free version a SQL database can be connected too and it’s very easy.&lt;/p&gt;
+
+&lt;p&gt;For this project the idea is to connect the data from the EPC and the Nomis data, so there is a big part of processing of the certificates to be aggregated at a district level and be connected to the Nomis data.&lt;/p&gt;
+
+&lt;p&gt;There is an overview of the complete process&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dss_uk/dss_overview_process.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;In the following figure there is the process to prepare the EPC dataset that could be connect with the Nomis data.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dss_uk/process_epcready_clean.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;There is a preparation phase (with the brush) where  there is a selection of the right columns, a processing of the postcode to get the district code.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dss_uk/epc_prep1.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;A second step that could have been put with the previous one, is to prepare the dataset to find the most recent EPC of the household (correct format of the date of the inspection date).&lt;/p&gt;
+
+&lt;p&gt;To get the last inspection date of each household in the dataset, there is a group by (the square triangle circle icon on the process image) function, there is an illustration of the process in the following animation.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;https://media.giphy.com/media/fR4DLlNIBS4COeHuIk/giphy.gif&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;Now that we have the EPC cleaned, and a list of the last inspection date for each household in another table a join between this two datasets with the join function (the join logo in the process), there is a presentation of the menu of the join where you can select the join key and the columns selected.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dss_uk/epc_part3.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;And finally there is a group by function per district, type of household, type of heating system and EPC rating.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;https://media.giphy.com/media/1ZxIxkXQIHOvTRw4gx/giphy.gif&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;And the final step is the python script to get aggregate informations at the district level with the pivot function of pandas (count of EPC per rating and type of household), but I could have used the pivot function of DSS.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;https://media.giphy.com/media/uWqiYpVDCQHKdV95vR/giphy.gif&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;Et voila we have the data of the EPC aggregated to a district level , that give us a knowledge on the rating of the household and the kind of household at this level.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dss_uk/epc_groupby_ready.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;This data can be easily joined with the data of Nomis with the join function.&lt;/p&gt;
+
+&lt;p&gt;I used some in house functions of DSS to do the join, groupby but I could have use:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;A python or R script to build the dataset&lt;/li&gt;
+  &lt;li&gt;SQL script if it was SQL tables&lt;/li&gt;
+  &lt;li&gt;Hive or impala in the case of a “big data” configuration&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now that the data are available let’s make an analysis and a dashboard to wrap up some results.&lt;/p&gt;
+
+&lt;h1 id=&quot;data-analysis-in-dss&quot;&gt;Data analysis in DSS&lt;/h1&gt;
+
+&lt;p&gt;The analysis are going to be super high level, it’s only to show the features of DSS.&lt;/p&gt;
+
+&lt;p&gt;This is an animation of a dashboard that I build with DSS.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;https://media.giphy.com/media/5QYlWs9chlKX0ZZZfq/giphy.gif&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The building of this dashboard is much easier than a Tableau one (my opinion), but they are sharing this drag and drop approach to build each graph that is very useful.&lt;/p&gt;
+
+&lt;p&gt;There is way to make some analysis directly from the dataset with the lab tool where in house functions can be used (to determine correlation for example) or used some script to analyse data, in this case I choose python to make some plot with seaborn.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;https://media.giphy.com/media/70kgukXMQ5opJQMete/giphy.gif&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The analysis part is really cool and I think that it could fit a lot of needs, but the other part that is really impressive is the ML part to build model based on the data processed.&lt;/p&gt;
+
+&lt;h1 id=&quot;model-serving-in-dss&quot;&gt;Model serving in DSS&lt;/h1&gt;
+
+&lt;p&gt;So there is multiple ways to build a model, but first let’s define a purpose for this part:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;“Build an energy rating estimator based on the location, the total floor area and the type of heating of the household”&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;There is three “levels” that DSS gives you to build a model but let’s be honest it’s the same interface just that your journey on the model configuration part start higher in the hierarchy of the menu.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dss_uk/choose_model3.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dss_uk/choose_model.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;In the menu to build the model there is the possibility to:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Prepare the training and testing sets&lt;/li&gt;
+  &lt;li&gt;Choose the evaluation metric&lt;/li&gt;
+  &lt;li&gt;Pick up the features&lt;/li&gt;
+  &lt;li&gt;Choose the models and the parameters for the grid search&lt;/li&gt;
+  &lt;li&gt;Compare the models after the testing part&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There is a simple animation that is making an overview of the features of the model builder.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;https://media.giphy.com/media/5n9tq7otvq3mnq0zqK/giphy.gif&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The interesting part is that you could use pre built functions (I presumed that scikit learn functions), or write your own python code. The tool to test the model is really impressive in terms of visualisation of the process and the results.&lt;/p&gt;
+
+&lt;p&gt;A good point is the visualisation of the results with for example for a decision tree that is really easy to understand (decompose with this tool).&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dss_uk/decisiontree_ukdss.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;After that you find the right model there is an API builder to embed the model. In this space you can define some test requests to see the model in action.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;https://media.giphy.com/media/Ylw99xCkx3y5UpN3aD/giphy.gif&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;To expose the model, the feature is not activated for the free version (or i miss to use it) but it seems pretty intuitive.&lt;/p&gt;
+
+&lt;p&gt;Now it’s time to conclude.&lt;/p&gt;
+
+&lt;h1 id=&quot;feedback-on-the-project&quot;&gt;Feedback on the project&lt;/h1&gt;
+
+&lt;p&gt;I will highly recommend to people that are working/interesting on the energy sector to dive in the EPC data because they are a very good source of knowledge on house market in the UK. &lt;strong&gt;In general and it’s very painful for me the most French guy abroad to say that but the UK government is doing a great job to collect and share data&lt;/strong&gt; and there is very interesting datasets on the government platform that could be used by data scientists (in France we are very late on this topic but things are changing slowly).&lt;/p&gt;
+
+&lt;p&gt;For Dataiku DSS, it is a &lt;strong&gt;great tool for data scientist experimented or not, I can feel that this tool has been designed by data scientists for data scientists&lt;/strong&gt; and there is so much features that I didn’t used like all the collaboration part, the deep learning etc. There is multiples in house functions to make the data processing easier, that’s really cool but it could become a burden if for example Dataiku decides to drop theses features (or make it premium) , if data people doesn’t know how to do a join a groupby etc the data pipeline transfer could be difficult but I really like the fact that Dataiku doesn’t stuck the user with their in house functions and let the possibility other way to manipulate data like (with SQL for example).&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;In my day to day job do DSS can fill MY need ?, NO because I have currently multiple tools at my disposal to do my job and I need flexibility on the data side and on the development side to experiment and deploy things&lt;/strong&gt; but this tool is definitely worth trying because it can fill the needs of data teams who doesn’t have my needs (and they are numerous around the world).&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dss_uk/dataiku_logo.png&quot; /&gt;
+&lt;/center&gt;
+</description>
+        <pubDate>Sat, 23 Mar 2019 00:00:00 -0400</pubDate>
+        <link>http://localhost:4000/dataiku_epc</link>
+        <guid isPermaLink="true">http://localhost:4000/dataiku_epc</guid>
+        
+        
+        <category>tooling</category>
+        
+        <category>dsml</category>
+        
+      </item>
+    
+      <item>
+        <title>Build a data pipeline on AWS to collect PUBG data</title>
+        <description>&lt;p&gt;I started this project in echo of the &lt;a href=&quot;https://www.kaggle.com/c/pubg-finish-placement-prediction&quot;&gt;Kaggle competition&lt;/a&gt; related to PUBG, where the goal was to predict the player rank in the match,  based on some end of match statistic (like the distance ran during the match etc) . I wanted to understand the data source  (to see if there is some intentional missing stats/informations) and try some services of Amazon like AWS Glue and Athena to build a data pipeline in AWS.&lt;/p&gt;
+
+&lt;p&gt;In this article, I will explain:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;What’s PUBG, the principle of the game etc&lt;/li&gt;
+  &lt;li&gt;The approach of the project&lt;/li&gt;
+  &lt;li&gt;The collection and the cleaning of the data&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;description-of-pubg&quot;&gt;Description of PUBG&lt;/h1&gt;
+
+&lt;p&gt;PUBG is one of the flagship (first  and one of the most popular) of a video game type call battle royale, the principal is that 100 players (less or more) are dropped on an island, without equipment and they have to survive on this island by collecting materials, weapons, equipment and vehicle.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/pubg1/pubg-main.jpg&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;To push people to fight, the area available is becoming smaller more the game is progressing so this format push people to fight each others because at the end it can be only one survivor. There is two very popular games who support the movement it’s PUBG and Fortnite they are available on all the possible platforms (PUBG on console is not good), and now you can see that all the other popular games (Call of duty, Battlefield) wants to add their own battle royale mode inside, but let’s be honest Fortnite is crushing everybody (Check the google trends PUBG VS Fornite)&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/pubg1/google_trends.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;My opinion on this kind of game is that the principle is cool, you can build some amazing situation where  is tension during the game but I think that you cannot sell (full price) a game that is just battle royale. Epic has been smart with Fortnite because they turned a project that has been long to produce and the sell was not good to something very lucrative by proposing a free standalone application that is using the same asset than the original game but only focus on the battle royale (I hope that the guy that get the idea add a raise).&lt;/p&gt;
+
+&lt;p&gt;Let see the project of data collection.&lt;/p&gt;
+
+&lt;h1 id=&quot;approach-of-the-project&quot;&gt;Approach of the project&lt;/h1&gt;
+
+&lt;p&gt;The idea behind this project is to:
+&lt;strong&gt;Build a system to collect the data  from the API delivered by the PUBG corporation
+Clean the data
+Make all the data available without downloading everything on my machine&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;To build the pipeline I decided to use AWS because I am more comfortable with their services than Microsoft, Google etc but I am sure that the same system can be built on these platforms too.&lt;/p&gt;
+
+&lt;p&gt;To complete the task, I decided to use the following services:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;EC2 instance to have a machine running to make the collection&lt;/li&gt;
+  &lt;li&gt;S3 to store the data collected and process&lt;/li&gt;
+  &lt;li&gt;Glue to make the data clean and available&lt;/li&gt;
+  &lt;li&gt;Athena to be the interface with the data store in S3&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There is an high level view of the process deploy on AWS with the different steps.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/pubg1/pubg-data project.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;Let’s see the process in details.&lt;/p&gt;
+
+&lt;h1 id=&quot;collect-the-data-from-pubg-api&quot;&gt;Collect the data from PUBG API&lt;/h1&gt;
+
+&lt;p&gt;The PUBG corporation has build a very good open &lt;a href=&quot;https://developer.playbattlegrounds.com/apps?locale=en&quot;&gt;API&lt;/a&gt;, there is multiple endpoints that opens differents data sources. To make it simple you can access data related to:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The PUBG player defined by their accountid&lt;/li&gt;
+  &lt;li&gt;The match defined by their matchid&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There is data from multiple platforms (pc, xbox, and ps4) from different regions (America, Europe and Asia). For this article I am going to focus on the PC platform and the north america area. There is multiple endpoints on this API but let’s focus on :&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The &lt;a href=&quot;https://documentation.playbattlegrounds.com/en/samples-endpoint.html&quot;&gt;sample endpoint&lt;/a&gt;: That gives the access to some matchid updated every day&lt;/li&gt;
+  &lt;li&gt;The &lt;a href=&quot;https://documentation.playbattlegrounds.com/en/matches-endpoint.html&quot;&gt;matches endpoint&lt;/a&gt;: That gives details on the match, like the end result and more important the link to download a compress packets of events.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can find a &lt;a href=&quot;https://github.com/jeanmidevacc/pubg-datacollection&quot;&gt;repository&lt;/a&gt; with the functions that I build to collect, clean and send the data. This notebook gives goods insight on the data collected. There is three types of data:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The end match stats, they are stored in a “folder” in a s3 bucket&lt;/li&gt;
+  &lt;li&gt;The complete events that are stored in another folder&lt;/li&gt;
+  &lt;li&gt;The decomposed events that are stored in separate folder&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;About the packets of events there is multiple events available on the API, there is a schema that contains the details on this events.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/pubg1/events_pubg.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;I schedule a script to run every day on my EC2 instance that triggered the acquisition of new data from the sample and store it in the right folder and in a day folder.&lt;/p&gt;
+
+&lt;p&gt;To get the general informations the details on the match is collected (like the number of people, the map name etc) to an dynamodb table.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Some advices that I can give when you are storing the data is :&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Store them as proper .gz file&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Be clear on the delimiter, espace char and quote char&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Drop the index&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;For Dynamodb, convert your float data to Decimal&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So that’s a simple overview about how I collected the data, now let’s have a look on the cloud part.&lt;/p&gt;
+
+&lt;h1 id=&quot;crawl-the-data-data-in-s3-and-dynamodb-with-glue-so-much-name-dropping&quot;&gt;Crawl the data data in S3 and Dynamodb with Glue (so much name dropping)&lt;/h1&gt;
+
+&lt;p&gt;The AWS glue setup dashboard is setup in two sections with the data catalog part and the ETL part ( I will focus on the upper part of the dashboard).&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/pubg1/awsgluesdash.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;Let’s focus on the data catalog first.&lt;/p&gt;
+
+&lt;h2 id=&quot;data-catalog-and-crawler-part&quot;&gt;Data catalog and Crawler part&lt;/h2&gt;
+
+&lt;p&gt;In this part you can find a database tab that contains all the databases and the tables associated that you created with Glue. For this project I create my first database. The interesting part is the the crawler tab where you can setup the crawler that will navigate in S3, Dynamodb et some others services of AWS (like RDS). On the previous figure there is a list of all the crawlers that I created for this project. Let’s see what’s inside a crawler.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/pubg1/awsgluecrawler.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;So when you setup your crawler, there is to :&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Find a name for your crawler&lt;/li&gt;
+  &lt;li&gt;Define the data source, in this case I am going to focus on three events and my Dynamodb table&lt;/li&gt;
+  &lt;li&gt;Define a AWS role for your crawler to have access to all the data sources that want to be crawled&lt;/li&gt;
+  &lt;li&gt;Define the frequency of execution of the crawler, I decided to make it run one time per week&lt;/li&gt;
+  &lt;li&gt;Define the output of the crawler&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;I am highly recommending to activate the tickbox Update all new and existing partitions with metadata from the table to avoid some partitions issue during the reading of the data if you are not controlling what you are receiving like me.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;And voila just have to run the crawler from the main page of AWS Glue and you can now have access to your data extract by the crawler in Athena (SQL way to access the  data).&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/pubg1/athena_rawevents.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;But the data is quite still raw so I decided to add a new layer to the crawler to make some data cleaning and add some informations.&lt;/p&gt;
+
+&lt;h2 id=&quot;etl-part&quot;&gt;ETL part&lt;/h2&gt;
+
+&lt;p&gt;For the ETL part, that is the data processing part of the pipeline. I could have analyse the data as they arrived in the S3 bucket but I noticed that some of the records was not good (let’s say corrupted) so I wanted to apply a transformation state for this data for:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Drop the corrupted records (with a wrong matchid format)&lt;/li&gt;
+  &lt;li&gt;Make a join with the details of the match collected in the dynamodb table (and crawl previously)&lt;/li&gt;
+  &lt;li&gt;Calculate the delta time between the event and the beginning of the match (in seconds and minutes)&lt;/li&gt;
+  &lt;li&gt;Make some simple string manipulation in function of the events (like cleaning the name of the weapon)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There is an illustration of the code and you can find the piece of code in the &lt;a href=&quot;https://github.com/jeanmidevacc/pubg-datacollection/blob/master/etl_example.py&quot;&gt;repository&lt;/a&gt;.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/pubg1/etl-pubg.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;I try the code approach but there is an option the ETL configuration where you can have more a diagram approach to make the data manipulation, as I wanted to used the rdd map and the dataframe of spark I decided to not use this feature but I make some simple tests and it works fine.So now there is just a need to build a crawler to update the data catalog with the new data generated by the ETL part.&lt;/p&gt;
+
+&lt;p&gt;In the following schema there is the schedule of the operations in AWS Glue.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/pubg1/awsgluediagram.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;And now let’s make a quick test on AWS to request the process data from the web interface.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/pubg1/athena_events.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;This data is accessible from Athena but you can connect AWS quicksight it have a more Tableau like experience (what I don’t like I am not a big fan of all these BI tool that are too blackbox for me) and more important you can access this data from a notebook (there is copy of a python environment in the &lt;a href=&quot;https://github.com/jeanmidevacc/pubg-datacollection/blob/master/environnement.yml&quot;&gt;repository&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;That was a description of my data pipeline to collect the data from the PUBG API, the system is collecting around 1000 matches per day, it’s not a big amount but I wanted to start small.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;And I am a nice guy, you can find an extract of the tables that I build for this project (it’s an extract of the data of the 27th January 2019) in this &lt;a href=&quot;https://www.kaggle.com/jeanmidev/pubgevents&quot;&gt;kaggle dataset&lt;/a&gt;.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I hope that you enjoy the reading, and if you have any comments don’t hesitate to comment.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 01 Feb 2019 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/pubg1</link>
+        <guid isPermaLink="true">http://localhost:4000/pubg1</guid>
+        
+        
+        <category>tooling</category>
+        
+      </item>
+    
+      <item>
+        <title>Analysis of the Crossfit Open 2018</title>
+        <description>&lt;p&gt;Hello in this article, I am going to give some leads on how to create web scraping system that has been used to collect some data from the &lt;a href=&quot;https://games.crossfit.com/regionals&quot;&gt;Crossfit games website of Reebok&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;introduction-to-crossfit&quot;&gt;Introduction to Crossfit&lt;/h1&gt;
+
+&lt;p&gt;The Crossfit is defined as&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;a strength and conditioning program consisting mainly of a mix of aerobic exercise, calisthenics (body weight exercises), and Olympic weightlifting
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This program seems to have been invited in the 2000’s by Greg Glassman and Lauren Jenai, and the sport is licensed under the name of &lt;strong&gt;CrossFit, Inc&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;I invite you to take a look to some videos on the &lt;a href=&quot;https://www.youtube.com/channel/UCtcQ6TPwXAYgZ1Mcl3M1vng&quot;&gt;Crossfit Inc channel on youtube&lt;/a&gt; to have a better view of what could be the exercises to do during a session.&lt;/p&gt;
+
+&lt;p&gt;In my case I am practicing crossfit since August 2017, three times per week and I liked it honestly when I started I was looking the sport as some brutes that were doing gym exercises at high intensity.&lt;/p&gt;
+
+&lt;p&gt;More seriously, I was a little bit afraid by the intensity of the exercises that from my point of view could hurt people pretty badly, but this sport is made for everybody no need to be Superman to practice crossfit.&lt;/p&gt;
+
+&lt;p&gt;The strength is that every exercise can be scaled in term of weight, movement in function of your need (physical condition, injuries) but the only goal is to complete the exercise. Never giving up could be the motto of crossfit.&lt;/p&gt;
+
+&lt;p&gt;The selection for the world cup championship is quite simple, there is 3 phases in the process:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The &lt;strong&gt;Open&lt;/strong&gt;, everybody can participate to this qualification, the division are defined by age and gender and if you are not on an affiliate gym that can validate your performance you can film it and send it to the organisers.&lt;/li&gt;
+  &lt;li&gt;The &lt;strong&gt;Regionals&lt;/strong&gt;, where the best from the Open will compete to be selected for the &lt;strong&gt;Games&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;The &lt;strong&gt;Games&lt;/strong&gt;, the world cup&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For this article, the data collection will be only the open 2018 data that can be found at this &lt;a href=&quot;https://games.crossfit.com/open&quot;&gt;address&lt;/a&gt;.The Open are defined by:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;a period of 5 weeks, where every week a new wod (workout of the day) is announced&lt;/li&gt;
+  &lt;li&gt;there are 4 days to try to make the best score to the wod&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So why I want to use this case for my introduction to web scraping:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;I read a &lt;a href=&quot;https://towardsdatascience.com/my-first-battle-with-web-scraping-77e15954d13b&quot;&gt;cool article&lt;/a&gt; on the scraping of the Crossfit games website&lt;/li&gt;
+  &lt;li&gt;I found the presentation of the leaderboard quite limited in term of comparison&lt;/li&gt;
+  &lt;li&gt;I wanted to make a web scraping exercise for a long time&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So let’s dive in it.&lt;/p&gt;
+
+&lt;h1 id=&quot;web-scraping-101&quot;&gt;Web scraping 101&lt;/h1&gt;
+
+&lt;p&gt;In this case I decided to scrap the following elements:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;the &lt;a href=&quot;https://games.crossfit.com/leaderboard/open/2018?division=1&amp;amp;region=0&amp;amp;scaled=0&amp;amp;sort=0&amp;amp;occupation=0&amp;amp;page=1&quot;&gt;leaderboard pages&lt;/a&gt; for this article we will just be working on the result for 2018 but if you want the approach for the previous year I invite you to look this &lt;a href=&quot;https://towardsdatascience.com/my-first-battle-with-web-scraping-77e15954d13b&quot;&gt;article&lt;/a&gt; on the topic&lt;/li&gt;
+  &lt;li&gt;the &lt;a href=&quot;https://games.crossfit.com/athlete/153604&quot;&gt;athletes pages&lt;/a&gt;, because every athlete has a page with some interesting informations&lt;/li&gt;
+  &lt;li&gt;the &lt;a href=&quot;https://games.crossfit.com/affiliate/3220&quot;&gt;gym pages&lt;/a&gt; that contains some details on the location of the gym&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To collect the data from this website, I used the package called &lt;a href=&quot;https://www.crummy.com/software/BeautifulSoup/&quot;&gt;Beautiful Soup&lt;/a&gt;, that is quite popular for the web scraping in Python. In the following sections there will be a description of the data collected and the code associated.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;You can find all functions explained in this part in this &lt;a href=&quot;https://github.com/jeanmidevacc/crossfit_webscraping&quot;&gt;GitHub repository&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-leaderboard&quot;&gt;The leaderboard&lt;/h2&gt;
+
+&lt;p&gt;There is no proper need to scrap the webpage, the API that is used by the frontend can be called directly by a simple get request. Thanks to &lt;a href=&quot;https://twitter.com/PedroPuros&quot;&gt;@pedro&lt;/a&gt; to notice that. There is just a need to mention in the request:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;the code of the division&lt;/li&gt;
+  &lt;li&gt;if the leaderboard concerns the scaled or not scaled athletes&lt;/li&gt;
+  &lt;li&gt;the page of the api (that you can get form the request of the first page)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is the request to execute.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/carbon_getleaderboard.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Function to collect the leaderboard data&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;h2 id=&quot;the-athlete-pages&quot;&gt;The athlete pages&lt;/h2&gt;
+
+&lt;p&gt;In this case the athlete page looks like the screenshot in the following figure&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/crossfit_athletespage.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Example of an athlete page&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;And at then bottom of the page, there is some benchmark for some exercises.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/stat_athlete.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Benchmark of exercises&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;So I decided to scrap the page for all the athletes that participated to the open during the last 5 years and that represent more than 700000 pages to scrap, to optimise the collection I decided to parallelise the process and I used the following code to get the data for one page.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/carbon_getathletes.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Function to collect the athlete data&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;h2 id=&quot;the-gym-pages&quot;&gt;The gym pages&lt;/h2&gt;
+
+&lt;p&gt;In the case of the gym page, the amount of informations to collect is less important than for the athletes, in the following figure there is a screenshot of the page of a gym.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/gym_details.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Example of a gym page&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The script will focus on the details on the header of the page, that concern the location. The number of pages to scrap in this case is around 10000 pages, and the following code has been used to do that.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/carbon_getgym.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Function to collect the gym data&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;h2 id=&quot;ethic-behind-the-process&quot;&gt;Ethic behind the process&lt;/h2&gt;
+
+&lt;p&gt;As you have read there is a lot of data that have been collected by my system, the question is &lt;strong&gt;This is legal or not ?&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;If I am referring to the common belief, &lt;em&gt;it’s on internet so it’s free that’s fine&lt;/em&gt; well it seems that it’s more complicated than that if I refer to &lt;a href=&quot;https://benbernardblog.com/web-scraping-and-crawling-are-perfectly-legal-right/&quot;&gt;this article&lt;/a&gt;, it seems that I did something illegal because I didn’t respect the term of use of the website so I decided to contact Crossfit Inc to warn them of what I have done and get their feedback on it (I contacted the organisation by their form, and some email address related to privacy etc).&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;29 April 2018&lt;/strong&gt;: I have no feedback from them on this subject.&lt;/p&gt;
+
+&lt;p&gt;From my point of view, I think that’s say until i didn’t publish personal informations on the athletes and the sell the dataset but who knows ?&lt;/p&gt;
+
+&lt;p&gt;Let’s have a look on some global insights of the dataset.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;You can find all functions explained in this part in this &lt;a href=&quot;https://github.com/jeanmidevacc/crossfit_webscraping&quot;&gt;GitHub repository&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h1 id=&quot;insights-on-the-open-2018&quot;&gt;Insights on the Open 2018&lt;/h1&gt;
+
+&lt;h2 id=&quot;overview&quot;&gt;Overview&lt;/h2&gt;
+
+&lt;p&gt;In this part, it will be mostly a very general overview on the Open event. The analysis will start by the gender repartition.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/genderrepartition.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Gender repartition&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;It is good to see that there is quite a similar number of  men (56.8%) and the women (43.2%) (similar as what I can see during my training) that was engaged in the Open. Let’s see now the repartition of the age.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/boxplot_age.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Box plot of the age of the athletes (in function of the gender)&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The distribution of the age is quite similar between the gender, the athletes with an age greater than 60 are considered as outliers. Another point to notice is that the average age of the athletes is greater than 30 years old, this is could be maybe the mark of:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;need of experience to participate to the Open (but I will not bet on that)&lt;/li&gt;
+  &lt;li&gt;the price to be a member of a box is too high&lt;/li&gt;
+  &lt;li&gt;the video rating is not very well promoted&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The following distribution graph is a good illustration of this age segmentation.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/distplot_age.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Distribution of the age of the athletes&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;This is the illustration of the age segmentation that can be related to the income. Let’s see now the athletes data.&lt;/p&gt;
+
+&lt;h2 id=&quot;analysis-of-the-athletes&quot;&gt;Analysis of the athletes&lt;/h2&gt;
+
+&lt;p&gt;I used for this a part of the data from the athletes pages, I filtered the outlier data that doesn’t respect the &lt;a href=&quot;https://goo.gl/images/jJRsXf&quot;&gt;BMI (Body Mass Index)&lt;/a&gt; that are not between 13 and 83, and some wrong weight and height values. There is a visualisation of the morphology.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/jointplot.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt; Morphology of the athletes &lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The general physic of the athlete seems to be:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;a weight around 80 kg&lt;/li&gt;
+  &lt;li&gt;a height around 180 cm&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In term of country repartition, the USA is leading the way. In the following figure there is a count of the number of athletes engaged in the event in the USA and the top 10 others countries.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/countcompetitor_countrytop10.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Number of athletes in the top 10 countries&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;I think there is no comment to do on the popularity of the crossfit in the USA, if I zoom more on the other countries there is some interesting insights. In the following figure, there is more details on the top 10 countries (in term of number of athletes) without the USA.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/countcompetitor_countrytop9-US.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Number of athletes in the other countries&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;As we can see there is:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;there is a huge gap between the USA and the second country (like 200 000 athletes)&lt;/li&gt;
+  &lt;li&gt;the second country with the most important number of athletes it’s not a country it’s the association of all the athletes that was just filming their wod.&lt;/li&gt;
+  &lt;li&gt;a clear interest from the athletes in Brazil and part of the commonwealth&lt;/li&gt;
+  &lt;li&gt;the number of athletes engaged in Europe is less important&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let’s see now some details on the gym that was scoring the athletes.&lt;/p&gt;
+
+&lt;h2 id=&quot;analysis-of-the-gymbox-data&quot;&gt;Analysis of the gym/box data&lt;/h2&gt;
+
+&lt;p&gt;So to be clear the USA have an important number of gyms/athletes engaged in the event. In the following there is a comparison between the number of gyms in the USA and the number of gyms and the 9 others countries with the more gym engaged.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/countaffiliate_countrytop10.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Top 10 count of gym&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The USA is crushing  the other countries literally. In the following figure, there is an illustration of the number of gyms in the others countries.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/countaffiliate_countrytop9-US.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Number of gyms in the others top10 countries&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;It’s interesting to see that (there is a lot of similarity between the athlete number and the gym number, that’s normal):&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Brazil has an important number of gyms&lt;/li&gt;
+  &lt;li&gt;the Commonwealth (Canada,UK,Australia) is present&lt;/li&gt;
+  &lt;li&gt;France is leading Europe in the ranking (but the Italy is close)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I can continue to make a lot of graphs with this data, so I decided to make an interactive dashboard that I can make evolved easily at any time and for that I will use &lt;a href=&quot;https://www.tableau.com/&quot;&gt;Tableau&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;dashboard-on-tableau-public&quot;&gt;Dashboard on Tableau Public&lt;/h1&gt;
+
+&lt;p&gt;Tableau Public is a service that have been by a company developed in 2003 in Mountain view based on the work of Stanford university (vizQL). The company was introduced in 2013 at the NYSE and count 2400 employees (2015 number).&lt;/p&gt;
+
+&lt;p&gt;There are different products developed by a Tableau, but the purpose of this tool is to facilitate the exchange of data informations across the business by the creation and the sharing of the dashboard.&lt;/p&gt;
+
+&lt;p&gt;I invite to take a look on their website to have more details on the products, for this project I used Tableau public to create the following dashboard.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;div class=&quot;tableauPlaceholder&quot; id=&quot;viz1525029086914&quot; style=&quot;position: relative&quot;&gt;&lt;noscript&gt;&lt;a href=&quot;#&quot;&gt;&lt;img alt=&quot;Story 1 &quot; src=&quot;https:&amp;#47;&amp;#47;public.tableau.com&amp;#47;static&amp;#47;images&amp;#47;cr&amp;#47;crossfitopen&amp;#47;Story1&amp;#47;1_rss.png&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt;&lt;/noscript&gt;&lt;object class=&quot;tableauViz&quot; style=&quot;display:none;&quot;&gt;&lt;param name=&quot;host_url&quot; value=&quot;https%3A%2F%2Fpublic.tableau.com%2F&quot; /&gt; &lt;param name=&quot;embed_code_version&quot; value=&quot;3&quot; /&gt; &lt;param name=&quot;site_root&quot; value=&quot;&quot; /&gt;&lt;param name=&quot;name&quot; value=&quot;crossfitopen&amp;#47;Story1&quot; /&gt;&lt;param name=&quot;tabs&quot; value=&quot;no&quot; /&gt;&lt;param name=&quot;toolbar&quot; value=&quot;yes&quot; /&gt;&lt;param name=&quot;static_image&quot; value=&quot;https:&amp;#47;&amp;#47;public.tableau.com&amp;#47;static&amp;#47;images&amp;#47;cr&amp;#47;crossfitopen&amp;#47;Story1&amp;#47;1.png&quot; /&gt; &lt;param name=&quot;animate_transition&quot; value=&quot;yes&quot; /&gt;&lt;param name=&quot;display_static_image&quot; value=&quot;yes&quot; /&gt;&lt;param name=&quot;display_spinner&quot; value=&quot;yes&quot; /&gt;&lt;param name=&quot;display_overlay&quot; value=&quot;yes&quot; /&gt;&lt;param name=&quot;display_count&quot; value=&quot;yes&quot; /&gt;&lt;/object&gt;&lt;/div&gt;                &lt;script type=&quot;text/javascript&quot;&gt;                    var divElement = document.getElementById('viz1525029086914');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                &lt;/script&gt;
+&lt;h6&gt;&lt;i&gt;Tableau dashboard&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;To finish I wanted to go further on the data and just focused on the benchmark exercises, to try to find a connection between them.&lt;/p&gt;
+
+&lt;h2 id=&quot;relationship-between-the-exercises&quot;&gt;Relationship between the exercises&lt;/h2&gt;
+
+&lt;p&gt;To analyse the data, I had to eliminate the outliers value so to do that I add the choice:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;use the dbscan to detect the outliers after normalisation of the data (efficient but a little bit long to apply it on all the athlete with the data)&lt;/li&gt;
+  &lt;li&gt;use the statistic approach based on the quantile and delete the value that were below the 5% quantile limit and above the 95% quantile&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I visually found some correlation between the exercise, as the following figure illustrates the relation.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/linearmodel_example.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Illustration of a linear relation between two exercises&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;So I wanted to apply the research of correlation (a linear relation) to all the exercises, I applied a linear model on 1,000 athletes, and I tested the model on 250 athletes to see if the model was good enough. I used the r score as an index to evaluate the efficiency of the models.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/heatmap_linearmodel.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;rscore matrix for the different benchmarks&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;On the training set, the exercises that involved to carry some weight was highly correlated to each other, the exercises that involved a duration showed a correlation that was less important. When the models have been applied on the test set, the correlation for the weight exercises was still good but the exercises with time was definitely overfitting on the training set. In the following figure there is an illustration of the linear model for the exercises associated to the weight.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/linearmodel_weight.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Linear relation for the exercises with weight&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;To have a better idea of the impact of a weight modification on one exercise, I created a table that make the conversion of for a weight modification on one exercise to a another.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/crossfit/matrix_adjust_weight.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Adjustment matrix&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;h1 id=&quot;conclusion-and-next-steps&quot;&gt;Conclusion and next steps&lt;/h1&gt;
+
+&lt;p&gt;This project was superinteresting, the scraping of a website is definitely very practical to collect data, and there was some insights to get from this dataset (by a quick analysis).&lt;/p&gt;
+
+&lt;p&gt;The next steps for this project are:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;create a Kaggle dataset (if Reebok is OK)&lt;/li&gt;
+  &lt;li&gt;create some kind of API that will use this data to give training advices&lt;/li&gt;
+  &lt;li&gt;based on the pictures available on the athletes profile, as the age and the gender are right create a model to determine from the face of someone his gender and age (age range)&lt;/li&gt;
+  &lt;li&gt;add more historical data on the table (I scraped the past 5 years but the format of the past data is a little bit different) and maybe add regionals and games data&lt;/li&gt;
+  &lt;li&gt;improve and build other dashboards&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Fri, 30 Mar 2018 00:00:00 -0400</pubDate>
+        <link>http://localhost:4000/crossfitopen</link>
+        <guid isPermaLink="true">http://localhost:4000/crossfitopen</guid>
+        
+        
+        <category>tooling</category>
+        
+        <category>dsml</category>
+        
+      </item>
+    
+      <item>
+        <title>Building a dashboard with Dash (plotly), AWS and Heroku</title>
+        <description>&lt;p&gt;&lt;strong&gt;You can find the template for this dashboard in this &lt;a href=&quot;https://github.com/jeanmidevacc/dash_template_dashboard&quot;&gt;Github repository&lt;/a&gt;.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Hello, in this article I am going to explain the process that I followed to create a dashboard that displayed some personal informations. To realise this project, I decide to use &lt;a href=&quot;https://github.com/plotly/dash&quot;&gt;Dash&lt;/a&gt; a Python framework that has been developed by &lt;a href=&quot;https://plot.ly/&quot;&gt;Plotly&lt;/a&gt; a canadian company that develop the library Plotly to make interactive data visualisation.&lt;/p&gt;
+
+&lt;p&gt;In this article, I am going to explain:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The data involved&lt;/li&gt;
+  &lt;li&gt;The back end of this project (and some tips to make your own)&lt;/li&gt;
+  &lt;li&gt;The dashboard, his deployment and components&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;introduction-on-tha-data&quot;&gt;Introduction on tha data&lt;/h1&gt;
+
+&lt;p&gt;In our day to day life, we are generating a lot of data and as a data scientist I liked to play with data. In my case, I have some smart devices like a smart scale or a smart band that I am using every day, and I have some applications to monitor some aspect of my life like Strava,  in this context I am interested by the following data sources:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;my smart scale data from Nokia devices&lt;/li&gt;
+  &lt;li&gt;my running sessions on Strava&lt;/li&gt;
+  &lt;li&gt;my crossfit exercices&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For the first two data sources, I have an application to follow the evolution of different metrics&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/hm_ss_reduce.jpg&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Screenshot of my Health mate app (Nokia data)&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;So that’s great, but one service/device = one application, it’s not very efficient to make a quick monitoring of what happened. But who said application said potentiel API for developers and in that case there is one (Nokia and Strava).&lt;/p&gt;
+
+&lt;p&gt;The last data source is more an “old school” data source because it’s simply a Google spreadsheet that I am filling every week with the different exercices that I completed during my crossfit sessions. I found it a good and efficient way to keep track of what I am doing at the box and see the progress. There is an &lt;a href=&quot;https://developers.google.com/drive/&quot;&gt;API&lt;/a&gt; that offer me the possibilities to access this data source.&lt;/p&gt;
+
+&lt;p&gt;So all the data are available for my project.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;https://media.giphy.com/media/3ohzdIuqJoo8QdKlnW/giphy.gif&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;Let’s see now the structure of the back end that will expose the data for the dashboard.&lt;/p&gt;
+
+&lt;h1 id=&quot;back-end-description&quot;&gt;Back end description&lt;/h1&gt;
+
+&lt;p&gt;For this project, the backend is hosted on Amazon Web Services. There is an illustration of the back end of the project.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/jm-personalmetric-dp_crop.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Structure of the back end&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;This back end is structured around two elements, the data pipeline for the data collection from the different API, and the API that will offer the possibilities to get a forecast of the weight and the fat ratio.&lt;/p&gt;
+
+&lt;h2 id=&quot;building-the-data-pipeline&quot;&gt;Building the data pipeline&lt;/h2&gt;
+
+&lt;p&gt;For the collection of the data, the pipeline is hosted in Amazon Web Services, I have an EC2 instance (the one from the &lt;a href=&quot;https://aws.amazon.com/free/&quot;&gt;AWS free tier&lt;/a&gt;) that is collecting periodically (every 3 hours) the new data that have been pushed in the different sources. The data collected are cleaned and send in 3 differents DynamoDB tables.&lt;/p&gt;
+
+&lt;p&gt;The pipeline is very simple, for the configuration of the DynamoDB table I setup a very small writing capacity of 2 units but for the reading I decided to use the auto-scaling feature to set a dynamic reading capacity between 10 and 50 units in function of the traffic.&lt;/p&gt;
+
+&lt;h2 id=&quot;deploy-a-forecast-model&quot;&gt;Deploy a forecast model&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;DISCLAIMER: This is not a super efficient model but at least it exists&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The model is very simple but not very efficient, I am currently having a model for the weight and another one for the fat ratio.&lt;/p&gt;
+
+&lt;p&gt;It’s a simple KNN model in each case that it take the following inputs:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;the distance ran during the week&lt;/li&gt;
+  &lt;li&gt;the time ran during the week&lt;/li&gt;
+  &lt;li&gt;the number of sessions of crossfit&lt;/li&gt;
+  &lt;li&gt;the average weight carried during crossfit exercices (with weight)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The model will predict the weekly variation of the weight and the fat ratio.&lt;/p&gt;
+
+&lt;p&gt;The model will be updated every week and send in a S3 bucket. To access the model directly from the dashboard I create an API with &lt;a href=&quot;http://flask.pocoo.org/docs/0.12/quickstart/&quot;&gt;Flask&lt;/a&gt; that I deploy in a Lambda with the &lt;a href=&quot;https://github.com/Miserlou/Zappa&quot;&gt;Zappa package&lt;/a&gt; that I used for &lt;a href=&quot;http://jmdaignan.com/2017/09/18/How-to-deploy-a-Messenger-bot-in-Python/&quot;&gt;my article&lt;/a&gt; on the messenger chatbot.&lt;/p&gt;
+
+&lt;p&gt;This is the code of the API.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;requests&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;flask&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Flask&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jsonify&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pickle&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;json&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;scipy&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sklearn.preprocessing&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MinMaxScaler&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;boto3&lt;/span&gt;
+
+
+&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Flask&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;s3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;boto3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resource&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'s3'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;methods&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'GET'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hello_world&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Hello world&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'/testget'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;methods&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'GET'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_forecast&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Collect the inputs from the get request
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    	&lt;span class=&quot;s&quot;&gt;&quot;distance_running&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;distance_running&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    	&lt;span class=&quot;s&quot;&gt;&quot;duration_running&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;duration_running&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    	&lt;span class=&quot;s&quot;&gt;&quot;nbr_crossfit&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;nbr_crossfit&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    	&lt;span class=&quot;s&quot;&gt;&quot;weight_crossfit&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;weight_crossfit&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# Collect the models
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;s3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bucket&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;forecastjm.models&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;download_file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;finalized_model.pickle&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'finalized_model.pickle'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;dict_models&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pickle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;finalized_model.pickle&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'rb'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# Create the normaliser
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;normaliser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MinMaxScaler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;normaliser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dict_models&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;input&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# Prepare the inputs
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;input_model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;distance_running&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;duration_running&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;nbr_crossfit&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;weight_crossfit&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;input_model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# Normalise the inputs
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;input_model_norm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;normaliser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;transform&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;input_model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;input_model_norm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# Get the weekly forecast
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;evolution_weight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dict_models&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;model_weight&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;predict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;input_model_norm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;evolution_fatratio&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dict_models&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;model_fatratio&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;predict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;input_model_norm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;evolution_weight&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;evolution_fatratio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# Prepare the response to send
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;weight&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;evolution_weight&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;fat_ratio&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;evolution_fatratio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dumps&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;#Flask application
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;debug&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Nothing special but everything it’s working. Let’s focus now on the data collection part of the project to fill the Dynamodb tables.&lt;/p&gt;
+
+&lt;h1 id=&quot;data-collection&quot;&gt;Data collection&lt;/h1&gt;
+
+&lt;p&gt;As I said previously, there is three API to connect to our back end:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Nokia API&lt;/li&gt;
+  &lt;li&gt;Strava API&lt;/li&gt;
+  &lt;li&gt;Google drive API&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let’s have a look on each data source.&lt;/p&gt;
+
+&lt;h2 id=&quot;nokia-api&quot;&gt;Nokia API&lt;/h2&gt;
+
+&lt;p&gt;With this API, I started to collect the data since February 2017, I have my smart band since July 2014 and my smart scale since November 2014 and I loved these devices, their design is nice the application is good.I hope that all the rumors about Nokia that will stop this branch are wrong.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/withings_nokia_crop.jpg&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Nokia devices (withings branded but it's the same thing now)&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;I created a script that was calling the API with GET requests (super long in term of lenght), honestly I think that the API of Nokia is the most technical API that I used so far (in comparison to Netatmo that is for me the easiest API to use) but at least it was working during the past year.&lt;/p&gt;
+
+&lt;p&gt;For this project I tried to make some adjustments and I litterally break everything so I decided to use this &lt;a href=&quot;https://github.com/orcasgit/python-nokia&quot;&gt;GitHub repository&lt;/a&gt; to manage the connection with the API and it’s working great !!&lt;/p&gt;
+
+&lt;h2 id=&quot;strava-api&quot;&gt;Strava API&lt;/h2&gt;
+
+&lt;p&gt;I am using Strava since September 2016, I was a Runkeeper and a Runstatic guy before but I decided to switch when I arrived in the UK in 2017.&lt;/p&gt;
+
+&lt;p&gt;Honestly the API of Strava is super easy to use, just create an application get your access token and make the following GET request to get your past activities.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;requests&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Get the endpoint for the GET request
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;requests_url&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;https://www.strava.com/api/v3/athlete/activities&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Create the parameter for the GET request
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;access_token&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;access_token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Make the request
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;requests&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;requests_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Store the response
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;list_activities&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;crossfit-data-google-drive-api&quot;&gt;Crossfit data (Google drive API)&lt;/h2&gt;
+
+&lt;p&gt;I am currently practicing crossfit since August 2017, as I said previously, I am monitoring my trainings in a spreadsheet on Google sheets.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/capture_gs.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Capture of my Google spreadsheet&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;It’s an old school way to do it but I found it more efficient than an application to collect the data.&lt;/p&gt;
+
+&lt;p&gt;I am using the Google Drive API and this &lt;a href=&quot;https://www.twilio.com/blog/2017/02/an-easy-way-to-read-and-write-to-a-google-spreadsheet-in-python.html&quot;&gt;tutorial&lt;/a&gt; made by Twillio to setup a python script that will collect the data. Another way to do it, is to use &lt;a href=&quot;https://sheetsu.com/&quot;&gt;Sheetsu&lt;/a&gt; as I have some Google credits I decided to not use this service (I used in the past for an Alexa skills and it’s great).&lt;/p&gt;
+
+&lt;h2 id=&quot;data-storage-dynamodb-and-boto3&quot;&gt;Data storage (DynamoDB and Boto3)&lt;/h2&gt;
+
+&lt;p&gt;After collecting all these data, the connection to the DynamoDB tables is very easy with &lt;a href=&quot;https://boto3.readthedocs.io/en/latest/&quot;&gt;boto3&lt;/a&gt; .&lt;/p&gt;
+
+&lt;p&gt;There is an example of a script to send data to a DynamoDB table.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;boto3&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;decimal&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Setup the connection to DynamoDB
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dynamodb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;boto3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resource&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'dynamodb'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;region_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;eu-west-1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Declare the table
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dynamodb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Table_test'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;#Create a json object
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;item_dynamodb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;&quot;elt&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;string&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;&quot;value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;&quot;index&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;decimal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Decimal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;12.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;#Put the object in the table
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;put_item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;item_dynamodb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Now that we have the data in the back end let’s make some analytics on it.&lt;/p&gt;
+
+&lt;h1 id=&quot;analytics&quot;&gt;Analytics&lt;/h1&gt;
+
+&lt;h2 id=&quot;weight-data&quot;&gt;Weight data&lt;/h2&gt;
+
+&lt;p&gt;Like I said previously, for this data source I will keep focus on the data from the scale, the parameters are the weight and the &lt;a href=&quot;https://en.wikipedia.org/wiki/Body_fat_percentage&quot;&gt;fat ratio&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In the following figure there is the representation of the historical data for my weight for the past year.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/weight_pastyear.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Evolution of my weight during the past year&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;As you can see there is a lot of noise in the evolution of the weight during the past year so I will apply a rolling mean function on the signal to make it looks nicer and keep the trend of the behaviour.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/weight_pastyear_rmtest.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Test of different windows for the rolling mean of my weight during the past year&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The most interesting window seems to be the &lt;strong&gt;7 days window&lt;/strong&gt; because this one keep the local variation but is not affect by a lag effect that will corrupt the analysis of the data.&lt;/p&gt;
+
+&lt;p&gt;The conclusion on the variation are the same for the fat ratio.&lt;/p&gt;
+
+&lt;p&gt;Another element to analyse could be the weekly variation of the metrics to illustrate the good and bad week and maybe detect the interesting period (gain of muscle or fat for example)&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/weeklyvariationscale_pastyear.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Detection of the gain of muscle period&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;There is a linear relation between the gain of fat and the gain of weight, but I don’t want to display it because I know that there is some phases where you can gain weight but lose fat (gain of muscle) so the relation doesn’t exist.&lt;/p&gt;
+
+&lt;p&gt;Let’s have a look on the Strava data.&lt;/p&gt;
+
+&lt;h2 id=&quot;running-data&quot;&gt;Running data&lt;/h2&gt;
+
+&lt;p&gt;I am basically running one time per week in average around 10 km in less than one hour.&lt;/p&gt;
+
+&lt;p&gt;The interesting metrics for this data source are:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;the distance&lt;/li&gt;
+  &lt;li&gt;the average speed&lt;/li&gt;
+  &lt;li&gt;the elevation&lt;/li&gt;
+  &lt;li&gt;the time elpased&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Some very simple  bar graph can be displayed on the evolution of these parameters.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/average_speed_pastyear.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Historical of the average speed during the different sessions&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The interesting point is to cross the distance, the average speed and the elevation together to see the impact of the last parameter on the speed.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/stravaoverview_pastyear.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Distance and average speed during the session in function of the elevation&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;We can see the impact of the elevation on my average speed. But let’s be honest this data source is not very exciting (I am also collecting the details of the running sessions like the speed during the session etc but I am currently doing nothing with these data).&lt;/p&gt;
+
+&lt;p&gt;Let’s have a look on crossfit data.&lt;/p&gt;
+
+&lt;h2 id=&quot;crossfit-data&quot;&gt;Crossfit data&lt;/h2&gt;
+
+&lt;p&gt;I am practicing crossfit since August 2017, 3 times per week and I am definetly not a pro. In the following figure, there is a visualisation of the total weight carried during a session in function of the number of repetitions.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/crossfitsessions_pastyear.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Weight carried in function of the number of repetitions&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;This figure is a good illustration of the variety of sessions that can happened in crossfit, some where you can carry a lot of weights, without too much repetitions and in the contrary some with a lot of repetitions and not too much weight.&lt;/p&gt;
+
+&lt;p&gt;Another interesting part is to see the evolution of the weight between the sessions for one exercice (and yes I am progressing a little bit).&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/deadlift_evolution.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Maximum average weight per repetitions for the deadlift&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;So the quality of the data depends on my motivation to write it correctly in the spreadsheet but the quantity of informations is quite interesting.&lt;/p&gt;
+
+&lt;p&gt;Now it’s time to create the dashboard that will display all these informations.&lt;/p&gt;
+
+&lt;h1 id=&quot;design-of-the-dashboard&quot;&gt;Design of the dashboard&lt;/h1&gt;
+
+&lt;p&gt;For this dashboard, my requirements for the application are :&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Easy and cheap to deploy&lt;/li&gt;
+  &lt;li&gt;Authentification process to access the dashboard&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I see people say “oh you should use R Shiny to create your application because ..” and I will say.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;https://media.giphy.com/media/12XMGIWtrHBl5e/giphy.gif&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;Honestly I am not a big fan of R, I know how to use it but I found it quite limited when I want to do more advance computing stuff that are not data analytic related.&lt;/p&gt;
+
+&lt;p&gt;And I want to write an article on Dash, so let’s dash.&lt;/p&gt;
+
+&lt;p&gt;For me it’s important to have the following sections on the dashboard:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;An overview of the data (like the last value, and some quick statistics)&lt;/li&gt;
+  &lt;li&gt;A section for each data sources&lt;/li&gt;
+  &lt;li&gt;A forecast section where I can use a little bit of ML&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;I invite you to use the code and the environnment in this &lt;a href=&quot;https://github.com/jeanmidevacc/dash_template_dashboard&quot;&gt;Github repository&lt;/a&gt; to start.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;presentation-of-the-dashboard&quot;&gt;Presentation of the dashboard&lt;/h2&gt;
+
+&lt;p&gt;In this section, I will describe and present the dashboard in his latest version (before the final css “coup de poliche”).&lt;/p&gt;
+
+&lt;p&gt;For the style of the application, I used the following resources:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://codepen.io/maggiben/pen/AylDH&quot;&gt;Inspiration/super base for the metrics&lt;/a&gt; thanks &lt;a href=&quot;https://github.com/jimsawinner&quot;&gt;@Jamie&lt;/a&gt; for the link.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://getbootstrap.com/docs/4.0/getting-started/download/&quot;&gt;Bootstrap 4&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Support of &lt;a href=&quot;http://pixinema.com/&quot;&gt;@Marius&lt;/a&gt; for the final css&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;the-overview-section&quot;&gt;The overview section&lt;/h3&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/overview_section.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Overview section&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;In this section the idea is to offering to the user a very clear ans simple overview of the different metrics and a quick insight on their evolution.&lt;/p&gt;
+
+&lt;p&gt;There is a first part where some informations on the weight and the fat ratio are displayed.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/overview_weight.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Weight metrics&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;There is for each parameters:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The last measurement (and when he happened)&lt;/li&gt;
+  &lt;li&gt;The evolution of the metrics on different periods (since last week, last month and last year)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I found this part very rich in informations, it’s easy to understand and you can see the trends (so perfect for my parents)&lt;/p&gt;
+
+&lt;p&gt;This section is followed by another one with the last running session, more simplest.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/running_overview.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Running metrics&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;There is some informations on the distance, the average speed and the elevation followed by a comparison with the previous session.&lt;/p&gt;
+
+&lt;p&gt;For the rest of the section, it’s a table that contains the exercices of the last crossfit session so nothing really exciting no need of a zoom.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-weight-and-running-sections&quot;&gt;The weight and running sections&lt;/h3&gt;
+
+&lt;p&gt;For the two following sections, it’s basically some very basic figures where I take the visualisation from this article.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/weight_section.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Weight section&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The user can select the time period and the parameter that you want to visualise with the inputs element. He can select the parameter and the range of data with the dropdown panel and the date range picker&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/inputs_weight.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Inputs of the weight panel&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The layout is super simple but it’s functional.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-crossfit-section&quot;&gt;The crossfit section&lt;/h3&gt;
+
+&lt;p&gt;In this section, I choose to cross the metrics index and the inputs options of the previous sections.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/crossfit_section_crop.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Crossfit section&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;You can select the exercices and get some quick statistics on it:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The maximum weight carried&lt;/li&gt;
+  &lt;li&gt;the number of repetitions executed&lt;/li&gt;
+  &lt;li&gt;the average weight per repetition&lt;/li&gt;
+  &lt;li&gt;the graph of repetitions vs weight&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It’s simple but quite useful when I want to find quickly my 1 rep max weight.&lt;/p&gt;
+
+&lt;h3 id=&quot;forecast-section&quot;&gt;Forecast section&lt;/h3&gt;
+
+&lt;p&gt;In this section it’s basically the control panel to call the API that contains the model.&lt;/p&gt;
+
+&lt;p&gt;The user can select the forecast period and the weekly training settings and get an idea of the evolution of the weight and the fat ratio at the end of the forecast period.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dash_data/forecast_tabs.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Forecast section&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;Maybe not accurate but at least it’s here and it will definetly become better with more data (the model is trained on 30 points).&lt;/p&gt;
+
+&lt;h3 id=&quot;live-demo&quot;&gt;Live demo&lt;/h3&gt;
+
+&lt;p&gt;Now it’s time to make the final css updated, and voila&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;https://media.giphy.com/media/3bzPBXvJg0E4hmC3qx/giphy.gif&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Demo&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;Nothing crazy but it’s functional (maybe a little bit slow) and easy to use.&lt;/p&gt;
+
+&lt;h1 id=&quot;conclusion-and-next-steps&quot;&gt;Conclusion and next steps&lt;/h1&gt;
+
+&lt;p&gt;So the prototype is working great and deployed on Heroku (if you want to have access you can contact me). It took me 2 weeks to do it (week end and lunch break) so I am quite happy with that.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;You can find all the code (at least the skeleton of the app) in the &lt;a href=&quot;https://github.com/jeanmidevacc/dash_template_dashboard&quot;&gt;Github repo&lt;/a&gt;.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The next steps are:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Try maybe an alternative with Flask and D3.js&lt;/li&gt;
+  &lt;li&gt;Add more data, maybe a food index&lt;/li&gt;
+  &lt;li&gt;Implement a visualisation of the running session details (&lt;a href=&quot;http://leafletjs.com/&quot;&gt;leaflet&lt;/a&gt; could be a good start)&lt;/li&gt;
+  &lt;li&gt;Find some other metrics to display&lt;/li&gt;
+  &lt;li&gt;Get some feedbacks from the users&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Mon, 26 Feb 2018 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/metricsdash</link>
+        <guid isPermaLink="true">http://localhost:4000/metricsdash</guid>
+        
+        
+        <category>tooling</category>
+        
+      </item>
+    
+      <item>
+        <title>Energy in the UK - Analysis of smart meter data in London</title>
+        <description>&lt;p&gt;Hello, the goal of this article is to offer a clear description of the dataset that I uploaded in November 2017 on &lt;a href=&quot;https://www.kaggle.com/jeanmidev/smart-meters-in-london&quot;&gt;Kaggle&lt;/a&gt; followed by some insights on the dataset.&lt;/p&gt;
+
+&lt;h1 id=&quot;description-of-the-dataset&quot;&gt;Description of the dataset&lt;/h1&gt;
+
+&lt;p&gt;To better follow the energy consumption, the government wants energy suppliers to install smart meters in every home in England, Wales and Scotland. There are more than 26 million homes for the energy suppliers to get to, with the goal of every home having a smart meter by 2020.&lt;/p&gt;
+
+&lt;p&gt;This roll out of meter is lead by the European Union who asked all member governments to look at smart meters as part of measures to upgrade our energy supply and tackle climate change. After an initial study, the British government decided to adopt smart meters as part of their plan to update our ageing energy system.&lt;/p&gt;
+
+&lt;p&gt;In this dataset, you will find a &lt;a href=&quot;https://data.london.gov.uk/dataset/smartmeter-energy-use-data-in-london-households&quot;&gt;refacted version of the data&lt;/a&gt; from the London data store, that contains the energy consumption readings for a sample of 5,567 London Households that took part in the UK Power Networks led Low Carbon London project between November 2011 and February 2014. The data from the smart meters seems associated only to the electrical consumption.&lt;/p&gt;
+
+&lt;p&gt;To have an easier dataset to manipulate, different transformations have been applied on the dataset:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Collection of all the data from a specific household in the same file (that was not the case in the original dataset)&lt;/li&gt;
+  &lt;li&gt;People from the same ACORN group are on the same file&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The original and clean dataset can be find in the halfhourly_dataset zip file and one file looks like this snapshot.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/hhdata_preview.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Preview of the half hourly data&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;As you can see the dataset is quite easy to manipulate with:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;LCLid&lt;/strong&gt; that corresponds to the household id&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;tstp&lt;/strong&gt; the timestamp of the measure&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;energy(kWh/hh)&lt;/strong&gt; the energy consumes in the past 30 minutes in kWh&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;But to make the life easier for the user of my dataset, I created two others zip files that contains some pre-process data:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;the &lt;em&gt;daily_dataset&lt;/em&gt; that contains daily informations on the consumption of the households&lt;/li&gt;
+&lt;/ul&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/dailydata_preview.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Preview of a file in the daily_dataset folder&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+&lt;ul&gt;
+  &lt;li&gt;the &lt;em&gt;hhblock_dataset&lt;/em&gt; that contains the transpose data of a day for one household (as an array) with for example the hh_0 column is the consumption between 00:00 and 00:30&lt;/li&gt;
+&lt;/ul&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/hhblock_preview.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Preview of a file in the hhblock_dataset folder&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;This is an overview of  all the data from the smart meter, but to facilitate the exploration there is a table that stored all the households and their associated files (informations_households.csv).&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/tableref_preview.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Preview of the reference table&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;In this table, there is:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;LCLid&lt;/strong&gt; that correspond to the household id&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;stdorToU&lt;/strong&gt; the kind of tariff applied (&lt;em&gt;ToU&lt;/em&gt; the dynamic tariff in function of the days or &lt;em&gt;Std&lt;/em&gt; the classic fixed tariff)&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Acorn&lt;/strong&gt; the &lt;a href=&quot;https://acorn.caci.co.uk/&quot;&gt;ACORN group&lt;/a&gt; associated, that categorises the household&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Acorn_grouped&lt;/strong&gt; this is another more global classification of the ACORN (fusion of different ACORN groups)&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;file&lt;/strong&gt; name of the file in the different zip files where you can find the data of the household&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;All these informations are from the original dataset but to complete the informations available to make other study there is an addition of some new datasets:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;acorn_details.csv&lt;/em&gt; : that contains the index for multiple parameters in comparison of the national (that have an index of 100)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/accorndetails_preview.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Preview of the details on the ACORN groups&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;uk_bank_holidays.csv&lt;/em&gt; : the bank holidays for the period of the study&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/ukbankholidays_preview.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Preview of the details on the bank holidays&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;weather_daily_darksky.csv&lt;/em&gt; : the daily informations on the weather from &lt;a href=&quot;https://darksky.net/dev/docs&quot;&gt;darksky&lt;/a&gt; at London during the study&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/weatherdaily.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Preview of the daily weather informations&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;weather_hourly_darksky.csv&lt;/em&gt; : the hourly informations on the weather from &lt;a href=&quot;https://darksky.net/dev/docs&quot;&gt;darksky&lt;/a&gt; at London during the study&lt;/li&gt;
+&lt;/ul&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/weatherhourly.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Preview of the hourly weather informations&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;This first part offers a general overview of the content of the dataset, it’s time now to obtain a clearer vision on the data from the smart meter.&lt;/p&gt;
+
+&lt;h1 id=&quot;exploration-of-the-dataset&quot;&gt;Exploration of the dataset&lt;/h1&gt;
+
+&lt;h2 id=&quot;selection-of-the-households&quot;&gt;Selection of the households&lt;/h2&gt;
+
+&lt;p&gt;First step on this study is to find the best period to make the comparison. In my previous article on the electrical consumption in France there was a seasonal effect so a great period to study will be at least one year of data. In the next figure there is an illustration of the count of households with data (the 48 timestamps in the day) per day of the study.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/count_householdday.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Count of households per day&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;&lt;strong&gt;Notes&lt;/strong&gt;: There is clearly an increase of the number of available households since the start of the study in end 2011, the peak is reach in 2013. A good period for our study could be 2013 (and i choose this one). But it’s now important to know the distribution of the available days for this period in the households of the experiment, in the following figure there is a representation of this distribution in a boxplot.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/boxplot_availalbedayhousehold.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Boxplot of the number of available days for the study in 2013&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The decision has been done to use the Households that possess at least 357 days, so on the original dataset that represents a &lt;strong&gt;lost of 632 households&lt;/strong&gt; on the 5566 available in the dataset that’s totally acceptable.&lt;/p&gt;
+
+&lt;h2 id=&quot;overview-of-the-panel&quot;&gt;Overview of the panel&lt;/h2&gt;
+
+&lt;p&gt;One of the first realisation is to display the average consumption per day of these households during the year of 2013, in the following figure there is the average global consumption of these households during the period.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/timeseries_sumall.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Average daily consumption of the households &lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;&lt;strong&gt;Notes&lt;/strong&gt;: This is obvious that there is a link between the electrical consumption and the day of the year (same result than in my &lt;a href=&quot;http://jmdaignan.com/2017/10/20/Make-a-forecast-system-of-the-national-energy-consumption/&quot;&gt;previous article&lt;/a&gt;). The seasonal effect is very clear so in this panel there is a lot of people that are using the electricity as an heating source. If the average daily outdoor temperature and the total daily consumption of the panel are crossed, the following figure display the relation:&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/ptg_like.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Daily consumption X Outdoor temperature (in red the ptg of the global behaviour) &lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;This general observation offers a clear vision that the PTG (The red plot) from the &lt;a href=&quot;http://jmdaignan.com/2017/10/20/Make-a-forecast-system-of-the-national-energy-consumption/&quot;&gt;previous article&lt;/a&gt; can ba calculated for each household.In the following figure, there is a representation of the daily consumption and the ptg associated to this household (and theri r² score).&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/ptg_randomhouseholds.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Consumption X outdoor temperature for random households (in red the associated ptg model for the household and in yellow the general ptg)&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;&lt;strong&gt;Notes&lt;/strong&gt;: This is a good illustration that for some households the r² score is working great (this household should have a electric system) but for some households it doesn’t work at all. The general model issued from the average daily consumption (the yellow curve) illustrates that average daily consumption doesn’t represent the general behaviour of the households.In the folowing figure there is the scatter plot of the pivot temperature in function of the r² score.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/ptg_result.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Pivot temperature X r² score&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;Another way to identify the households that have an electric heating system could be to compare the average consumption during the winter and the summer and make a simple ratio between these two consumptions.The data have been crossed with the informations of the households, and there is an extract of the new dataset.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/df_crossdata.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Preview of the dataset&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;In this dataframe, there is:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;model_a&lt;/strong&gt; the slope of the ptg model (in the winter part)&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;model_b&lt;/strong&gt; the intersection of the ptg models&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;model_x0&lt;/strong&gt; the temperature of regime switch&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;r2score&lt;/strong&gt; the r² score of the ptg model on the household&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;season_0&lt;/strong&gt; the average consumption in winter&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;season_1&lt;/strong&gt; the average consumption in spring&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;season_2&lt;/strong&gt; the average consumption in summer&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;season_3&lt;/strong&gt; the average consumption in autumn&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;ratio_winter_summer&lt;/strong&gt; the ratio of the consumption winter/ration_winter_summer&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;stdorToU&lt;/strong&gt; the type of tariff&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Acorn&lt;/strong&gt; the ACORN group&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Acorn_grouped&lt;/strong&gt; tha aggregated ACORN groups&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There is a serious amount of data to cross so in the following figure there is a pairplot that cross all this data andfilter thme in function of the Acorn_grouped.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/pairplot_dfcross.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Pairplot of the different parameters &lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;&lt;strong&gt;Notes&lt;/strong&gt;: There is no obvious relation between all this index that defined the households except between the season_0 and the model_b but this two are winter related so that’s normal.But there is no link between these indexes and the Acorn_grouped, the result is similar with the Acorn, that’s a little bit disappointing.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;https://media.giphy.com/media/3og0INyCmHlNylks9O/giphy.gif&quot; /&gt;
+&lt;/center&gt;
+
+&lt;h1 id=&quot;next-steps&quot;&gt;Next steps&lt;/h1&gt;
+&lt;p&gt;As you can see this first exploration of the dataset has highlighted some characteristics of the electrical consumption in London like the influence of the weather in this consumption but there is a lot more things to do on this &lt;a href=&quot;https://www.kaggle.com/jeanmidev/smart-meters-in-london&quot;&gt;dataset&lt;/a&gt;. Some ideas for future analytics:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Cross the ACORN data and the smart meter data&lt;/li&gt;
+  &lt;li&gt;Try to forecast the consumption of the different households&lt;/li&gt;
+  &lt;li&gt;Add new datasets like:
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;https://epc.opendatacommunities.org/docs/api&quot;&gt;EPC&lt;/a&gt; data from London&lt;/li&gt;
+      &lt;li&gt;extra data on London like some underground or train strike during the period&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Make some clusterings in the households data and the energy profiles, as you can see in the following heatmap there is a “pattern” in the total consumption of these households.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/london_sm/heatmap.png&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Heatmap of the average consumption in function of the day of the year&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;&lt;strong&gt;You can find all the code to make this article in this &lt;a href=&quot;https://github.com/jeanmidevacc/london_smartmeter&quot;&gt;GitHub repo&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 28 Jan 2018 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/Londonsmartmeter</link>
+        <guid isPermaLink="true">http://localhost:4000/Londonsmartmeter</guid>
+        
+        
+        <category>dsml</category>
+        
+      </item>
+    
+      <item>
+        <title>Make a forecast system of the French national energy consumption</title>
+        <description>&lt;p&gt;Hello readers, for this article I am going to explain my approach to create a forecast system of the French (metropolitan) energy consumption. This kind of problematics is more or less related to part of my job at EDF Energy but this works has been done in my free time to complete my machine engineer nanodegree of &lt;a href=&quot;https://www.udacity.com&quot;&gt;Udacity&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In this article, there will be a description of the data used for this project, an explanation of the approach used to make a daily forecast of the consumption and the half hourly version.&lt;/p&gt;
+
+&lt;h1 id=&quot;exploration-of-the-dataset&quot;&gt;Exploration of the dataset&lt;/h1&gt;
+
+&lt;p&gt;In this case, the data to create the model are from:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;RTE, the energy network manager in France they have created an &lt;a href=&quot;https://rte-opendata.opendatasoft.com/explore/dataset/cdc_conso/?disjunctive.qualite&quot;&gt;open data platform&lt;/a&gt; to access different datasets on the network&lt;/li&gt;
+  &lt;li&gt;The &lt;a href=&quot;http://professionnels.ign.fr/geofla&quot;&gt;GEOFLA dataset&lt;/a&gt; that give you informations on the number of inhabitants in the city and the area&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.wunderground.com/&quot;&gt;Weather underground&lt;/a&gt;. I have to scrap this data source from the website (I focus my scraping on the weather stations from the airports) and I pick the weather stations that have enough data during the period measured by RTE.I focus my data analytics on the outdoor temperature and the wind speed.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For the weather condition, I choose to create a national weather dataset where basically each region has his weather station associated , these stations are weighted by the number of people that are in this region (this information is coming from the GEOFLA dataset).To make the data analysis, I choose to convert the average power consumed from RTE in energy (in MWh).&lt;/p&gt;
+
+&lt;p&gt;In the following figure there is an illustration of the average energy consumed in France for the past years.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/energy_forecast/daily_national_consumption.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;This figure illustrates the seasonality in the energy consumption in France.&lt;/p&gt;
+
+&lt;p&gt;After that to make the forecast at a daily scale, I have to aggregate the data. In the following figures, there is a representation of the daily data aggregated at different scale in a heatmap.&lt;/p&gt;
+
+&lt;p&gt;A study of the hourly effect in function of the day of the year&lt;/p&gt;
+&lt;center&gt;
+&lt;img width=&quot;100%&quot; src=&quot;/img/posts/energy_forecast/heatmap_yearday_hour.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;A study of the consumption of the month of the year and the day of the week.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/energy_forecast/month_dayweek.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;This two figures are perfect to illustrate that the daily consumption is linked to the moment of the year and the day of the week. But this insight are not enough to create a forecast model, a very popular approach that is used to make a forecast of the energy consumption is the study of the daily consumption in function of the average daily outdoor temperature. This technic is called PTG for Power Temperature Gradient and you can find a lot of publications that are based on this &lt;a href=&quot;http://www.ibpsa.org/proceedings/BS2015/p2854.pdf&quot;&gt;approach&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In the following figure there is a representation of this model used for the forecast.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/energy_forecast/ptg.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The model is a piecewise regression with a winter part represented by the linear regression (that’s included the heating needs and the appliances) and a summer part with the constant part (only the appliances). This model will be the reference model for the next part.&lt;/p&gt;
+
+&lt;h1 id=&quot;daily-forecast&quot;&gt;Daily forecast&lt;/h1&gt;
+&lt;p&gt;To create the model, the dataset will be split between training set and test set, the selection of the samples for the sets will be randomized. That’s representing:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;2337 samples for the training set&lt;/li&gt;
+  &lt;li&gt;585 samples for the test set&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is a regression problem, so the following models from scikit learn are going to be tested:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://scikit-learn.org/stable/auto_examples/linear_model/plot_polynomial_interpolation.html&quot;&gt;Polynomial regressor&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html&quot;&gt;Random forest regressor&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeRegressor.html&quot;&gt;Decision tree regressor&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://scikit-learn.org/stable/modules/neighbors.html&quot;&gt;K-nearest neighbours&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPRegressor.html&quot;&gt;Neural network MLP regressor&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is a personal selection of different models and there is plenty of other models to try but for a start I think that was enough. I have to tune the different models and find the best parameters to used, I used a k-fold approach on the training set (I created ten folds) to test the different parameters. &lt;a href=&quot;https://github.com/jeanmidevacc/udacity_mlen/blob/master/capstone/report.pdf&quot;&gt;I invited you to check my report to see the choices done on the parameters for the different models&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To test the impact of the input in the models, I tested different inputs:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;only outdoor temperature&lt;/li&gt;
+  &lt;li&gt;outdoor temperature and wind speed&lt;/li&gt;
+  &lt;li&gt;outdoor temperature and month of the year and day of the week&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To facilitate the usage of the inputs I have to normalise the sets. To assess the accuracy of the model I used the r²score metric that is used for the regression problem. But this metric is not enough to assess the quality of the algorithm, the second metrics that I will use is the time to create the model. In the following table there is the evolution of the r²score in function of the model used.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Models&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;r²score&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;r²score(+wind)&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;r²score(+time)&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;PTG&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.827&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt; &lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Polynomial regressor&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.811&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.829&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.92&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Random forest regressor&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.831&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.836&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.91&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Decision tree regressor&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.831&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.829&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.898&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;K-nearest neighbour&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.823&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.831&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.931&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Neural network MLP&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.829&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.84&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.904&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;This table permits to give the following conclusions:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The PTG is quite a good model, for an only outdoor temperature based model the score is good but the tree based model offers and the neural network offer good results too&lt;/li&gt;
+  &lt;li&gt;the addition of the wind speed improves the score but the gain is very small&lt;/li&gt;
+  &lt;li&gt;the addition offer an interesting gain to the score for every model tested&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;But as I said previously the r²score is not enough, in the following table there is the time to create the model in the case of the addition of the time features to the initial inputs.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Models&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Time (s)&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;PTG&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.021(not same input)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Polynomial regressor&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.108&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Random forest regressor&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.017&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Decision tree regressor&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.004&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;K-nearest neighbour&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.002&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Neural network MLP&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;1.826&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;This table is illustrating that the PTG has good performance, and that the neural network is very bad in term of speed. The polynomial regressor should be avoided too.But this two metrics are not enough to evaluate the efficiency of the models. The impact of the size of the training set should be studied. In the following figure, there is an illustration of the impact of the training set.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/energy_forecast/trainingset_impact.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;This figure show us that the size of the training set has a clear impact on the polynomial regressor, so other models seems less impact (the neural network show good efficiency quite quickly).&lt;/p&gt;
+
+&lt;h1 id=&quot;half-hourly-forecast&quot;&gt;Half hourly forecast&lt;/h1&gt;
+&lt;p&gt;For this part, we will used all the results found previously (the used of the time features essentially). I will test the same models than for the daily forecast and used the same metrics.&lt;/p&gt;
+
+&lt;p&gt;My benchmark model will be the &lt;a href=&quot;https://machinelearningmastery.com/arima-for-time-series-forecasting-with-python/&quot;&gt;ARIMA model&lt;/a&gt;.this model is quite popular to forecast time series (but need to not randomized the sets).These sets are composed of:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;112176 samples for the training set&lt;/li&gt;
+  &lt;li&gt;28080 samples for the test set&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In my problem the result of the model are bad. In the following table there is summary if the result of the benchmark model and the other models tested.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Models&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;r²score&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Time (s)&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;ARIMA&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;-0.662&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.014&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Polynomial regressor&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.903&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;2.77&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Random forest regressor&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.944&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;1.58&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Decision tree regressor&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.936&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.21&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;K-nearest neighbour&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.945&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.26&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Neural network MLP&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.93&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;156.28&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;This final table, show us that the benchmark model is quite easy to beat. The neural network is very slow to construct but two models seems very good to used for our problem:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;the decision tree regressor&lt;/li&gt;
+  &lt;li&gt;the K-nearest neighbour&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;This work was used to complete my nanodegree, this is my approach, not the only one and I think there is a lot of things to try like a deep learning approach or a reinforcement learning one for example.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;https://media.giphy.com/media/sONJ1lEAx0nHG/giphy.gif&quot; /&gt;
+&lt;h6&gt;&lt;i&gt;Sortez les bazookas&lt;/i&gt;&lt;/h6&gt;
+&lt;/center&gt;
+
+&lt;p&gt;I invite you to used the &lt;a href=&quot;https://github.com/jeanmidevacc/udacity_mlen/tree/master/capstone/data&quot;&gt;datasets&lt;/a&gt; of this project to try to create your own (better?!) model and if you have any comments write it below.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 20 Oct 2017 00:00:00 -0400</pubDate>
+        <link>http://localhost:4000/Make-a-forecast-system-of-the-national-energy-consumption</link>
+        <guid isPermaLink="true">http://localhost:4000/Make-a-forecast-system-of-the-national-energy-consumption</guid>
+        
+        
+        <category>dsml</category>
+        
+      </item>
+    
+      <item>
+        <title>How to deploy a Messenger bot in Python</title>
+        <description>&lt;p&gt;Hello reader, in this article I will explain my approach to deploy a chatbot in Python on the Messenger platform.&lt;/p&gt;
+
+&lt;h1 id=&quot;genesis-of-the-project&quot;&gt;Genesis of the project&lt;/h1&gt;
+&lt;p&gt;This idea to deploy a chatbot comes from different articles that I read on how non developer create a resume bot to assist them during their job search and have a vey nice digital and original front page.&lt;/p&gt;
+
+&lt;p&gt;One of the nicest example that I saw was the HireElibot.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/zappa_messenger/content/HireEliBot_messenger_code_1196843487068415.png&quot; style=&quot;width: 200px;&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;This chatbot that you can find on Messenger, is quite cool and I wanted to make one to assist me in my future job search (or at least a skeleton for a future chatbot).&lt;/p&gt;
+
+&lt;p&gt;I am definetly not a proper developer; but I am a coder (as a data scientist/maker can be) and a Python lover (a lot of colleagues try to push me to use node.js for this project but I refused) so I decided to try to make my own chatbot in Python.&lt;/p&gt;
+
+&lt;p&gt;I tried different approaches to complete this project that I am going to explain right now.&lt;/p&gt;
+
+&lt;h1 id=&quot;first-approach--telegram--python&quot;&gt;First approach : Telegram + Python&lt;/h1&gt;
+
+&lt;p&gt;My first approach was to try to find how to deploy a chatbot in a platform and make it available on different devices.&lt;/p&gt;
+
+&lt;p&gt;My research leads me to the course of Gareth Dwyer on &lt;a href=&quot;https://www.codementor.io/garethdwyer/building-a-telegram-bot-using-python-part-1-goi5fncay&quot;&gt;Codementor&lt;/a&gt;.&lt;/p&gt;
+
+&lt;center&gt;
+ &lt;img src=&quot;https://process.filestackapi.com/cache=expiry:max/resize=width:1050/compress/8xBGD3aKTDuWnCiubdc3&quot; style=&quot;width: 300px;&quot; /&gt;
+ &lt;/center&gt;
+
+&lt;p&gt;&lt;strong&gt;Opinion&lt;/strong&gt;: The course is really good and it gives a nice overview of the usage of the Telegram api to make a very simple chatbot. I used this approach to create a weather chatbot that will use the &lt;a href=&quot;https://developers.google.com/maps/?hl=fr&quot;&gt;Google maps api&lt;/a&gt; and the &lt;a href=&quot;https://darksky.net/dev/&quot;&gt;dark sky api&lt;/a&gt;, you can find in this &lt;a href=&quot;https://github.com/jeanmidevacc/weatherforecast_telegrambot&quot;&gt;Github repository&lt;/a&gt; the chatbot.&lt;/p&gt;
+
+&lt;p&gt;But it’s a very simple approach (with a while loop), and the Telegram platform is not the most popular as you can see.&lt;/p&gt;
+
+&lt;center&gt;&lt;img src=&quot;https://media.giphy.com/media/xT39D1rKL92e8SQY3m/giphy.gif&quot; /&gt;&lt;/center&gt;
+
+&lt;p&gt;So I decided to use the Messenger platform and try to find the way to deploy the bot on a server or at least avoid the “dirty” while loop with a webhook approach.&lt;/p&gt;
+
+&lt;h1 id=&quot;second-approach--messenger--heroku--python&quot;&gt;Second approach : Messenger + Heroku + Python&lt;/h1&gt;
+
+&lt;p&gt;In this part my research leads me to the blog of &lt;a href=&quot;https://blog.hartleybrody.com/&quot;&gt;Hartley Brody&lt;/a&gt; and his post &lt;a href=&quot;https://blog.hartleybrody.com/fb-messenger-bot/&quot;&gt;“Facebook Messenger Bot Tutorial: Step-by-Step Instructions for Building a Basic Facebook Chat Bot”&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The article and the code are very clear, but basically the idea is to deploy a Flask application that can receive the data send by the user (by the use of webhook) and answer in consequence at the interactions.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Opinion&lt;/strong&gt;:The course is really clear and I am a Flask defender so that’s cool but the usage of Heroku in his free version is quite limited, I have to ping my Heroku app every 10 minutes to avoid that she fall asleep. I can pay to continue to use a proper Heroku application but I found the pricing quite high for just a chatbot.&lt;/p&gt;
+
+&lt;p&gt;Like most of my backend is stored in the Amazon Web Services services (dynamodb, RDS, S3), I try to find an approach that could help me to use the AWS structure and be not too expensive and I found the perfect solution for me.&lt;/p&gt;
+
+&lt;h1 id=&quot;my-approach&quot;&gt;My approach&lt;/h1&gt;
+&lt;p&gt;My options on AWS to deploy the Flask application were:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;EC2 instance&lt;/li&gt;
+  &lt;li&gt;Elastic beanstalk&lt;/li&gt;
+  &lt;li&gt;Lambda&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The two first options were still in the same range of price that Heroku and I found the Elastic beanstalk approach very restricted. So my choice went on the AWS Lambda service.&lt;/p&gt;
+
+&lt;p&gt;To deploy the Flask application on a lambda I have to find a dependency that permit that. Amazon has one it’s call &lt;a href=&quot;https://github.com/aws/chalice&quot;&gt;Chalice&lt;/a&gt;.I tested this library for some other api projects, it’s good but I have to translate all my code from the Flask Framework to the Chalice framework so …&lt;/p&gt;
+
+&lt;center&gt;&lt;img src=&quot;https://media.giphy.com/media/ToMjGpx9F5ktZw8qPUQ/giphy.gif&quot; /&gt;&lt;/center&gt;
+
+&lt;p&gt;But my research leads me to a super alternative at chalice called &lt;a href=&quot;https://www.zappa.io/&quot;&gt;Zappa&lt;/a&gt; and guess what : it’s working perfectly.&lt;/p&gt;
+
+&lt;p&gt;To deploy a Messenger chatbot in a AWS Lambda you can follow the following process (that you can find in this &lt;a href=&quot;https://github.com/jeanmidevacc/messenger-bot-python-flask-zappa-amazon&quot;&gt;github repository&lt;/a&gt;).&lt;/p&gt;
+
+&lt;h1 id=&quot;process&quot;&gt;Process&lt;/h1&gt;
+
+&lt;h2 id=&quot;step-1--setup-a-facebook-application-setup&quot;&gt;Step 1 : Setup a Facebook application setup&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Setup a &lt;a href=&quot;https://developers.facebook.com&quot;&gt;Facebook application&lt;/a&gt; in the developer portal&lt;/li&gt;
+  &lt;li&gt;Add a messenger product in the application&lt;/li&gt;
+&lt;/ul&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/zappa_messenger/pictures/setup_app.png&quot; /&gt;
+&lt;/center&gt;
+&lt;ul&gt;
+  &lt;li&gt;Create a Facebook page&lt;/li&gt;
+  &lt;li&gt;Add a “send message” button to the page&lt;/li&gt;
+&lt;/ul&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/zappa_messenger/pictures/addmessagebutton.png&quot; /&gt;
+&lt;/center&gt;
+&lt;ul&gt;
+  &lt;li&gt;Select the page that you have created (and accept the profile have access blah blah blah)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/zappa_messenger/pictures/settings_messenger_product.png&quot; /&gt;
+&lt;/center&gt;
+&lt;ul&gt;
+  &lt;li&gt;Keep the access token that has been assigned for the application&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;step-2--create-your-flask-application&quot;&gt;Step 2 : Create your Flask application&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Create a virtual environment with the command virtualenv in my case &lt;strong&gt;zappa_env&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;Activate the environment with &lt;code class=&quot;highlighter-rouge&quot;&gt;activate zappa_env&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Install the dependencies &lt;code class=&quot;highlighter-rouge&quot;&gt;pip install zappa flask awscli&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Clone the content of my repository in a separate folder of your environment&lt;/li&gt;
+&lt;/ul&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/zappa_messenger/pictures/environnment.png&quot; /&gt;
+&lt;/center&gt;
+&lt;ul&gt;
+  &lt;li&gt;Replace the &lt;code class=&quot;highlighter-rouge&quot;&gt;access_token&lt;/code&gt; in the application.py file by the access token of your application&lt;/li&gt;
+  &lt;li&gt;Think to a &lt;code class=&quot;highlighter-rouge&quot;&gt;verify_token&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;step-3--deploy-the-application-on-aws&quot;&gt;Step 3 : Deploy the application on AWS&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Use the command &lt;code class=&quot;highlighter-rouge&quot;&gt;zappa init&lt;/code&gt; in your project folder&lt;/li&gt;
+  &lt;li&gt;In this tutorial you can accept the default parameter that zappa offer you to complete the process but if you want to add some specifications go for it&lt;/li&gt;
+  &lt;li&gt;Check if in your project folder there is a zappa_settings.json file&lt;/li&gt;
+  &lt;li&gt;Your application is now initialize so we can deploy the app with the command &lt;code class=&quot;highlighter-rouge&quot;&gt;zappa deploy dev&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Let’s the deployment begin (chill out).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;center&gt;&lt;img src=&quot;https://media.giphy.com/media/xEGqih6o0meyY/giphy.gif&quot; /&gt;&lt;/center&gt;
+
+&lt;h2 id=&quot;step-4--finish-to-complete-the-facebook-application-setup&quot;&gt;Step 4 : Finish to complete the Facebook application setup&lt;/h2&gt;
+&lt;p&gt;On the Messenger settings page you have to setup the webhooks&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Copy paste the url of your app on the callback url field&lt;/li&gt;
+  &lt;li&gt;Add the &lt;code class=&quot;highlighter-rouge&quot;&gt;verify_token&lt;/code&gt; that you thinked before&lt;/li&gt;
+  &lt;li&gt;Verify and save&lt;/li&gt;
+  &lt;li&gt;Subscribe the webhook to your Facebook page events&lt;/li&gt;
+&lt;/ul&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/zappa_messenger/pictures/subscribe_webhook.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;h2 id=&quot;step-5--update-you-application&quot;&gt;Step 5 : Update you application&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;To finish you need to update the &lt;code class=&quot;highlighter-rouge&quot;&gt;verify_token&lt;/code&gt; variable on the application.py files by the token that you create previously&lt;/li&gt;
+  &lt;li&gt;Update the app with the command &lt;code class=&quot;highlighter-rouge&quot;&gt;zappa update dev&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;step-6--test-it&quot;&gt;Step 6 : Test it&lt;/h2&gt;
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/zappa_messenger/pictures/test_bot.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;h1 id=&quot;feedback&quot;&gt;Feedback&lt;/h1&gt;
+&lt;p&gt;So with this approach you can have a Messenger chatbot that you can deploy easily without a server with a very limited cost.&lt;/p&gt;
+
+&lt;p&gt;I hope that this article that present my approach to deploy a chatbot will help you and if you have any remarks on my works contact me.&lt;/p&gt;
+
+&lt;h1 id=&quot;resources&quot;&gt;Resources&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.codementor.io/garethdwyer/building-a-telegram-bot-using-python-part-1-goi5fncay&quot;&gt;Gareth Dwyer course &lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/jeanmidevacc/weatherforecast_telegrambot&quot;&gt;Telegram weather bot&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/jeanmidevacc/messenger-bot-python-flask-zappa-amazon&quot;&gt;Messenger bot with Python&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.hartleybrody.com/fb-messenger-bot/&quot;&gt;Facebook Messenger Bot Tutorial: Step-by-Step Instructions for Building a Basic Facebook Chat Bot&lt;/a&gt; by Hartley Brody&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://andrich.blog/2017/02/12/first-steps-with-aws-lambda-zappa-flask-and-python/&quot;&gt;First step with Zappa Flask and Python 3&lt;/a&gt; by Oliver Andrich&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.zappa.io/&quot;&gt;Zappa&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Mon, 18 Sep 2017 00:00:00 -0400</pubDate>
+        <link>http://localhost:4000/How-to-deploy-a-Messenger-bot-in-Python</link>
+        <guid isPermaLink="true">http://localhost:4000/How-to-deploy-a-Messenger-bot-in-Python</guid>
+        
+        
+        <category>tooling</category>
+        
+      </item>
+    
+      <item>
+        <title>Hello World</title>
+        <description>&lt;p&gt;Hello reader , and welcome to my blog.&lt;/p&gt;
+
+&lt;p&gt;My name is Jean-Michel and I am currently a data scientist for EDF energy in England .I am not English as you can read with my super writing skills i am French (basically from the best country in the world 😁)&lt;/p&gt;
+
+&lt;center&gt;&lt;img src=&quot;https://media.giphy.com/media/Mayhw4Px7zfnW/giphy.gif&quot; /&gt;&lt;/center&gt;
+
+&lt;p&gt;I am beginning today my blog/website for different reasons:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Need of some kind of portfolio for my career/projects&lt;/li&gt;
+  &lt;li&gt;Refresh html knowledge&lt;/li&gt;
+  &lt;li&gt;Be the foundation for my Medium profile&lt;/li&gt;
+  &lt;li&gt;Nice coding project&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Like I said I am currently a data scientist and my job since the beginning of my career (quite young) it’s to develop solutions for smart grid/home/device projects (take a look on my &lt;a href=&quot;../../../../../about&quot;&gt;background&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;In this blog I will mostly talk about digital stuff (surely more data oriented) and present some of my personal projects.&lt;/p&gt;
+
+&lt;p&gt;So if you have any remarks, questions don’t hesitate to contact me.&lt;/p&gt;
+
+&lt;p&gt;I hope that you will enjoy the reading of my blog.&lt;/p&gt;
+
+&lt;center&gt;&lt;img src=&quot;https://media.giphy.com/media/k39w535jFPYrK/giphy.gif&quot; /&gt;&lt;/center&gt;
+
+&lt;p&gt;PS : By the way this website is hosting in Github , I am using the service &lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt; with the framework &lt;a href=&quot;https://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt; and the foundation of this blog is a git fork from the &lt;a href=&quot;https://github.com/BlackrockDigital/startbootstrap-clean-blog-jekyll&quot;&gt;repository&lt;/a&gt; that I found after the reading of this &lt;a href=&quot;https://iamtrask.github.io/&quot;&gt;blog&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 04 Aug 2017 00:00:00 -0400</pubDate>
+        <link>http://localhost:4000/Hello-World</link>
+        <guid isPermaLink="true">http://localhost:4000/Hello-World</guid>
+        
+        
+        <category>writing</category>
+        
+      </item>
+    
+  </channel>
+</rss>

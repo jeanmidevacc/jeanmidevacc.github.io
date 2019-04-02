@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Writer Theme | Energy in the UK - Analysis of smart meter data in London</title>
+    <meta name="description" content="Hello, the goal of this article is to offer a clear description of the dataset that I uploaded in November 2017 on Kaggle followed by some insights on the da...">
+
+    <link rel="stylesheet" href="/css/main.css">
+
+    <link rel="canonical" href="http://localhost:4000/Londonsmartmeter">
+    <link rel="alternate" type="application/rss+xml" title="Writer Theme" href="http://localhost:4000/feed.xml" />
+
+    <!--[if lt IE 9]>
+        <script src="/js/vendor/html5shiv.min.js"></script>
+    <![endif]-->
+</head>
+
+
+  <body class="">
+    <!-- if the user has javascript disabled they can still use the menu -->
+<noscript>
+    <div class="no-js-menu clearfix">
+        <ul>
+            
+                <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+            
+                <li><i class="fa fa-anchor"></i><a href="/about">About</a></li>
+            
+                <li><i class="fa fa-plane"></i><a href="/contact">Contact</a></li>
+            
+        </ul>
+    </div>
+</noscript>
+<!-- end no script -->
+
+    <header class="hero-image" style="background-image: url(/img//header_img/london_image.jpg);">
+    <span class="menu-trigger animated fadeInDown">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </span>
+
+    <div id="menu-target">
+    <ul>
+        
+            <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+        
+            <li><i class="fa fa-anchor"></i><a href="/about">About</a></li>
+        
+            <li><i class="fa fa-plane"></i><a href="/contact">Contact</a></li>
+        
+    </ul>
+</div>
+
+</header>
+
+<main class="container">
+    <div class="row">
+        <div class="col-xs-12 single-content">
+            <p class="meta">
+                <a href=""></a> in <a href='/category/dsml'>Dsml</a> <i class="link-spacer"></i> <i class="fa fa-bookmark"></i> 9 minutes
+            </p>
+
+            <h1>Energy in the UK - Analysis of smart meter data in London</h1>
+            <h2>Description of the data and first insights on the electrical consumption</h2>
+            <p>Hello, the goal of this article is to offer a clear description of the dataset that I uploaded in November 2017 on <a href="https://www.kaggle.com/jeanmidev/smart-meters-in-london">Kaggle</a> followed by some insights on the dataset.</p>
+
+<h1 id="description-of-the-dataset">Description of the dataset</h1>
+
+<p>To better follow the energy consumption, the government wants energy suppliers to install smart meters in every home in England, Wales and Scotland. There are more than 26 million homes for the energy suppliers to get to, with the goal of every home having a smart meter by 2020.</p>
+
+<p>This roll out of meter is lead by the European Union who asked all member governments to look at smart meters as part of measures to upgrade our energy supply and tackle climate change. After an initial study, the British government decided to adopt smart meters as part of their plan to update our ageing energy system.</p>
+
+<p>In this dataset, you will find a <a href="https://data.london.gov.uk/dataset/smartmeter-energy-use-data-in-london-households">refacted version of the data</a> from the London data store, that contains the energy consumption readings for a sample of 5,567 London Households that took part in the UK Power Networks led Low Carbon London project between November 2011 and February 2014. The data from the smart meters seems associated only to the electrical consumption.</p>
+
+<p>To have an easier dataset to manipulate, different transformations have been applied on the dataset:</p>
+
+<ul>
+  <li>Collection of all the data from a specific household in the same file (that was not the case in the original dataset)</li>
+  <li>People from the same ACORN group are on the same file</li>
+</ul>
+
+<p>The original and clean dataset can be find in the halfhourly_dataset zip file and one file looks like this snapshot.</p>
+
+<center>
+<img src="/img/posts/london_sm/hhdata_preview.png" />
+<h6><i>Preview of the half hourly data</i></h6>
+</center>
+
+<p>As you can see the dataset is quite easy to manipulate with:</p>
+
+<ul>
+  <li><strong>LCLid</strong> that corresponds to the household id</li>
+  <li><strong>tstp</strong> the timestamp of the measure</li>
+  <li><strong>energy(kWh/hh)</strong> the energy consumes in the past 30 minutes in kWh</li>
+</ul>
+
+<p>But to make the life easier for the user of my dataset, I created two others zip files that contains some pre-process data:</p>
+
+<ul>
+  <li>the <em>daily_dataset</em> that contains daily informations on the consumption of the households</li>
+</ul>
+<center>
+<img src="/img/posts/london_sm/dailydata_preview.png" />
+<h6><i>Preview of a file in the daily_dataset folder</i></h6>
+</center>
+<ul>
+  <li>the <em>hhblock_dataset</em> that contains the transpose data of a day for one household (as an array) with for example the hh_0 column is the consumption between 00:00 and 00:30</li>
+</ul>
+<center>
+<img src="/img/posts/london_sm/hhblock_preview.png" />
+<h6><i>Preview of a file in the hhblock_dataset folder</i></h6>
+</center>
+
+<p>This is an overview of  all the data from the smart meter, but to facilitate the exploration there is a table that stored all the households and their associated files (informations_households.csv).</p>
+<center>
+<img src="/img/posts/london_sm/tableref_preview.png" />
+<h6><i>Preview of the reference table</i></h6>
+</center>
+
+<p>In this table, there is:</p>
+
+<ul>
+  <li><strong>LCLid</strong> that correspond to the household id</li>
+  <li><strong>stdorToU</strong> the kind of tariff applied (<em>ToU</em> the dynamic tariff in function of the days or <em>Std</em> the classic fixed tariff)</li>
+  <li><strong>Acorn</strong> the <a href="https://acorn.caci.co.uk/">ACORN group</a> associated, that categorises the household</li>
+  <li><strong>Acorn_grouped</strong> this is another more global classification of the ACORN (fusion of different ACORN groups)</li>
+  <li><strong>file</strong> name of the file in the different zip files where you can find the data of the household</li>
+</ul>
+
+<p>All these informations are from the original dataset but to complete the informations available to make other study there is an addition of some new datasets:</p>
+
+<ul>
+  <li><em>acorn_details.csv</em> : that contains the index for multiple parameters in comparison of the national (that have an index of 100)</li>
+</ul>
+
+<center>
+<img src="/img/posts/london_sm/accorndetails_preview.png" />
+<h6><i>Preview of the details on the ACORN groups</i></h6>
+</center>
+
+<ul>
+  <li><em>uk_bank_holidays.csv</em> : the bank holidays for the period of the study</li>
+</ul>
+
+<center>
+<img src="/img/posts/london_sm/ukbankholidays_preview.png" />
+<h6><i>Preview of the details on the bank holidays</i></h6>
+</center>
+
+<ul>
+  <li><em>weather_daily_darksky.csv</em> : the daily informations on the weather from <a href="https://darksky.net/dev/docs">darksky</a> at London during the study</li>
+</ul>
+
+<center>
+<img src="/img/posts/london_sm/weatherdaily.png" />
+<h6><i>Preview of the daily weather informations</i></h6>
+</center>
+
+<ul>
+  <li><em>weather_hourly_darksky.csv</em> : the hourly informations on the weather from <a href="https://darksky.net/dev/docs">darksky</a> at London during the study</li>
+</ul>
+<center>
+<img src="/img/posts/london_sm/weatherhourly.png" />
+<h6><i>Preview of the hourly weather informations</i></h6>
+</center>
+
+<p>This first part offers a general overview of the content of the dataset, it’s time now to obtain a clearer vision on the data from the smart meter.</p>
+
+<h1 id="exploration-of-the-dataset">Exploration of the dataset</h1>
+
+<h2 id="selection-of-the-households">Selection of the households</h2>
+
+<p>First step on this study is to find the best period to make the comparison. In my previous article on the electrical consumption in France there was a seasonal effect so a great period to study will be at least one year of data. In the next figure there is an illustration of the count of households with data (the 48 timestamps in the day) per day of the study.</p>
+<center>
+<img src="/img/posts/london_sm/count_householdday.png" />
+<h6><i>Count of households per day</i></h6>
+</center>
+
+<p><strong>Notes</strong>: There is clearly an increase of the number of available households since the start of the study in end 2011, the peak is reach in 2013. A good period for our study could be 2013 (and i choose this one). But it’s now important to know the distribution of the available days for this period in the households of the experiment, in the following figure there is a representation of this distribution in a boxplot.</p>
+
+<center>
+<img src="/img/posts/london_sm/boxplot_availalbedayhousehold.png" />
+<h6><i>Boxplot of the number of available days for the study in 2013</i></h6>
+</center>
+
+<p>The decision has been done to use the Households that possess at least 357 days, so on the original dataset that represents a <strong>lost of 632 households</strong> on the 5566 available in the dataset that’s totally acceptable.</p>
+
+<h2 id="overview-of-the-panel">Overview of the panel</h2>
+
+<p>One of the first realisation is to display the average consumption per day of these households during the year of 2013, in the following figure there is the average global consumption of these households during the period.</p>
+
+<center>
+<img src="/img/posts/london_sm/timeseries_sumall.png" />
+<h6><i>Average daily consumption of the households </i></h6>
+</center>
+
+<p><strong>Notes</strong>: This is obvious that there is a link between the electrical consumption and the day of the year (same result than in my <a href="http://jmdaignan.com/2017/10/20/Make-a-forecast-system-of-the-national-energy-consumption/">previous article</a>). The seasonal effect is very clear so in this panel there is a lot of people that are using the electricity as an heating source. If the average daily outdoor temperature and the total daily consumption of the panel are crossed, the following figure display the relation:</p>
+<center>
+<img src="/img/posts/london_sm/ptg_like.png" />
+<h6><i>Daily consumption X Outdoor temperature (in red the ptg of the global behaviour) </i></h6>
+</center>
+
+<p>This general observation offers a clear vision that the PTG (The red plot) from the <a href="http://jmdaignan.com/2017/10/20/Make-a-forecast-system-of-the-national-energy-consumption/">previous article</a> can ba calculated for each household.In the following figure, there is a representation of the daily consumption and the ptg associated to this household (and theri r² score).</p>
+<center>
+<img src="/img/posts/london_sm/ptg_randomhouseholds.png" />
+<h6><i>Consumption X outdoor temperature for random households (in red the associated ptg model for the household and in yellow the general ptg)</i></h6>
+</center>
+
+<p><strong>Notes</strong>: This is a good illustration that for some households the r² score is working great (this household should have a electric system) but for some households it doesn’t work at all. The general model issued from the average daily consumption (the yellow curve) illustrates that average daily consumption doesn’t represent the general behaviour of the households.In the folowing figure there is the scatter plot of the pivot temperature in function of the r² score.</p>
+
+<center>
+<img src="/img/posts/london_sm/ptg_result.png" />
+<h6><i>Pivot temperature X r² score</i></h6>
+</center>
+
+<p>Another way to identify the households that have an electric heating system could be to compare the average consumption during the winter and the summer and make a simple ratio between these two consumptions.The data have been crossed with the informations of the households, and there is an extract of the new dataset.</p>
+
+<center>
+<img src="/img/posts/london_sm/df_crossdata.png" />
+<h6><i>Preview of the dataset</i></h6>
+</center>
+
+<p>In this dataframe, there is:</p>
+
+<ul>
+  <li><strong>model_a</strong> the slope of the ptg model (in the winter part)</li>
+  <li><strong>model_b</strong> the intersection of the ptg models</li>
+  <li><strong>model_x0</strong> the temperature of regime switch</li>
+  <li><strong>r2score</strong> the r² score of the ptg model on the household</li>
+  <li><strong>season_0</strong> the average consumption in winter</li>
+  <li><strong>season_1</strong> the average consumption in spring</li>
+  <li><strong>season_2</strong> the average consumption in summer</li>
+  <li><strong>season_3</strong> the average consumption in autumn</li>
+  <li><strong>ratio_winter_summer</strong> the ratio of the consumption winter/ration_winter_summer</li>
+  <li><strong>stdorToU</strong> the type of tariff</li>
+  <li><strong>Acorn</strong> the ACORN group</li>
+  <li><strong>Acorn_grouped</strong> tha aggregated ACORN groups</li>
+</ul>
+
+<p>There is a serious amount of data to cross so in the following figure there is a pairplot that cross all this data andfilter thme in function of the Acorn_grouped.</p>
+<center>
+<img src="/img/posts/london_sm/pairplot_dfcross.png" />
+<h6><i>Pairplot of the different parameters </i></h6>
+</center>
+
+<p><strong>Notes</strong>: There is no obvious relation between all this index that defined the households except between the season_0 and the model_b but this two are winter related so that’s normal.But there is no link between these indexes and the Acorn_grouped, the result is similar with the Acorn, that’s a little bit disappointing.</p>
+
+<center>
+<img src="https://media.giphy.com/media/3og0INyCmHlNylks9O/giphy.gif" />
+</center>
+
+<h1 id="next-steps">Next steps</h1>
+<p>As you can see this first exploration of the dataset has highlighted some characteristics of the electrical consumption in London like the influence of the weather in this consumption but there is a lot more things to do on this <a href="https://www.kaggle.com/jeanmidev/smart-meters-in-london">dataset</a>. Some ideas for future analytics:</p>
+
+<ul>
+  <li>Cross the ACORN data and the smart meter data</li>
+  <li>Try to forecast the consumption of the different households</li>
+  <li>Add new datasets like:
+    <ul>
+      <li><a href="https://epc.opendatacommunities.org/docs/api">EPC</a> data from London</li>
+      <li>extra data on London like some underground or train strike during the period</li>
+    </ul>
+  </li>
+  <li>Make some clusterings in the households data and the energy profiles, as you can see in the following heatmap there is a “pattern” in the total consumption of these households.</li>
+</ul>
+<center>
+<img src="/img/posts/london_sm/heatmap.png" />
+<h6><i>Heatmap of the average consumption in function of the day of the year</i></h6>
+</center>
+
+<p><strong>You can find all the code to make this article in this <a href="https://github.com/jeanmidevacc/london_smartmeter">GitHub repo</a></strong></p>
+
+
+        </div><!-- main-content/col -->
+    </div> <!--/row -->
+
+</main> <!-- /container -->
+
+<footer class="single">
+    <div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-2">
+            <img src="/img/.jpg" class="user-icon " alt="user-image">
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="category-list">
+                <p>Published <span>Jan 28, 2018</span></p>
+                <p><a href=""></a> in <a href='/category/dsml'>Dsml</a></p>
+
+                <div class="other-catergories">
+                    <h3>Also found in</h3>
+
+                    <ul>
+                        
+                        <li>
+                            <a href='/category/dsml'>Dsml</a>
+                            
+                        </li>
+                        
+                    </ul>
+                </div>
+
+            </div>
+        </div><!-- end col -->
+        <div class="col-xs-12 col-sm-4">
+            <div class="social">
+                <p>Share this article</a>
+                <div class="social-links">
+                    <a class="social-icon" href="#" data-platform="twitter" data-message="" data-url="http://localhost:4000/Londonsmartmeter"><i class="fa fa-twitter"></i></a>
+
+                    <a class="social-icon" href="#" data-platform="facebook" data-message="" data-url="http://localhost:4000/Londonsmartmeter"><i class="fa fa-facebook-official"></i></a>
+                    <a class="social-icon" data-platform="mail"  href="mailto:help@writer-theme.com?body=http://localhost:4000/Londonsmartmeter"><i class="fa fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+    </div><!-- end row -->
+</div>
+
+
+    
+        <div class="row read-another-section">
+    
+        
+        <a href="/dataiku_epc"><div class="col-sm-6 col-md-2 no-gutter read-another-container">
+            <div class="overlay"></div>
+            <img src='/img/.jpg'>
+            <h3 class="read-another">Energy in the UK - Analysis of the energy performance certificates</h3>
+        </div></a>
+        
+    
+        
+        <a href="/pubg1"><div class="col-sm-6 col-md-2 no-gutter read-another-container">
+            <div class="overlay"></div>
+            <img src='/img/.jpg'>
+            <h3 class="read-another">Build a data pipeline on AWS to collect PUBG data</h3>
+        </div></a>
+        
+    
+        
+        <a href="/crossfitopen"><div class="col-sm-6 col-md-2 no-gutter read-another-container">
+            <div class="overlay"></div>
+            <img src='/img/.jpg'>
+            <h3 class="read-another">Analysis of the Crossfit Open 2018</h3>
+        </div></a>
+        
+    
+        
+        <a href="/metricsdash"><div class="col-sm-6 col-md-2 no-gutter read-another-container">
+            <div class="overlay"></div>
+            <img src='/img/.jpg'>
+            <h3 class="read-another">Building a dashboard with Dash (plotly), AWS and Heroku</h3>
+        </div></a>
+        
+    
+        
+        <a href="/Make-a-forecast-system-of-the-national-energy-consumption"><div class="col-sm-6 col-md-2 no-gutter read-another-container">
+            <div class="overlay"></div>
+            <img src='/img/.jpg'>
+            <h3 class="read-another">Make a forecast system of the French national energy consumption</h3>
+        </div></a>
+        
+    
+        
+        <a href="/How-to-deploy-a-Messenger-bot-in-Python"><div class="col-sm-6 col-md-2 no-gutter read-another-container">
+            <div class="overlay"></div>
+            <img src='/img/.jpg'>
+            <h3 class="read-another">How to deploy a Messenger bot in Python</h3>
+        </div></a>
+        
+    
+        
+    
+</div>
+    
+</footer>
+
+
+    <script src='/js/vendor/modernizr.custom.32229-2.8-respondjs-1-4-2.js'></script>
+    <script src="/js/vendor/jquery-1.11.2.min.js"></script>
+    <script src='/js/vendor/jquery.jpanelmenu.min.js'></script>
+    <script type='application/javascript' src='/js/vendor/fastclick.min.js'></script>
+    
+    <script src=' /js/main.js'></script>
+  </body>
+
+</html>

@@ -2,10 +2,16 @@
 layout: post
 comments: true
 published: true
+categories: tooling dsml
 title: Analysis of the Crossfit Open 2018
 subtitle: Introduction to web scraping
-header-img: img/header_img/victor-freitas-546919-unsplash.jpg
+read_time : 12
+feature_image: /header_img/victor-freitas-546919-unsplash
+show_related_posts: true
 ---
+
+
+
 
 Hello in this article, I am going to give some leads on how to create web scraping system that has been used to collect some data from the [Crossfit games website of Reebok](https://games.crossfit.com/regionals)
 

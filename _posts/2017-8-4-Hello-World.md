@@ -1,6 +1,11 @@
 ---
 layout: post
+comments: true
+published: true
+categories: writing
 title: Hello World
+read_time : 3
+show_related_posts: true
 ---
 
 Hello reader , and welcome to my blog.
