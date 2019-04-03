@@ -1,6 +1,6 @@
 # Site settings
 title: the odd data guy
-email: help@writer-theme.com
+email: daignanjm@gmail.com
 description: > # My blog.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site
@@ -9,11 +9,9 @@ permalink: :title
 nav_list:
   Home : ['Home', '/', 'fa-home']
   About : ['About', '/about', 'fa-anchor']
-  Contact : ['Contact', '/contact', 'fa-plane']
 single_footer: ''
 footer_links:
     About: ['About', '/about']
-    Writer: ['Writer 2016', '/about']
 
 
 # Build settings

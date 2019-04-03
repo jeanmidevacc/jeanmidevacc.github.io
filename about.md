@@ -1,9 +1,14 @@
 ---
-layout: page
+layout: with-sidebar
 title: About
 permalink: /about/
-feature_image: feature-book
+feature_image: dsml-thumbnail0
 ---
+
+ <center>
+ <img src="{{ site.baseurl }}/img/about/profile_picture/prisma_3.jpg" />
+ </center>
+
 
 I am Jean-Michel Daignan, data scientist, R&D engineer and maker.
 
