@@ -3,7 +3,7 @@ layout: post
 comments: true
 published: true
 categories: tooling dsml
-title: Analysis of the Crossfit Open 2018
+title: Analysis of the Crossfit Open
 subtitle: Introduction to web scraping
 read_time : 12
 feature_image: /header_img/victor-freitas-546919-unsplash
