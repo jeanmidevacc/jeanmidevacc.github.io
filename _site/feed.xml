@@ -5,8 +5,8 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 29 May 2019 22:11:51 -0400</pubDate>
-    <lastBuildDate>Wed, 29 May 2019 22:11:51 -0400</lastBuildDate>
+    <pubDate>Wed, 29 May 2019 22:12:17 -0400</pubDate>
+    <lastBuildDate>Wed, 29 May 2019 22:12:17 -0400</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -74,7 +74,7 @@
 &lt;iframe width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;//plot.ly/~jeanmidev/41.embed&quot;&gt;&lt;/iframe&gt;
 &lt;/center&gt;
 </description>
-        <pubDate>Wed, 29 May 2019 22:11:51 -0400</pubDate>
+        <pubDate>Wed, 29 May 2019 22:12:17 -0400</pubDate>
         <link>http://localhost:4000/2019-05-15-pubg2</link>
         <guid isPermaLink="true">http://localhost:4000/2019-05-15-pubg2</guid>
         
@@ -495,7 +495,7 @@ Make all the data available without downloading everything on my machine&lt;/str
       </item>
     
       <item>
-        <title>Analysis of the Crossfit Open 2018</title>
+        <title>Analysis of the Crossfit Open</title>
         <description>&lt;p&gt;Hello in this article, I am going to give some leads on how to create web scraping system that has been used to collect some data from the &lt;a href=&quot;https://games.crossfit.com/regionals&quot;&gt;Crossfit games website of Reebok&lt;/a&gt;&lt;/p&gt;
 
 &lt;h1 id=&quot;introduction-to-crossfit&quot;&gt;Introduction to Crossfit&lt;/h1&gt;
