@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-104903671-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-104903671-1');
+</script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>the odd data guy | Make a forecast system of the French national energy consumption</title>
+    <meta name="description" content="Hello readers, for this article I am going to explain my approach to create a forecast system of the French (metropolitan) energy consumption. This kind of p...">
+
+    <link rel="stylesheet" href="/css/main.css">
+
+    <link rel="canonical" href="http://localhost:4000/Make-a-forecast-system-of-the-national-energy-consumption">
+    <link rel="alternate" type="application/rss+xml" title="the odd data guy" href="http://localhost:4000/feed.xml" />
+
+    <!--[if lt IE 9]>
+        <script src="/js/vendor/html5shiv.min.js"></script>
+    <![endif]-->
+</head>
+
+
+  <body class="">
+    <!-- if the user has javascript disabled they can still use the menu -->
+<noscript>
+    <div class="no-js-menu clearfix">
+        <ul>
+            
+                <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+            
+                <li><i class="fa fa-anchor"></i><a href="/about">About</a></li>
+            
+        </ul>
+    </div>
+</noscript>
+<!-- end no script -->
+
+    <header class="hero-image" style="background-image: url(/img/.jpg);">
+    <span class="menu-trigger animated fadeInDown">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </span>
+
+    <div id="menu-target">
+    <ul>
+        
+            <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+        
+            <li><i class="fa fa-anchor"></i><a href="/about">About</a></li>
+        
+    </ul>
+</div>
+
+</header>
+
+<main class="container">
+    <div class="row">
+        <div class="col-xs-12 single-content">
+            <p class="meta">
+                <a href=""></a> in <a href='/category/dsml'>Dsml</a> <i class="link-spacer"></i> <i class="fa fa-bookmark"></i> 12 minutes
+            </p>
+
+            <h1>Make a forecast system of the French national energy consumption</h1>
+            <h2>Use of scikit learn to complete a Udacity nanodegree capstone</h2>
+            <p>Hello readers, for this article I am going to explain my approach to create a forecast system of the French (metropolitan) energy consumption. This kind of problematics is more or less related to part of my job at EDF Energy but this works has been done in my free time to complete my machine engineer nanodegree of <a href="https://www.udacity.com">Udacity</a>.</p>
+
+<p>In this article, there will be a description of the data used for this project, an explanation of the approach used to make a daily forecast of the consumption and the half hourly version.</p>
+
+<h1 id="exploration-of-the-dataset">Exploration of the dataset</h1>
+
+<p>In this case, the data to create the model are from:</p>
+
+<ul>
+  <li>RTE, the energy network manager in France they have created an <a href="https://rte-opendata.opendatasoft.com/explore/dataset/cdc_conso/?disjunctive.qualite">open data platform</a> to access different datasets on the network</li>
+  <li>The <a href="http://professionnels.ign.fr/geofla">GEOFLA dataset</a> that give you informations on the number of inhabitants in the city and the area</li>
+  <li><a href="https://www.wunderground.com/">Weather underground</a>. I have to scrap this data source from the website (I focus my scraping on the weather stations from the airports) and I pick the weather stations that have enough data during the period measured by RTE.I focus my data analytics on the outdoor temperature and the wind speed.</li>
+</ul>
+
+<p>For the weather condition, I choose to create a national weather dataset where basically each region has his weather station associated , these stations are weighted by the number of people that are in this region (this information is coming from the GEOFLA dataset).To make the data analysis, I choose to convert the average power consumed from RTE in energy (in MWh).</p>
+
+<p>In the following figure there is an illustration of the average energy consumed in France for the past years.</p>
+<center>
+<img src="/img/posts/energy_forecast/daily_national_consumption.png" />
+</center>
+
+<p>This figure illustrates the seasonality in the energy consumption in France.</p>
+
+<p>After that to make the forecast at a daily scale, I have to aggregate the data. In the following figures, there is a representation of the daily data aggregated at different scale in a heatmap.</p>
+
+<p>A study of the hourly effect in function of the day of the year</p>
+<center>
+<img width="100%" src="/img/posts/energy_forecast/heatmap_yearday_hour.png" />
+</center>
+
+<p>A study of the consumption of the month of the year and the day of the week.</p>
+<center>
+<img src="/img/posts/energy_forecast/month_dayweek.png" />
+</center>
+
+<p>This two figures are perfect to illustrate that the daily consumption is linked to the moment of the year and the day of the week. But this insight are not enough to create a forecast model, a very popular approach that is used to make a forecast of the energy consumption is the study of the daily consumption in function of the average daily outdoor temperature. This technic is called PTG for Power Temperature Gradient and you can find a lot of publications that are based on this <a href="http://www.ibpsa.org/proceedings/BS2015/p2854.pdf">approach</a>.</p>
+
+<p>In the following figure there is a representation of this model used for the forecast.</p>
+<center>
+<img src="/img/posts/energy_forecast/ptg.png" />
+</center>
+
+<p>The model is a piecewise regression with a winter part represented by the linear regression (that’s included the heating needs and the appliances) and a summer part with the constant part (only the appliances). This model will be the reference model for the next part.</p>
+
+<h1 id="daily-forecast">Daily forecast</h1>
+<p>To create the model, the dataset will be split between training set and test set, the selection of the samples for the sets will be randomized. That’s representing:</p>
+<ul>
+  <li>2337 samples for the training set</li>
+  <li>585 samples for the test set</li>
+</ul>
+
+<p>This is a regression problem, so the following models from scikit learn are going to be tested:</p>
+<ul>
+  <li><a href="http://scikit-learn.org/stable/auto_examples/linear_model/plot_polynomial_interpolation.html">Polynomial regressor</a></li>
+  <li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html">Random forest regressor</a></li>
+  <li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeRegressor.html">Decision tree regressor</a></li>
+  <li><a href="http://scikit-learn.org/stable/modules/neighbors.html">K-nearest neighbours</a></li>
+  <li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPRegressor.html">Neural network MLP regressor</a></li>
+</ul>
+
+<p>This is a personal selection of different models and there is plenty of other models to try but for a start I think that was enough. I have to tune the different models and find the best parameters to used, I used a k-fold approach on the training set (I created ten folds) to test the different parameters. <a href="https://github.com/jeanmidevacc/udacity_mlen/blob/master/capstone/report.pdf">I invited you to check my report to see the choices done on the parameters for the different models</a>.</p>
+
+<p>To test the impact of the input in the models, I tested different inputs:</p>
+
+<ul>
+  <li>only outdoor temperature</li>
+  <li>outdoor temperature and wind speed</li>
+  <li>outdoor temperature and month of the year and day of the week</li>
+</ul>
+
+<p>To facilitate the usage of the inputs I have to normalise the sets. To assess the accuracy of the model I used the r²score metric that is used for the regression problem. But this metric is not enough to assess the quality of the algorithm, the second metrics that I will use is the time to create the model. In the following table there is the evolution of the r²score in function of the model used.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Models</th>
+      <th style="text-align: center">r²score</th>
+      <th style="text-align: center">r²score(+wind)</th>
+      <th style="text-align: center">r²score(+time)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">PTG</td>
+      <td style="text-align: center">0.827</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Polynomial regressor</td>
+      <td style="text-align: center">0.811</td>
+      <td style="text-align: center">0.829</td>
+      <td style="text-align: center">0.92</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Random forest regressor</td>
+      <td style="text-align: center">0.831</td>
+      <td style="text-align: center">0.836</td>
+      <td style="text-align: center">0.91</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Decision tree regressor</td>
+      <td style="text-align: center">0.831</td>
+      <td style="text-align: center">0.829</td>
+      <td style="text-align: center">0.898</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">K-nearest neighbour</td>
+      <td style="text-align: center">0.823</td>
+      <td style="text-align: center">0.831</td>
+      <td style="text-align: center">0.931</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Neural network MLP</td>
+      <td style="text-align: center">0.829</td>
+      <td style="text-align: center">0.84</td>
+      <td style="text-align: center">0.904</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>This table permits to give the following conclusions:</p>
+<ul>
+  <li>The PTG is quite a good model, for an only outdoor temperature based model the score is good but the tree based model offers and the neural network offer good results too</li>
+  <li>the addition of the wind speed improves the score but the gain is very small</li>
+  <li>the addition offer an interesting gain to the score for every model tested</li>
+</ul>
+
+<p>But as I said previously the r²score is not enough, in the following table there is the time to create the model in the case of the addition of the time features to the initial inputs.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Models</th>
+      <th style="text-align: center">Time (s)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">PTG</td>
+      <td style="text-align: center">0.021(not same input)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Polynomial regressor</td>
+      <td style="text-align: center">0.108</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Random forest regressor</td>
+      <td style="text-align: center">0.017</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Decision tree regressor</td>
+      <td style="text-align: center">0.004</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">K-nearest neighbour</td>
+      <td style="text-align: center">0.002</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Neural network MLP</td>
+      <td style="text-align: center">1.826</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>This table is illustrating that the PTG has good performance, and that the neural network is very bad in term of speed. The polynomial regressor should be avoided too.But this two metrics are not enough to evaluate the efficiency of the models. The impact of the size of the training set should be studied. In the following figure, there is an illustration of the impact of the training set.</p>
+
+<center>
+<img src="/img/posts/energy_forecast/trainingset_impact.png" />
+</center>
+
+<p>This figure show us that the size of the training set has a clear impact on the polynomial regressor, so other models seems less impact (the neural network show good efficiency quite quickly).</p>
+
+<h1 id="half-hourly-forecast">Half hourly forecast</h1>
+<p>For this part, we will used all the results found previously (the used of the time features essentially). I will test the same models than for the daily forecast and used the same metrics.</p>
+
+<p>My benchmark model will be the <a href="https://machinelearningmastery.com/arima-for-time-series-forecasting-with-python/">ARIMA model</a>.this model is quite popular to forecast time series (but need to not randomized the sets).These sets are composed of:</p>
+
+<ul>
+  <li>112176 samples for the training set</li>
+  <li>28080 samples for the test set</li>
+</ul>
+
+<p>In my problem the result of the model are bad. In the following table there is summary if the result of the benchmark model and the other models tested.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Models</th>
+      <th style="text-align: center">r²score</th>
+      <th style="text-align: center">Time (s)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">ARIMA</td>
+      <td style="text-align: center">-0.662</td>
+      <td style="text-align: center">0.014</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Polynomial regressor</td>
+      <td style="text-align: center">0.903</td>
+      <td style="text-align: center">2.77</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Random forest regressor</td>
+      <td style="text-align: center">0.944</td>
+      <td style="text-align: center">1.58</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Decision tree regressor</td>
+      <td style="text-align: center">0.936</td>
+      <td style="text-align: center">0.21</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">K-nearest neighbour</td>
+      <td style="text-align: center">0.945</td>
+      <td style="text-align: center">0.26</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Neural network MLP</td>
+      <td style="text-align: center">0.93</td>
+      <td style="text-align: center">156.28</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>This final table, show us that the benchmark model is quite easy to beat. The neural network is very slow to construct but two models seems very good to used for our problem:</p>
+
+<ul>
+  <li>the decision tree regressor</li>
+  <li>the K-nearest neighbour</li>
+</ul>
+
+<h1 id="conclusion">Conclusion</h1>
+<p>This work was used to complete my nanodegree, this is my approach, not the only one and I think there is a lot of things to try like a deep learning approach or a reinforcement learning one for example.</p>
+
+<center>
+<img src="https://media.giphy.com/media/sONJ1lEAx0nHG/giphy.gif" />
+<h6><i>Sortez les bazookas</i></h6>
+</center>
+
+<p>I invite you to used the <a href="https://github.com/jeanmidevacc/udacity_mlen/tree/master/capstone/data">datasets</a> of this project to try to create your own (better?!) model and if you have any comments write it below.</p>
+
+
+        </div><!-- main-content/col -->
+    </div> <!--/row -->
+
+</main> <!-- /container -->
+
+<footer class="single">
+    <div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="social">
+                <p>Share this article</a>
+                <div class="social-links">
+                    <a class="social-icon" href="#" data-platform="twitter" data-message="" data-url="http://localhost:4000/Make-a-forecast-system-of-the-national-energy-consumption"><i class="fa fa-twitter"></i></a>
+
+                    <a class="social-icon" href="#" data-platform="facebook" data-message="" data-url="http://localhost:4000/Make-a-forecast-system-of-the-national-energy-consumption"><i class="fa fa-facebook-official"></i></a>
+                    <a class="social-icon" data-platform="mail"  href="mailto:daignanjm@gmail.com?body=http://localhost:4000/Make-a-forecast-system-of-the-national-energy-consumption"><i class="fa fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+    </div><!-- end row -->
+</div>
+
+
+    
+</footer>
+
+
+    <script src='/js/vendor/modernizr.custom.32229-2.8-respondjs-1-4-2.js'></script>
+    <script src="/js/vendor/jquery-1.11.2.min.js"></script>
+    <script src='/js/vendor/jquery.jpanelmenu.min.js'></script>
+    <script type='application/javascript' src='/js/vendor/fastclick.min.js'></script>
+    
+    <script src=' /js/main.js'></script>
+  </body>
+
+</html>

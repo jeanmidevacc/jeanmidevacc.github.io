@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-104903671-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-104903671-1');
+</script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>the odd data guy | Energy in the UK - Analysis of the energy performance certificates</title>
+    <meta name="description" content="Since I published the article on the London smart meter and the possible analysis of the data, I am receiving regularly messages of people that are interesti...">
+
+    <link rel="stylesheet" href="/css/main.css">
+
+    <link rel="canonical" href="http://localhost:4000/dataiku_epc">
+    <link rel="alternate" type="application/rss+xml" title="the odd data guy" href="http://localhost:4000/feed.xml" />
+
+    <!--[if lt IE 9]>
+        <script src="/js/vendor/html5shiv.min.js"></script>
+    <![endif]-->
+</head>
+
+
+  <body class="">
+    <!-- if the user has javascript disabled they can still use the menu -->
+<noscript>
+    <div class="no-js-menu clearfix">
+        <ul>
+            
+                <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+            
+                <li><i class="fa fa-anchor"></i><a href="/about">About</a></li>
+            
+        </ul>
+    </div>
+</noscript>
+<!-- end no script -->
+
+    <header class="hero-image" style="background-image: url(/img//header_img/uk_image.jpg);">
+    <span class="menu-trigger animated fadeInDown">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </span>
+
+    <div id="menu-target">
+    <ul>
+        
+            <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+        
+            <li><i class="fa fa-anchor"></i><a href="/about">About</a></li>
+        
+    </ul>
+</div>
+
+</header>
+
+<main class="container">
+    <div class="row">
+        <div class="col-xs-12 single-content">
+            <p class="meta">
+                <a href=""></a> in <a href='/category/tooling'>Tooling</a> <i class="link-spacer"></i> <i class="fa fa-bookmark"></i> 15 minutes
+            </p>
+
+            <h1>Energy in the UK - Analysis of the energy performance certificates</h1>
+            <h2>An overview to Dataiku Data Science Studio (DSS 5.1) and the EPC dataset</h2>
+            <p>Since I published the article on the London smart meter and the possible analysis of the data, I am receiving regularly messages of people that are interesting to connect the smart meter data and the energy efficiency of the household monitors. I wrote in this article that <strong>there is no direct way to connect the smart meter data , the acorn and the energy efficiency of the household</strong> but there is still some interesting things to do with other datasets around energy and energy efficiency of an household.</p>
+
+<p>I wanted since a long time make an article on interesting tool that I tested in my previous job, that is call DSS from <a href="https://www.dataiku.com/">Dataiku</a>, that is very interesting for people that are working with data. In this article I am going to present this tool, and these other datasets.</p>
+
+<h1 id="whats-dataiku-dss">What’s Dataiku DSS</h1>
+
+<p>Dataiku DSS is a product developed by the French company Dataiku that is defined on their website as <strong>a “collaborative data science software platform for teams of data scientists, data analysts, and engineers to explore, prototype, build, and deliver their own data products more efficiently”</strong>.</p>
+
+<p>To make it simple it is a tool to simplify the processing and sharing of data/model in a company, I really invite you to take a look on their <a href="https://www.dataiku.com/">website</a> that is describing a lot of business cases and the functionalities of the platform. But what’s important to know is that there is <a href="https://www.dataiku.com/dss/trynow/enterprise-edition/">two kinds of edition of the platform</a>:</p>
+
+<ul>
+  <li>The <strong>free edition</strong> : that I am using for this project that is hosted on my machine (but there is a version that can be hosted freely on dataiku server too)</li>
+  <li>The <strong>enterprise edition</strong> : that is offering more data connectors (Hive, etc) and less limitations, there is no price announced on the site because I think it’s based on the client needs but from the rumors that i heard it’s not cheap. But there is a 2 week free trial to test the service.</li>
+</ul>
+
+<p>The installation of the free edition is very simple and you can install it on all the possible OS. I am going to dive in the functionalities of the software after the presentation of the data.</p>
+
+<h1 id="describe-the-data">Describe the data</h1>
+
+<p>For this project, I am going to use the following data sources:</p>
+
+<ul>
+  <li><a href="https://epc.opendatacommunities.org/docs/api">EPC</a>: That is a collection of multiples performance certificates in the UK (around 15 millions)</li>
+  <li><a href="https://www.nomisweb.co.uk/query/select/getdatasetbytheme.asp?opt=3&amp;theme=&amp;subgrp=">Nomis data</a>: Website that is a collection of multiple informations In the UK collected during the different census (most recent is the one of 2011)</li>
+</ul>
+
+<p>Let’s see a more details description of the datasets.</p>
+
+<h2 id="epc">EPC</h2>
+
+<p>So first what’s an EPC ? It’s kind of simple it is an energy performance rating of an household , there is an example in the following figure.</p>
+
+<center>
+<img src="/img/posts/dss_uk/epcrating-example.png" />
+</center>
+
+<p>It’s like the one that can be find on appliance for example, and it need to be refresh at each new tenant or landlord. The data source that is opened by the ministry of Housing, Communities &amp; Local Government is very complete (more than 15 millions certificates) , and there is more than just a simple rating on this data (<a href="https://epc.opendatacommunities.org/docs/guidance#glossary">data dictionnary</a>), there is informations on the glazing, the energy consumption the floor area etc.</p>
+
+<h2 id="nomis-data">Nomis data</h2>
+
+<p>The Nomis website “is a service provided by the Office for National Statistics, ONS, to give free access to the most detailed and up-to-date UK labour market statistics from official sources “, and on this website there is multiple informations on the UK citizens collected during different census. There is multiple informations with a good level of details and the data of the census are mostly used to create the ACORN group that was defining in my article on the smart meter.</p>
+
+<center>
+<img src="/img/posts/dss_uk/extract_nomis.png" />
+</center>
+
+<p>From this portal I extracted informations on the UK citizens at a district level on their :</p>
+
+<ul>
+  <li>Occupation</li>
+  <li>Qualification</li>
+  <li>NS-SEC (National Statisitc-Socio Economic Classification)</li>
+  <li>Population</li>
+</ul>
+
+<p>Let start now Dataiku DSS.</p>
+
+<h1 id="data-processing-in-dss">Data processing in DSS</h1>
+
+<p>All the data extracted for this project are csv files, in the following animation there is an illustration of the process to create a dataset in DSS.</p>
+
+<center>
+<img src="https://media.giphy.com/media/ulnXzrS8kVppwZkxsg/giphy.gif" />
+</center>
+
+<p>Files can be easily drag and drop in DSS , and you can have an overview of the data, the quality etc. In the free version a SQL database can be connected too and it’s very easy.</p>
+
+<p>For this project the idea is to connect the data from the EPC and the Nomis data, so there is a big part of processing of the certificates to be aggregated at a district level and be connected to the Nomis data.</p>
+
+<p>There is an overview of the complete process</p>
+
+<center>
+<img src="/img/posts/dss_uk/dss_overview_process.png" />
+</center>
+
+<p>In the following figure there is the process to prepare the EPC dataset that could be connect with the Nomis data.</p>
+
+<center>
+<img src="/img/posts/dss_uk/process_epcready_clean.png" />
+</center>
+
+<p>There is a preparation phase (with the brush) where  there is a selection of the right columns, a processing of the postcode to get the district code.</p>
+
+<center>
+<img src="/img/posts/dss_uk/epc_prep1.png" />
+</center>
+
+<p>A second step that could have been put with the previous one, is to prepare the dataset to find the most recent EPC of the household (correct format of the date of the inspection date).</p>
+
+<p>To get the last inspection date of each household in the dataset, there is a group by (the square triangle circle icon on the process image) function, there is an illustration of the process in the following animation.</p>
+
+<center>
+<img src="https://media.giphy.com/media/fR4DLlNIBS4COeHuIk/giphy.gif" />
+</center>
+
+<p>Now that we have the EPC cleaned, and a list of the last inspection date for each household in another table a join between this two datasets with the join function (the join logo in the process), there is a presentation of the menu of the join where you can select the join key and the columns selected.</p>
+
+<center>
+<img src="/img/posts/dss_uk/epc_part3.png" />
+</center>
+
+<p>And finally there is a group by function per district, type of household, type of heating system and EPC rating.</p>
+
+<center>
+<img src="https://media.giphy.com/media/1ZxIxkXQIHOvTRw4gx/giphy.gif" />
+</center>
+
+<p>And the final step is the python script to get aggregate informations at the district level with the pivot function of pandas (count of EPC per rating and type of household), but I could have used the pivot function of DSS.</p>
+
+<center>
+<img src="https://media.giphy.com/media/uWqiYpVDCQHKdV95vR/giphy.gif" />
+</center>
+
+<p>Et voila we have the data of the EPC aggregated to a district level , that give us a knowledge on the rating of the household and the kind of household at this level.</p>
+
+<center>
+<img src="/img/posts/dss_uk/epc_groupby_ready.png" />
+</center>
+
+<p>This data can be easily joined with the data of Nomis with the join function.</p>
+
+<p>I used some in house functions of DSS to do the join, groupby but I could have use:</p>
+
+<ul>
+  <li>A python or R script to build the dataset</li>
+  <li>SQL script if it was SQL tables</li>
+  <li>Hive or impala in the case of a “big data” configuration</li>
+</ul>
+
+<p>Now that the data are available let’s make an analysis and a dashboard to wrap up some results.</p>
+
+<h1 id="data-analysis-in-dss">Data analysis in DSS</h1>
+
+<p>The analysis are going to be super high level, it’s only to show the features of DSS.</p>
+
+<p>This is an animation of a dashboard that I build with DSS.</p>
+
+<center>
+<img src="https://media.giphy.com/media/5QYlWs9chlKX0ZZZfq/giphy.gif" />
+</center>
+
+<p>The building of this dashboard is much easier than a Tableau one (my opinion), but they are sharing this drag and drop approach to build each graph that is very useful.</p>
+
+<p>There is way to make some analysis directly from the dataset with the lab tool where in house functions can be used (to determine correlation for example) or used some script to analyse data, in this case I choose python to make some plot with seaborn.</p>
+
+<center>
+<img src="https://media.giphy.com/media/70kgukXMQ5opJQMete/giphy.gif" />
+</center>
+
+<p>The analysis part is really cool and I think that it could fit a lot of needs, but the other part that is really impressive is the ML part to build model based on the data processed.</p>
+
+<h1 id="model-serving-in-dss">Model serving in DSS</h1>
+
+<p>So there is multiple ways to build a model, but first let’s define a purpose for this part:</p>
+
+<p><strong>“Build an energy rating estimator based on the location, the total floor area and the type of heating of the household”</strong></p>
+
+<p>There is three “levels” that DSS gives you to build a model but let’s be honest it’s the same interface just that your journey on the model configuration part start higher in the hierarchy of the menu.</p>
+
+<center>
+<img src="/img/posts/dss_uk/choose_model3.png" />
+</center>
+
+<center>
+<img src="/img/posts/dss_uk/choose_model.png" />
+</center>
+
+<p>In the menu to build the model there is the possibility to:</p>
+
+<ul>
+  <li>Prepare the training and testing sets</li>
+  <li>Choose the evaluation metric</li>
+  <li>Pick up the features</li>
+  <li>Choose the models and the parameters for the grid search</li>
+  <li>Compare the models after the testing part</li>
+</ul>
+
+<p>There is a simple animation that is making an overview of the features of the model builder.</p>
+
+<center>
+<img src="https://media.giphy.com/media/5n9tq7otvq3mnq0zqK/giphy.gif" />
+</center>
+
+<p>The interesting part is that you could use pre built functions (I presumed that scikit learn functions), or write your own python code. The tool to test the model is really impressive in terms of visualisation of the process and the results.</p>
+
+<p>A good point is the visualisation of the results with for example for a decision tree that is really easy to understand (decompose with this tool).</p>
+
+<center>
+<img src="/img/posts/dss_uk/decisiontree_ukdss.png" />
+</center>
+
+<p>After that you find the right model there is an API builder to embed the model. In this space you can define some test requests to see the model in action.</p>
+
+<center>
+<img src="https://media.giphy.com/media/Ylw99xCkx3y5UpN3aD/giphy.gif" />
+</center>
+
+<p>To expose the model, the feature is not activated for the free version (or i miss to use it) but it seems pretty intuitive.</p>
+
+<p>Now it’s time to conclude.</p>
+
+<h1 id="feedback-on-the-project">Feedback on the project</h1>
+
+<p>I will highly recommend to people that are working/interesting on the energy sector to dive in the EPC data because they are a very good source of knowledge on house market in the UK. <strong>In general and it’s very painful for me the most French guy abroad to say that but the UK government is doing a great job to collect and share data</strong> and there is very interesting datasets on the government platform that could be used by data scientists (in France we are very late on this topic but things are changing slowly).</p>
+
+<p>For Dataiku DSS, it is a <strong>great tool for data scientist experimented or not, I can feel that this tool has been designed by data scientists for data scientists</strong> and there is so much features that I didn’t used like all the collaboration part, the deep learning etc. There is multiples in house functions to make the data processing easier, that’s really cool but it could become a burden if for example Dataiku decides to drop theses features (or make it premium) , if data people doesn’t know how to do a join a groupby etc the data pipeline transfer could be difficult but I really like the fact that Dataiku doesn’t stuck the user with their in house functions and let the possibility other way to manipulate data like (with SQL for example).</p>
+
+<p><strong>In my day to day job do DSS can fill MY need ?, NO because I have currently multiple tools at my disposal to do my job and I need flexibility on the data side and on the development side to experiment and deploy things</strong> but this tool is definitely worth trying because it can fill the needs of data teams who doesn’t have my needs (and they are numerous around the world).</p>
+
+<center>
+<img src="/img/posts/dss_uk/dataiku_logo.png" />
+</center>
+
+
+        </div><!-- main-content/col -->
+    </div> <!--/row -->
+
+</main> <!-- /container -->
+
+<footer class="single">
+    <div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="social">
+                <p>Share this article</a>
+                <div class="social-links">
+                    <a class="social-icon" href="#" data-platform="twitter" data-message="" data-url="http://localhost:4000/dataiku_epc"><i class="fa fa-twitter"></i></a>
+
+                    <a class="social-icon" href="#" data-platform="facebook" data-message="" data-url="http://localhost:4000/dataiku_epc"><i class="fa fa-facebook-official"></i></a>
+                    <a class="social-icon" data-platform="mail"  href="mailto:daignanjm@gmail.com?body=http://localhost:4000/dataiku_epc"><i class="fa fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+    </div><!-- end row -->
+</div>
+
+
+    
+</footer>
+
+
+    <script src='/js/vendor/modernizr.custom.32229-2.8-respondjs-1-4-2.js'></script>
+    <script src="/js/vendor/jquery-1.11.2.min.js"></script>
+    <script src='/js/vendor/jquery.jpanelmenu.min.js'></script>
+    <script type='application/javascript' src='/js/vendor/fastclick.min.js'></script>
+    
+    <script src=' /js/main.js'></script>
+  </body>
+
+</html>

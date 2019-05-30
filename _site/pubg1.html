@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-104903671-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-104903671-1');
+</script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>the odd data guy | Build a data pipeline on AWS to collect PUBG data</title>
+    <meta name="description" content="I started this project in echo of the Kaggle competition related to PUBG, where the goal was to predict the player rank in the match,  based on some end of m...">
+
+    <link rel="stylesheet" href="/css/main.css">
+
+    <link rel="canonical" href="http://localhost:4000/pubg1">
+    <link rel="alternate" type="application/rss+xml" title="the odd data guy" href="http://localhost:4000/feed.xml" />
+
+    <!--[if lt IE 9]>
+        <script src="/js/vendor/html5shiv.min.js"></script>
+    <![endif]-->
+</head>
+
+
+  <body class="">
+    <!-- if the user has javascript disabled they can still use the menu -->
+<noscript>
+    <div class="no-js-menu clearfix">
+        <ul>
+            
+                <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+            
+                <li><i class="fa fa-anchor"></i><a href="/about">About</a></li>
+            
+        </ul>
+    </div>
+</noscript>
+<!-- end no script -->
+
+    <header class="hero-image" style="background-image: url(/img//header_img/quinten-de-graaf-pipeline.jpg);">
+    <span class="menu-trigger animated fadeInDown">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </span>
+
+    <div id="menu-target">
+    <ul>
+        
+            <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+        
+            <li><i class="fa fa-anchor"></i><a href="/about">About</a></li>
+        
+    </ul>
+</div>
+
+</header>
+
+<main class="container">
+    <div class="row">
+        <div class="col-xs-12 single-content">
+            <p class="meta">
+                <a href=""></a> in <a href='/category/tooling'>Tooling</a> <i class="link-spacer"></i> <i class="fa fa-bookmark"></i> 14 minutes
+            </p>
+
+            <h1>Build a data pipeline on AWS to collect PUBG data</h1>
+            <h2>An introduction to tracking in video games and how to handle big data without a big infrastructure</h2>
+            <p>I started this project in echo of the <a href="https://www.kaggle.com/c/pubg-finish-placement-prediction">Kaggle competition</a> related to PUBG, where the goal was to predict the player rank in the match,  based on some end of match statistic (like the distance ran during the match etc) . I wanted to understand the data source  (to see if there is some intentional missing stats/informations) and try some services of Amazon like AWS Glue and Athena to build a data pipeline in AWS.</p>
+
+<p>In this article, I will explain:</p>
+
+<ul>
+  <li>What’s PUBG, the principle of the game etc</li>
+  <li>The approach of the project</li>
+  <li>The collection and the cleaning of the data</li>
+</ul>
+
+<h1 id="description-of-pubg">Description of PUBG</h1>
+
+<p>PUBG is one of the flagship (first  and one of the most popular) of a video game type call battle royale, the principal is that 100 players (less or more) are dropped on an island, without equipment and they have to survive on this island by collecting materials, weapons, equipment and vehicle.</p>
+
+<center>
+<img src="/img/posts/pubg1/pubg-main.jpg" />
+</center>
+
+<p>To push people to fight, the area available is becoming smaller more the game is progressing so this format push people to fight each others because at the end it can be only one survivor. There is two very popular games who support the movement it’s PUBG and Fortnite they are available on all the possible platforms (PUBG on console is not good), and now you can see that all the other popular games (Call of duty, Battlefield) wants to add their own battle royale mode inside, but let’s be honest Fortnite is crushing everybody (Check the google trends PUBG VS Fornite)</p>
+
+<center>
+<img src="/img/posts/pubg1/google_trends.png" />
+</center>
+
+<p>My opinion on this kind of game is that the principle is cool, you can build some amazing situation where  is tension during the game but I think that you cannot sell (full price) a game that is just battle royale. Epic has been smart with Fortnite because they turned a project that has been long to produce and the sell was not good to something very lucrative by proposing a free standalone application that is using the same asset than the original game but only focus on the battle royale (I hope that the guy that get the idea add a raise).</p>
+
+<p>Let see the project of data collection.</p>
+
+<h1 id="approach-of-the-project">Approach of the project</h1>
+
+<p>The idea behind this project is to:
+<strong>Build a system to collect the data  from the API delivered by the PUBG corporation
+Clean the data
+Make all the data available without downloading everything on my machine</strong></p>
+
+<p>To build the pipeline I decided to use AWS because I am more comfortable with their services than Microsoft, Google etc but I am sure that the same system can be built on these platforms too.</p>
+
+<p>To complete the task, I decided to use the following services:</p>
+
+<ul>
+  <li>EC2 instance to have a machine running to make the collection</li>
+  <li>S3 to store the data collected and process</li>
+  <li>Glue to make the data clean and available</li>
+  <li>Athena to be the interface with the data store in S3</li>
+</ul>
+
+<p>There is an high level view of the process deploy on AWS with the different steps.</p>
+
+<center>
+<img src="/img/posts/pubg1/pubg-data project.png" />
+</center>
+
+<p>Let’s see the process in details.</p>
+
+<h1 id="collect-the-data-from-pubg-api">Collect the data from PUBG API</h1>
+
+<p>The PUBG corporation has build a very good open <a href="https://developer.playbattlegrounds.com/apps?locale=en">API</a>, there is multiple endpoints that opens differents data sources. To make it simple you can access data related to:</p>
+
+<ul>
+  <li>The PUBG player defined by their accountid</li>
+  <li>The match defined by their matchid</li>
+</ul>
+
+<p>There is data from multiple platforms (pc, xbox, and ps4) from different regions (America, Europe and Asia). For this article I am going to focus on the PC platform and the north america area. There is multiple endpoints on this API but let’s focus on :</p>
+
+<ul>
+  <li>The <a href="https://documentation.playbattlegrounds.com/en/samples-endpoint.html">sample endpoint</a>: That gives the access to some matchid updated every day</li>
+  <li>The <a href="https://documentation.playbattlegrounds.com/en/matches-endpoint.html">matches endpoint</a>: That gives details on the match, like the end result and more important the link to download a compress packets of events.</li>
+</ul>
+
+<p>You can find a <a href="https://github.com/jeanmidevacc/pubg-datacollection">repository</a> with the functions that I build to collect, clean and send the data. This notebook gives goods insight on the data collected. There is three types of data:</p>
+
+<ul>
+  <li>The end match stats, they are stored in a “folder” in a s3 bucket</li>
+  <li>The complete events that are stored in another folder</li>
+  <li>The decomposed events that are stored in separate folder</li>
+</ul>
+
+<p>About the packets of events there is multiple events available on the API, there is a schema that contains the details on this events.</p>
+
+<center>
+<img src="/img/posts/pubg1/events_pubg.png" />
+</center>
+
+<p>I schedule a script to run every day on my EC2 instance that triggered the acquisition of new data from the sample and store it in the right folder and in a day folder.</p>
+
+<p>To get the general informations the details on the match is collected (like the number of people, the map name etc) to an dynamodb table.</p>
+
+<p><strong>Some advices that I can give when you are storing the data is :</strong></p>
+
+<ul>
+  <li><strong>Store them as proper .gz file</strong></li>
+  <li><strong>Be clear on the delimiter, espace char and quote char</strong></li>
+  <li><strong>Drop the index</strong></li>
+  <li><strong>For Dynamodb, convert your float data to Decimal</strong></li>
+</ul>
+
+<p>So that’s a simple overview about how I collected the data, now let’s have a look on the cloud part.</p>
+
+<h1 id="crawl-the-data-data-in-s3-and-dynamodb-with-glue-so-much-name-dropping">Crawl the data data in S3 and Dynamodb with Glue (so much name dropping)</h1>
+
+<p>The AWS glue setup dashboard is setup in two sections with the data catalog part and the ETL part ( I will focus on the upper part of the dashboard).</p>
+
+<center>
+<img src="/img/posts/pubg1/awsgluesdash.png" />
+</center>
+
+<p>Let’s focus on the data catalog first.</p>
+
+<h2 id="data-catalog-and-crawler-part">Data catalog and Crawler part</h2>
+
+<p>In this part you can find a database tab that contains all the databases and the tables associated that you created with Glue. For this project I create my first database. The interesting part is the the crawler tab where you can setup the crawler that will navigate in S3, Dynamodb et some others services of AWS (like RDS). On the previous figure there is a list of all the crawlers that I created for this project. Let’s see what’s inside a crawler.</p>
+
+<center>
+<img src="/img/posts/pubg1/awsgluecrawler.png" />
+</center>
+
+<p>So when you setup your crawler, there is to :</p>
+
+<ul>
+  <li>Find a name for your crawler</li>
+  <li>Define the data source, in this case I am going to focus on three events and my Dynamodb table</li>
+  <li>Define a AWS role for your crawler to have access to all the data sources that want to be crawled</li>
+  <li>Define the frequency of execution of the crawler, I decided to make it run one time per week</li>
+  <li>Define the output of the crawler</li>
+</ul>
+
+<p><strong>I am highly recommending to activate the tickbox Update all new and existing partitions with metadata from the table to avoid some partitions issue during the reading of the data if you are not controlling what you are receiving like me.</strong></p>
+
+<p>And voila just have to run the crawler from the main page of AWS Glue and you can now have access to your data extract by the crawler in Athena (SQL way to access the  data).</p>
+
+<center>
+<img src="/img/posts/pubg1/athena_rawevents.png" />
+</center>
+
+<p>But the data is quite still raw so I decided to add a new layer to the crawler to make some data cleaning and add some informations.</p>
+
+<h2 id="etl-part">ETL part</h2>
+
+<p>For the ETL part, that is the data processing part of the pipeline. I could have analyse the data as they arrived in the S3 bucket but I noticed that some of the records was not good (let’s say corrupted) so I wanted to apply a transformation state for this data for:</p>
+
+<ul>
+  <li>Drop the corrupted records (with a wrong matchid format)</li>
+  <li>Make a join with the details of the match collected in the dynamodb table (and crawl previously)</li>
+  <li>Calculate the delta time between the event and the beginning of the match (in seconds and minutes)</li>
+  <li>Make some simple string manipulation in function of the events (like cleaning the name of the weapon)</li>
+</ul>
+
+<p>There is an illustration of the code and you can find the piece of code in the <a href="https://github.com/jeanmidevacc/pubg-datacollection/blob/master/etl_example.py">repository</a>.</p>
+
+<center>
+<img src="/img/posts/pubg1/etl-pubg.png" />
+</center>
+
+<p>I try the code approach but there is an option the ETL configuration where you can have more a diagram approach to make the data manipulation, as I wanted to used the rdd map and the dataframe of spark I decided to not use this feature but I make some simple tests and it works fine.So now there is just a need to build a crawler to update the data catalog with the new data generated by the ETL part.</p>
+
+<p>In the following schema there is the schedule of the operations in AWS Glue.</p>
+
+<center>
+<img src="/img/posts/pubg1/awsgluediagram.png" />
+</center>
+
+<p>And now let’s make a quick test on AWS to request the process data from the web interface.</p>
+
+<center>
+<img src="/img/posts/pubg1/athena_events.png" />
+</center>
+
+<p>This data is accessible from Athena but you can connect AWS quicksight it have a more Tableau like experience (what I don’t like I am not a big fan of all these BI tool that are too blackbox for me) and more important you can access this data from a notebook (there is copy of a python environment in the <a href="https://github.com/jeanmidevacc/pubg-datacollection/blob/master/environnement.yml">repository</a>).</p>
+
+<p>That was a description of my data pipeline to collect the data from the PUBG API, the system is collecting around 1000 matches per day, it’s not a big amount but I wanted to start small.</p>
+
+<p><strong>And I am a nice guy, you can find an extract of the tables that I build for this project (it’s an extract of the data of the 27th January 2019) in this <a href="https://www.kaggle.com/jeanmidev/pubgevents">kaggle dataset</a>.</strong></p>
+
+<p>I hope that you enjoy the reading, and if you have any comments don’t hesitate to comment.</p>
+
+
+        </div><!-- main-content/col -->
+    </div> <!--/row -->
+
+</main> <!-- /container -->
+
+<footer class="single">
+    <div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="social">
+                <p>Share this article</a>
+                <div class="social-links">
+                    <a class="social-icon" href="#" data-platform="twitter" data-message="" data-url="http://localhost:4000/pubg1"><i class="fa fa-twitter"></i></a>
+
+                    <a class="social-icon" href="#" data-platform="facebook" data-message="" data-url="http://localhost:4000/pubg1"><i class="fa fa-facebook-official"></i></a>
+                    <a class="social-icon" data-platform="mail"  href="mailto:daignanjm@gmail.com?body=http://localhost:4000/pubg1"><i class="fa fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+    </div><!-- end row -->
+</div>
+
+
+    
+</footer>
+
+
+    <script src='/js/vendor/modernizr.custom.32229-2.8-respondjs-1-4-2.js'></script>
+    <script src="/js/vendor/jquery-1.11.2.min.js"></script>
+    <script src='/js/vendor/jquery.jpanelmenu.min.js'></script>
+    <script type='application/javascript' src='/js/vendor/fastclick.min.js'></script>
+    
+    <script src=' /js/main.js'></script>
+  </body>
+
+</html>
