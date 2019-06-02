@@ -5,12 +5,12 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 29 May 2019 22:12:17 -0400</pubDate>
-    <lastBuildDate>Wed, 29 May 2019 22:12:17 -0400</lastBuildDate>
+    <pubDate>Sun, 02 Jun 2019 09:12:03 -0400</pubDate>
+    <lastBuildDate>Sun, 02 Jun 2019 09:12:03 -0400</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
-        <title></title>
+        <title>WIPDive in PUBG</title>
         <description>&lt;p&gt;For this article, I am going to start the analysis of the data extracted with the pipeline explained on this article. The goal of this &lt;a href=&quot;http://the-odd-dataguy.com/pubg1&quot;&gt;article&lt;/a&gt; is too:&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;Get an introduction to AWS athena&lt;/li&gt;
@@ -42,6 +42,14 @@
 &lt;img src=&quot;/img/posts/pubg2/extract_code.png&quot; /&gt;
 &lt;/center&gt;
 
+&lt;p&gt;The code is quite simple and looks like call to a classic postgreSQL database. To be really transparent in terms of cost there is a graph with the cost for the experiment.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/pubg2/cost_aws.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;If I would like to get a very simple database that can handle this amount of data the bill will re more important, the real amount is the one that is coming from the S3 reading and Athena activation less than 2$ per day of analysis (that are just 4 during the experiment).&lt;/p&gt;
+
 &lt;p&gt;Let’s start the analysis of the data associated to PUBG.&lt;/p&gt;
 
 &lt;h1 id=&quot;status-on-the-data-collected&quot;&gt;Status on the data collected&lt;/h1&gt;
@@ -50,34 +58,103 @@
 
 &lt;p&gt;In terms of area and platform, the pipe was focused to extract the data from the PC platform in north america.&lt;/p&gt;
 
-&lt;h1 id=&quot;plotly-and-cufflinks&quot;&gt;Plotly and cufflinks&lt;/h1&gt;
-
-&lt;p&gt;I am pretty big fan of plotly I did an &lt;a href=&quot;http://the-odd-dataguy.com/metricsdash&quot;&gt;article&lt;/a&gt; last year on their Shiny like python package call &lt;a href=&quot;https://plot.ly/products/dash/&quot;&gt;Dash&lt;/a&gt;, it’s really a cool package that make the building of dashboard more easier in Python.&lt;/p&gt;
-
-&lt;p&gt;Plotly is a really cool library to make interactive plot  but the syntax is a little bit long so there is people that have developed some plotly wrapper to facilitate the build a of a graph:&lt;/p&gt;
+&lt;p&gt;I am going to focus on 3 events for this analysis:&lt;/p&gt;
 &lt;ul&gt;
-  &lt;li&gt;Cufflinks developed by Jorge Santos (and many contributors)&lt;/li&gt;
-  &lt;li&gt;Plotly express developed by plotly themselves&lt;/li&gt;
+  &lt;li&gt;The gamestat periodic, that is around 11 000 000 rows&lt;/li&gt;
+  &lt;li&gt;The player kill, that is around 7 000 000 rows&lt;/li&gt;
+  &lt;li&gt;The items used, that is around 19 000 000 rows&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;For this article I have only used cufflinks but I am planning to make another article that will used plotly express.&lt;/p&gt;
+&lt;h1 id=&quot;plotly-and-cufflinks&quot;&gt;Plotly and cufflinks&lt;/h1&gt;
 
-&lt;h1 id=&quot;lets-dive-in-pubg&quot;&gt;Let’s dive in PUBG&lt;/h1&gt;
+&lt;p&gt;I am a pretty big fan of  the library plotly I did an &lt;a href=&quot;http://the-odd-dataguy.com/metricsdash&quot;&gt;article&lt;/a&gt; last year on a Shiny like python package call &lt;a href=&quot;https://plot.ly/products/dash/&quot;&gt;Dash&lt;/a&gt; powered by plotly, it’s really a cool package that makes the building of dashboard more easier in Python. The package has been developed by the company Plotly that is based in Montreal in the mile end so we are literally neighbors as I am working at Ubisoft montreal (really like 4 minutes walking time).&lt;/p&gt;
+
+&lt;p&gt;The original package is a really cool library that is free to make interactive plot based on &lt;a href=&quot;https://d3js.org/&quot;&gt;D3.js&lt;/a&gt;, they offer the possibility to deploy on the their chart studio the plot that are produce (the free version offers you the possibility to host 25 charts on their platform but with a &lt;a href=&quot;https://plot.ly/products/cloud/&quot;&gt;premium account&lt;/a&gt; you can host more charts/data)&lt;/p&gt;
+
+&lt;p&gt;In term of usage, the original syntax is a little bit “heavy” so there is people that have developed wrappers to facilitate the building of a graph on a more one liner style:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/santosjorge/cufflinks&quot;&gt;Cufflinks&lt;/a&gt; developed by Jorge Santos (and many contributors)&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://medium.com/@plotlygraphs/introducing-plotly-express-808df010143d&quot;&gt;Plotly express&lt;/a&gt; developed by Plotly themselves&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For this article I have only used cufflinks but I am planning to make others articles that will used plotly express.&lt;/p&gt;
+
+&lt;h1 id=&quot;pubg-from-different-perspectives&quot;&gt;PUBG from different perspectives&lt;/h1&gt;
+
+&lt;h2 id=&quot;gameplay&quot;&gt;Gameplay&lt;/h2&gt;
+
+&lt;p&gt;PUBG is one of this game that is define as battle royale, where the principle is there is X peoples (or squads) that are drop on an island, the goal is to be the last survivor on the island by using the items, weapons that are deploy randomly on the island. And to increase the tension in the game (and do give it an end), the part of map available is  decreasing regularly to push the players to fight for their lives.&lt;/p&gt;
+
+&lt;p&gt;In term of gameplay, there is multiples islands available (each with its own environment like desert, snow) , and you can play in different modes (solo, duo squad) and sometimes the camera can be predefined (fpp for first person player only)&lt;/p&gt;
+
+&lt;h2 id=&quot;data&quot;&gt;Data&lt;/h2&gt;
 
 &lt;p&gt;To be honest there is multiples websites than have done similar analysis like &lt;a href=&quot;https://pubgmap.io/&quot;&gt;pubgmap.io&lt;/a&gt; but it is still interesting to make different analysis and make some comparisons.&lt;/p&gt;
 
-&lt;p&gt;The mode that is the most popular is the squad one, and the map is Savage. For the following analysis , I am going to focus on the mode &lt;strong&gt;squad&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;There is a representation of the matches collected based on the map and the mode.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;iframe width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;//plot.ly/~jeanmidev/87.embed&quot;&gt;&lt;/iframe&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The mode that is the most popular is the squad one, and the map is Savage. For the following analysis, I am going to focus on the mode &lt;strong&gt;squad&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;p&gt;n term of duration , I took a sample of the match (1000 matches) for each map and there is some boxplots.&lt;/p&gt;
 
 &lt;center&gt;
 &lt;iframe width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;//plot.ly/~jeanmidev/41.embed&quot;&gt;&lt;/iframe&gt;
 &lt;/center&gt;
+
+&lt;p&gt;The map Savage looks to have a different comportment on the duration, that could be explained by the size that is way smaller than the other ones (there is like a 5 minutes differential for the median).&lt;/p&gt;
+
+&lt;p&gt;For the lifespan of the players, in the following figure there is the representation of the percentage of player alive VS the completion of the match in function of the map.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;iframe width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;//plot.ly/~jeanmidev/33.embed&quot;&gt;&lt;/iframe&gt;
+&lt;/center&gt;
+
+&lt;p&gt;At the beginning of the match , most of the players stay alive that is related to the landing moment of all the players in the match so no kill but a few percentage there is a split that’s happening between all the maps. There is a clear differentiation between the different maps i n term of players killed over time, the Savage map looks the one that is the most abrupt in terms of death after the landing.&lt;/p&gt;
+
+&lt;p&gt;In the same topics of death, in terms of weapons used to kill there is the distribution of number of kills per weapons register during the periods.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;iframe width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;//plot.ly/~jeanmidev/35.embed&quot;&gt;&lt;/iframe&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The most popular weapons seems to be the AK47, and there is a lot of rifles in the top of the weapons.What is really interesting with the events associated to the kill, there is localisation elements where the hit is localised on the body of the victim.&lt;/p&gt;
+
+&lt;p&gt;The most popular weapons seems to be the AK47, and there is a lot of rifles in the top of the weapons.What is really interesting with the events associated to the kill, there is localisation elements where the hit is localised on the body of the victim.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;iframe width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;//plot.ly/~jeanmidev/39.embed&quot;&gt;&lt;/iframe&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The portion of headshot is different in function of the weapon, the two first weapons that seems to be the more precise are sniper rifle so that make sense.&lt;/p&gt;
+
+&lt;p&gt;Another interesting insights is that it seems that there is some weapons that are map specific, in the following figure there is a distribution of the weapons per map.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;iframe width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;//plot.ly/~jeanmidev/37.embed&quot;&gt;&lt;/iframe&gt;
+&lt;/center&gt;
+
+&lt;p&gt;With this representation , there is a distribution of the kills per maps and there is the illustration than some weapons are map specific but in general some map are more used to kill in some specific map that could be the mark of a distribution of the equipment that is differing in function of the map&lt;/p&gt;
+
+&lt;p&gt;And to finish I just decide to have an overview of the heal and booster usage in the game, there is in the following figure the evolution of the events to use an heal object and a booster object in function of the completion of the match.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;iframe width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;//plot.ly/~jeanmidev/57.embed&quot;&gt;&lt;/iframe&gt;
+&lt;/center&gt;
+
+&lt;p&gt;For the booster, there is definitely a peak around 40% of the match, but for the heal object there is a first bump in the 15% that refer to the first wave of eliminated player , the peak is on the middle of the match with a second phase of elimination. If we compare the percentage of player alive figure with this one there another story that can be tell i n terms of player behaviour.&lt;/p&gt;
+
+&lt;p&gt;This article was an introduction to more works that I am going to do with the data collected from pubg, i will give a focus on a future article on pubg about the position data and interest points that can be detected during a match.&lt;/p&gt;
 </description>
-        <pubDate>Wed, 29 May 2019 22:12:17 -0400</pubDate>
-        <link>http://localhost:4000/2019-05-15-pubg2</link>
-        <guid isPermaLink="true">http://localhost:4000/2019-05-15-pubg2</guid>
+        <pubDate>Wed, 15 May 2019 00:00:00 -0400</pubDate>
+        <link>http://localhost:4000/pubg2</link>
+        <guid isPermaLink="true">http://localhost:4000/pubg2</guid>
         
+        
+        <category>dsml</category>
         
       </item>
     
