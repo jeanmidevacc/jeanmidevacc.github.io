@@ -16,7 +16,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>the odd data guy | WIPDive in PUBG</title>
+    <title>the odd data guy | Make analytics with AWS and plotly on PUBG data</title>
     <meta name="description" content="For this article, I am going to start the analysis of the data extracted with the pipeline explained on this article. The goal of this article is too:  Get a...">
 
     <link rel="stylesheet" href="/css/main.css">
@@ -45,7 +45,7 @@
 </noscript>
 <!-- end no script -->
 
-    <header class="hero-image" style="background-image: url(/img//header_img/benjamin-behre-429210-unsplash.jpg);">
+    <header class="hero-image" style="background-image: url(/img//header_img/franki-chamaki-694946-unsplash.jpg);">
     <span class="menu-trigger animated fadeInDown">
         <span class="bar"></span>
         <span class="bar"></span>
@@ -68,19 +68,27 @@
     <div class="row">
         <div class="col-xs-12 single-content">
             <p class="meta">
-                <a href=""></a> in <a href='/category/dsml'>Dsml</a> <i class="link-spacer"></i> <i class="fa fa-bookmark"></i> 12 minutes
+                <a href=""></a> in <a href='/category/dsml'>Dsml</a> <i class="link-spacer"></i> <i class="fa fa-bookmark"></i> 10 minutes
             </p>
 
-            <h1>WIPDive in PUBG</h1>
-            <h2>Application of AWS Athena and plotly to analyse PUBG data</h2>
-            <p>For this article, I am going to start the analysis of the data extracted with the pipeline explained on this article. The goal of this <a href="http://the-odd-dataguy.com/pubg1">article</a> is too:</p>
+            <h1>Make analytics with AWS and plotly on PUBG data</h1>
+            <h2>Application of Athena and cufflinks to analyse PUBG data</h2>
+            <p>For this article, I am going to start the analysis of the data extracted with the pipeline explained on this article. The goal of this <a href="http://the-odd-dataguy.com/PUBG1">article</a> is too:</p>
 <ul>
   <li>Get an introduction to AWS athena</li>
   <li>Get insights on the data by using plotly</li>
   <li>Better understand the consumption of the video game PUBG</li>
 </ul>
 
-<h1 id="athena-aws">Athena AWS</h1>
+<h1 id="reminder-on-pubg">Reminder on PUBG</h1>
+
+<p>PUBG is one of this game that is define as battle royale, where the principle is there is X peoples (or squads) that are drop on an island, the goal is to be the last survivor on the island by using the items, weapons that are deploy randomly on the island. And to increase the tension in the game (and do give it an end), the part of map available is  decreasing regularly to push the players to fight for their lives.</p>
+
+<p>In term of gameplay, there is multiples islands available (each with its own environment like desert, snow) , and you can play in different modes (solo, duo squad) and sometimes the camera can be predefined (fpp for first person player only or first/third person camera)</p>
+
+<h1 id="tech-side">Tech side</h1>
+
+<h2 id="overview-of-athena">Overview of Athena</h2>
 
 <p>Athena is the service developed by Amazon to give the possibility to someone to easily query data from a S3 bucket without using servers or data warehouses. There is an example of the interface to use Athena on a web browser.</p>
 
@@ -92,11 +100,11 @@
 
 <p>The core of the system is build on <a href="https://prestodb.github.io/">Presto</a> that is defined as an open source distributed SQL query engine. One of the main user of this project is <a href="https://www.facebook.com/notes/facebook-engineering/presto-interacting-with-petabytes-of-data-at-facebook/10151786197628920/">Facebook</a> on various topics around interactive analytics, batch ETL, A/B testing and developer advertiser analytics.</p>
 
-<p>There is a good <a href="https://research.fb.com/publications/presto-sql-on-everything/">article</a> about Presto that is entering more in details on the all the machinery of the engine.</p>
+<p>There is a good <a href="https://research.fb.com/publications/presto-sql-on-everything/">article</a> about Presto that is entering more in details on all the machinery of the engine.</p>
 
 <p>Some other big users of this tool are <a href="https://medium.com/netflix-techblog/metacat-making-big-data-discoverable-and-meaningful-at-netflix-56fb36a53520">Netflix</a> and <a href="https://airbnb.io/projects/airpal/">Airbnb</a> that are building services around this kind of system.</p>
 
-<p>If we go back to the Athena service, that arrived with the serverless system is the fact the billing is only based  data scanned. So really this combo S3  + Athena is a good mix for people who wants to handle a volume of data that can be consider “big” without handling all the infrastructure (that is a full time job).</p>
+<p>If we go back to the Athena service, the serverless system is interesting because  the billing is only based on the data scanned. So really this combo S3  + Athena is a good mix for people who wants to handle a volume of data that can be consider “big” without handling all the infrastructure (that is a full time job).</p>
 
 <p>To connect AWS Athena to a python script there is a package <a href="https://pypi.org/project/PyAthenaJDBC/">pyathenajdbc</a> that can be installed and will install a connector that can be use in a pandas dataframe. There is an example of a script to connect the data.</p>
 
@@ -110,11 +118,11 @@
 <img src="/img/posts/pubg2/cost_aws.png" />
 </center>
 
-<p>If I would like to get a very simple database that can handle this amount of data the bill will re more important, the real amount is the one that is coming from the S3 reading and Athena activation less than 2$ per day of analysis (that are just 4 during the experiment).</p>
+<p>The real amount is the one that is coming from the S3 reading and Athena activation and it’s less than 2$ per day of analysis (that are just 4 for this experiment).</p>
 
 <p>Let’s start the analysis of the data associated to PUBG.</p>
 
-<h1 id="status-on-the-data-collected">Status on the data collected</h1>
+<h2 id="status-on-the-data-collected">Status on the data collected</h2>
 
 <p>The pipe ran during more than a month between the 26th january 2019 and the 5th April 2019, this amount of time represent around 69000 matches so that a pretty interesting volume of data to handle (with the amount of events collected during the match).</p>
 
@@ -127,9 +135,19 @@
   <li>The items used, that is around 19 000 000 rows</li>
 </ul>
 
-<h1 id="plotly-and-cufflinks">Plotly and cufflinks</h1>
+<h2 id="plotly-and-co">Plotly and co</h2>
 
-<p>I am a pretty big fan of  the library plotly I did an <a href="http://the-odd-dataguy.com/metricsdash">article</a> last year on a Shiny like python package call <a href="https://plot.ly/products/dash/">Dash</a> powered by plotly, it’s really a cool package that makes the building of dashboard more easier in Python. The package has been developed by the company Plotly that is based in Montreal in the mile end so we are literally neighbors as I am working at Ubisoft montreal (really like 4 minutes walking time).</p>
+<p>I am a pretty big fan of  the library plotly I did an <a href="http://the-odd-dataguy.com/metricsdash">article</a> last year on a Shiny like python package call <a href="https://plot.ly/products/dash/">Dash</a> powered by plotly, it’s really a cool package that makes the building of dashboard more easier in Python.</p>
+
+<center>
+<img src="https://media.giphy.com/media/3bzPBXvJg0E4hmC3qx/giphy.gif" />
+</center>
+
+<p>The package has been developed by the company Plotly that is based in Montreal in the mile end so we are literally neighbors as I am working at Ubisoft montreal (really like 4 minutes walking time).</p>
+
+<center>
+<img src="/img/posts/pubg2/plotly_logo.png" />
+</center>
 
 <p>The original package is a really cool library that is free to make interactive plot based on <a href="https://d3js.org/">D3.js</a>, they offer the possibility to deploy on the their chart studio the plot that are produce (the free version offers you the possibility to host 25 charts on their platform but with a <a href="https://plot.ly/products/cloud/">premium account</a> you can host more charts/data)</p>
 
@@ -139,19 +157,13 @@
   <li><a href="https://medium.com/@plotlygraphs/introducing-plotly-express-808df010143d">Plotly express</a> developed by Plotly themselves</li>
 </ul>
 
-<p>For this article I have only used cufflinks but I am planning to make others articles that will used plotly express.</p>
+<p>For this article I have only used cufflinks but I am planning to make others articles that will use plotly express.</p>
 
 <h1 id="pubg-from-different-perspectives">PUBG from different perspectives</h1>
 
-<h2 id="gameplay">Gameplay</h2>
+<h2 id="data-extracted">Data extracted</h2>
 
-<p>PUBG is one of this game that is define as battle royale, where the principle is there is X peoples (or squads) that are drop on an island, the goal is to be the last survivor on the island by using the items, weapons that are deploy randomly on the island. And to increase the tension in the game (and do give it an end), the part of map available is  decreasing regularly to push the players to fight for their lives.</p>
-
-<p>In term of gameplay, there is multiples islands available (each with its own environment like desert, snow) , and you can play in different modes (solo, duo squad) and sometimes the camera can be predefined (fpp for first person player only)</p>
-
-<h2 id="data">Data</h2>
-
-<p>To be honest there is multiples websites than have done similar analysis like <a href="https://pubgmap.io/">pubgmap.io</a> but it is still interesting to make different analysis and make some comparisons.</p>
+<p>To be honest there is multiples websites than have done similar analysis like <a href="https://PUBGmap.io/">PUBGmap.io</a> but it is still interesting to make different analysis and make some comparisons.</p>
 
 <p>There is a representation of the matches collected based on the map and the mode.</p>
 
@@ -161,6 +173,8 @@
 
 <p>The mode that is the most popular is the squad one, and the map is Savage. For the following analysis, I am going to focus on the mode <strong>squad</strong>.</p>
 
+<h2 id="duration-of-the-matches">Duration of the matches</h2>
+
 <p>n term of duration , I took a sample of the match (1000 matches) for each map and there is some boxplots.</p>
 
 <center>
@@ -169,47 +183,57 @@
 
 <p>The map Savage looks to have a different comportment on the duration, that could be explained by the size that is way smaller than the other ones (there is like a 5 minutes differential for the median).</p>
 
+<h2 id="evolution-of-the-matches">Evolution of the matches</h2>
+
 <p>For the lifespan of the players, in the following figure there is the representation of the percentage of player alive VS the completion of the match in function of the map.</p>
 
 <center>
 <iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~jeanmidev/33.embed"></iframe>
 </center>
 
-<p>At the beginning of the match , most of the players stay alive that is related to the landing moment of all the players in the match so no kill but a few percentage there is a split that’s happening between all the maps. There is a clear differentiation between the different maps i n term of players killed over time, the Savage map looks the one that is the most abrupt in terms of death after the landing.</p>
+<p>At the beginning of the match , most of the players stay alive that is related to the landing moment of all the players  on the map. In terms of evolution of the players alive, the map seems to not have the same evolution to the end, the map to be “smoother” than the other one, Erangel and dihorotok are very similar and Savage is the one that seems the most violent (and that can explained by the format of the map).</p>
 
-<p>In the same topics of death, in terms of weapons used to kill there is the distribution of number of kills per weapons register during the periods.</p>
+<h2 id="weapons-usage">Weapons usage</h2>
+
+<p>In term of weapons used to kill there is the distribution of number of kills per weapon during the period.</p>
 
 <center>
 <iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~jeanmidev/35.embed"></iframe>
 </center>
 
-<p>The most popular weapons seems to be the AK47, and there is a lot of rifles in the top of the weapons.What is really interesting with the events associated to the kill, there is localisation elements where the hit is localised on the body of the victim.</p>
+<p>There is multiple types of weapon in the game from handgun, rifle shotgun or crossbow but the most popular is the AK47, and there is a lot of rifles in the top of the weapons.</p>
 
-<p>The most popular weapons seems to be the AK47, and there is a lot of rifles in the top of the weapons.What is really interesting with the events associated to the kill, there is localisation elements where the hit is localised on the body of the victim.</p>
+<p>Another really interesting data from the kill event is the localisation on the body  of the final shot, in the following figure there is the repartition for each weapon of the localisation of the final shot.</p>
 
 <center>
 <iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~jeanmidev/39.embed"></iframe>
 </center>
 
-<p>The portion of headshot is different in function of the weapon, the two first weapons that seems to be the more precise are sniper rifle so that make sense.</p>
+<p>The portion of headshot is different in function of the weapon, the handguns look way less precise to do headshot than the rifle (and that makes sense)</p>
 
-<p>Another interesting insights is that it seems that there is some weapons that are map specific, in the following figure there is a distribution of the weapons per map.</p>
+<p>Another interesting insights is that some weapons seems to be map specific, in the following figure there is a distribution of the weapons per map.</p>
 
 <center>
 <iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~jeanmidev/37.embed"></iframe>
 </center>
 
-<p>With this representation , there is a distribution of the kills per maps and there is the illustration than some weapons are map specific but in general some map are more used to kill in some specific map that could be the mark of a distribution of the equipment that is differing in function of the map</p>
+<h2 id="support-items-usage">Support items usage</h2>
 
-<p>And to finish I just decide to have an overview of the heal and booster usage in the game, there is in the following figure the evolution of the events to use an heal object and a booster object in function of the completion of the match.</p>
+<p>To conclude I decided to have an overview of the heal and booster usage in the game, there is in the following figure the evolution of the events to use an heal object and a booster object in function of the completion of the match.</p>
 
 <center>
 <iframe width="800" height="600" frameborder="0" scrolling="no" src="//plot.ly/~jeanmidev/57.embed"></iframe>
 </center>
 
-<p>For the booster, there is definitely a peak around 40% of the match, but for the heal object there is a first bump in the 15% that refer to the first wave of eliminated player , the peak is on the middle of the match with a second phase of elimination. If we compare the percentage of player alive figure with this one there another story that can be tell i n terms of player behaviour.</p>
+<p>For the booster, there is definitely a peak around 40% of the match, but for the heal object there is a first bump in the 15% that refer to the first wave of eliminated player, the peak is on the middle of the match with a second phase of elimination.</p>
 
-<p>This article was an introduction to more works that I am going to do with the data collected from pubg, i will give a focus on a future article on pubg about the position data and interest points that can be detected during a match.</p>
+<h1 id="conclusion">Conclusion</h1>
+
+<p>This article was an introduction to more works that I am going to do with the data collected from PUBG, I will give a focus on a future article on PUBG about the position data , this dataset represent around 500 000 000 rows so that is going to be more interesting.</p>
+
+<center>
+<img src="https://media.giphy.com/media/rVbAzUUSUC6dO/giphy.gif" />
+</center>
 
 
         </div><!-- main-content/col -->
