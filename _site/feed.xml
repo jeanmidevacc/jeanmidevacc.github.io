@@ -5,6 +5,7 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+<<<<<<< Updated upstream
     <pubDate>Sun, 02 Jun 2019 19:29:10 -0400</pubDate>
     <lastBuildDate>Sun, 02 Jun 2019 19:29:10 -0400</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
@@ -12,6 +13,15 @@
       <item>
         <title>Make analytics with AWS and plotly on PUBG data</title>
         <description>&lt;p&gt;For this article, I am going to start the analysis of the data extracted with the pipeline explained on this article. The goal of this &lt;a href=&quot;http://the-odd-dataguy.com/PUBG1&quot;&gt;article&lt;/a&gt; is too:&lt;/p&gt;
+=======
+    <pubDate>Thu, 30 May 2019 08:07:40 -0400</pubDate>
+    <lastBuildDate>Thu, 30 May 2019 08:07:40 -0400</lastBuildDate>
+    <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>WIPDive in PUBG</title>
+        <description>&lt;p&gt;For this article, I am going to start the analysis of the data extracted with the pipeline explained on this article. The goal of this &lt;a href=&quot;http://the-odd-dataguy.com/pubg1&quot;&gt;article&lt;/a&gt; is too:&lt;/p&gt;
+>>>>>>> Stashed changes
 &lt;ul&gt;
   &lt;li&gt;Get an introduction to AWS athena&lt;/li&gt;
   &lt;li&gt;Get insights on the data by using plotly&lt;/li&gt;
@@ -121,48 +131,76 @@
 
 &lt;p&gt;The map Savage looks to have a different comportment on the duration, that could be explained by the size that is way smaller than the other ones (there is like a 5 minutes differential for the median).&lt;/p&gt;
 
+<<<<<<< Updated upstream
 &lt;h2 id=&quot;evolution-of-the-matches&quot;&gt;Evolution of the matches&lt;/h2&gt;
 
+=======
+>>>>>>> Stashed changes
 &lt;p&gt;For the lifespan of the players, in the following figure there is the representation of the percentage of player alive VS the completion of the match in function of the map.&lt;/p&gt;
 
 &lt;center&gt;
 &lt;iframe width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;//plot.ly/~jeanmidev/33.embed&quot;&gt;&lt;/iframe&gt;
 &lt;/center&gt;
 
+<<<<<<< Updated upstream
 &lt;p&gt;At the beginning of the match , most of the players stay alive that is related to the landing moment of all the players  on the map. In terms of evolution of the players alive, the map seems to not have the same evolution to the end, the map to be “smoother” than the other one, Erangel and dihorotok are very similar and Savage is the one that seems the most violent (and that can explained by the format of the map).&lt;/p&gt;
 
 &lt;h2 id=&quot;weapons-usage&quot;&gt;Weapons usage&lt;/h2&gt;
 
 &lt;p&gt;In term of weapons used to kill there is the distribution of number of kills per weapon during the period.&lt;/p&gt;
+=======
+&lt;p&gt;At the beginning of the match , most of the players stay alive that is related to the landing moment of all the players in the match so no kill but a few percentage there is a split that’s happening between all the maps. There is a clear differentiation between the different maps i n term of players killed over time, the Savage map looks the one that is the most abrupt in terms of death after the landing.&lt;/p&gt;
+
+&lt;p&gt;In the same topics of death, in terms of weapons used to kill there is the distribution of number of kills per weapons register during the periods.&lt;/p&gt;
+>>>>>>> Stashed changes
 
 &lt;center&gt;
 &lt;iframe width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;//plot.ly/~jeanmidev/35.embed&quot;&gt;&lt;/iframe&gt;
 &lt;/center&gt;
 
+<<<<<<< Updated upstream
 &lt;p&gt;There is multiple types of weapon in the game from handgun, rifle shotgun or crossbow but the most popular is the AK47, and there is a lot of rifles in the top of the weapons.&lt;/p&gt;
 
 &lt;p&gt;Another really interesting data from the kill event is the localisation on the body  of the final shot, in the following figure there is the repartition for each weapon of the localisation of the final shot.&lt;/p&gt;
+=======
+&lt;p&gt;The most popular weapons seems to be the AK47, and there is a lot of rifles in the top of the weapons.What is really interesting with the events associated to the kill, there is localisation elements where the hit is localised on the body of the victim.&lt;/p&gt;
+
+&lt;p&gt;The most popular weapons seems to be the AK47, and there is a lot of rifles in the top of the weapons.What is really interesting with the events associated to the kill, there is localisation elements where the hit is localised on the body of the victim.&lt;/p&gt;
+>>>>>>> Stashed changes
 
 &lt;center&gt;
 &lt;iframe width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;//plot.ly/~jeanmidev/39.embed&quot;&gt;&lt;/iframe&gt;
 &lt;/center&gt;
 
+<<<<<<< Updated upstream
 &lt;p&gt;The portion of headshot is different in function of the weapon, the handguns look way less precise to do headshot than the rifle (and that makes sense)&lt;/p&gt;
 
 &lt;p&gt;Another interesting insights is that some weapons seems to be map specific, in the following figure there is a distribution of the weapons per map.&lt;/p&gt;
+=======
+&lt;p&gt;The portion of headshot is different in function of the weapon, the two first weapons that seems to be the more precise are sniper rifle so that make sense.&lt;/p&gt;
+
+&lt;p&gt;Another interesting insights is that it seems that there is some weapons that are map specific, in the following figure there is a distribution of the weapons per map.&lt;/p&gt;
+>>>>>>> Stashed changes
 
 &lt;center&gt;
 &lt;iframe width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;//plot.ly/~jeanmidev/37.embed&quot;&gt;&lt;/iframe&gt;
 &lt;/center&gt;
 
+<<<<<<< Updated upstream
 &lt;h2 id=&quot;support-items-usage&quot;&gt;Support items usage&lt;/h2&gt;
 
 &lt;p&gt;To conclude I decided to have an overview of the heal and booster usage in the game, there is in the following figure the evolution of the events to use an heal object and a booster object in function of the completion of the match.&lt;/p&gt;
+=======
+&lt;p&gt;With this representation , there is a distribution of the kills per maps and there is the illustration than some weapons are map specific but in general some map are more used to kill in some specific map that could be the mark of a distribution of the equipment that is differing in function of the map&lt;/p&gt;
+
+&lt;p&gt;And to finish I just decide to have an overview of the heal and booster usage in the game, there is in the following figure the evolution of the events to use an heal object and a booster object in function of the completion of the match.&lt;/p&gt;
+>>>>>>> Stashed changes
 
 &lt;center&gt;
 &lt;iframe width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;//plot.ly/~jeanmidev/57.embed&quot;&gt;&lt;/iframe&gt;
 &lt;/center&gt;
 
+<<<<<<< Updated upstream
 &lt;p&gt;For the booster, there is definitely a peak around 40% of the match, but for the heal object there is a first bump in the 15% that refer to the first wave of eliminated player, the peak is on the middle of the match with a second phase of elimination.&lt;/p&gt;
 
 &lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
@@ -172,6 +210,11 @@
 &lt;center&gt;
 &lt;img src=&quot;https://media.giphy.com/media/rVbAzUUSUC6dO/giphy.gif&quot; /&gt;
 &lt;/center&gt;
+=======
+&lt;p&gt;For the booster, there is definitely a peak around 40% of the match, but for the heal object there is a first bump in the 15% that refer to the first wave of eliminated player , the peak is on the middle of the match with a second phase of elimination. If we compare the percentage of player alive figure with this one there another story that can be tell i n terms of player behaviour.&lt;/p&gt;
+
+&lt;p&gt;This article was an introduction to more works that I am going to do with the data collected from pubg, i will give a focus on a future article on pubg about the position data and interest points that can be detected during a match.&lt;/p&gt;
+>>>>>>> Stashed changes
 </description>
         <pubDate>Wed, 15 May 2019 00:00:00 -0400</pubDate>
         <link>http://localhost:4000/pubg2</link>
