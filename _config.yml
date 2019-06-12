@@ -8,13 +8,14 @@ enable_retina: false
 permalink: :title
 nav_list:
   Home : ['Home', '/', 'fa-home']
+  Tools : ['Tools', '/category/tooling', 'fa-bookmark']
+  DS&ML : ['DS&ML', '/category/dsml', 'fa-bookmark']
+  Writing : ['Writing', '/category/writing', 'fa-bookmark']
   About : ['About', '/about', 'fa-anchor']
 single_footer: ''
 footer_links:
     About: ['About', '/about']
 
-
 # Build settings
 # markdown: kramdown
-
 google_tracking_id: 'UA-104903671-1'
