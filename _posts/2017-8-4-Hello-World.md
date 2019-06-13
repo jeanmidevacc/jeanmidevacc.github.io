@@ -30,4 +30,4 @@ I hope that you will enjoy the reading of my blog.
 <center><img src="https://media.giphy.com/media/k39w535jFPYrK/giphy.gif"></center>
 
 
-PS : By the way this website is hosting in Github , I am using the service [Github Pages](https://pages.github.com/) with the framework [Jekyll](https://jekyllrb.com/) and the foundation of this blog is a git fork from the [repository](https://github.com/BlackrockDigital/startbootstrap-clean-blog-jekyll) that I found after the reading of this [blog](https://iamtrask.github.io/).
+PS : By the way this website is hosting in Github , I am using the service [Github Pages](https://pages.github.com/) with the framework [Jekyll](https://jekyllrb.com/) and the template of this blog is coming from [Jekyll themes](https://jekyllthemes.io/theme/writer-a-minimal-blog-for-jekyll).
