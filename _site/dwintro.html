@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-104903671-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-104903671-1');
+</script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>the odd data guy | Doctor Who scripts - Overview of the Kaggle dataset and NLTK</title>
+    <meta name="description" content="Hello, I am writing this quick article to:  present a dataset that I built during the past weeks  get an overview of some features of nltk">
+
+    <link rel="stylesheet" href="/css/main.css">
+
+    <link rel="canonical" href="http://localhost:4000/dwintro">
+    <link rel="alternate" type="application/rss+xml" title="the odd data guy" href="http://localhost:4000/feed.xml" />
+
+    <!--[if lt IE 9]>
+        <script src="/js/vendor/html5shiv.min.js"></script>
+    <![endif]-->
+</head>
+
+
+  <body class="">
+    <!-- if the user has javascript disabled they can still use the menu -->
+<noscript>
+    <div class="no-js-menu clearfix">
+        <ul>
+            
+                <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+            
+                <li><i class="fa fa-bookmark"></i><a href="/category/tooling">Tools</a></li>
+            
+                <li><i class="fa fa-bookmark"></i><a href="/category/dsml">DS&ML</a></li>
+            
+                <li><i class="fa fa-bookmark"></i><a href="/category/writing">Writing</a></li>
+            
+                <li><i class="fa fa-anchor"></i><a href="/about">About</a></li>
+            
+        </ul>
+    </div>
+</noscript>
+<!-- end no script -->
+
+    <header class="hero-image" style="background-image: url(/img//header_img/dw_panels.jpg);">
+    <span class="menu-trigger animated fadeInDown">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </span>
+
+    <div id="menu-target">
+    <ul>
+        
+            <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+        
+            <li><i class="fa fa-bookmark"></i><a href="/category/tooling">Tools</a></li>
+        
+            <li><i class="fa fa-bookmark"></i><a href="/category/dsml">DS&ML</a></li>
+        
+            <li><i class="fa fa-bookmark"></i><a href="/category/writing">Writing</a></li>
+        
+            <li><i class="fa fa-anchor"></i><a href="/about">About</a></li>
+        
+    </ul>
+</div>
+
+</header>
+
+<main class="container">
+    <div class="row">
+        <div class="col-xs-12 single-content">
+            <h1>Doctor Who scripts - Overview of the Kaggle dataset and NLTK</h1>
+            <h2>Presentation of a kaggle dataset around Doctor Who and a very brief introduction to NLTK library to process text data</h2>
+            <p>Hello, I am writing this quick article to:</p>
+<ul>
+  <li>present a <a href="https://www.kaggle.com/jeanmidev/doctor-who">dataset</a> that I built during the past weeks</li>
+  <li>get an overview of some features of nltk</li>
+</ul>
+
+<h1 id="who-are-you-">Who are you ?</h1>
+
+<p>Doctor Who is a British TV show , a science fiction one that starting in 1963 produced by the BBC , the programme telling the story of the Doctor an alien (with a human form) that is travelling on the universe in his time machine / spaceship called the Tardis (a police box).</p>
+
+<p>During this travel in space and time, the Doctor is followed by companions from Earth because he has some preference for the planet Earth (that’s very convenient isn’t it). The Doctor is very smart, funny etc but the two main features of the characters (that are coming from his alien race the time lord) are :</p>
+
+<ul>
+  <li>He is kind of immortal</li>
+  <li>When he dies he is coming back to life in a new human form (very useful for the end of contract). Each regeneration keeps the memory of the previous form but he has a new look and a new comportment. But this regeneration process is limited in number of iterations</li>
+</ul>
+
+<p>In terms of show , there is two phases that can be defined (that’s my term so please doctor who fans don’t exterminate me):</p>
+
+<ul>
+  <li>The classic area from 1963  to 1989</li>
+  <li>The modern area from 2005 to now</li>
+</ul>
+
+<p>From my part I discovered Doctor Who around 2010 , so I am more a modern area guy and I am not very familiar with the classic area but what I like with the modern area , it is that  they are reimporting the lore of the classic area and make a refresh and an update (like redesign the enemy of the doctor for example).</p>
+
+<p>Anyway, this show is a diamond of the british pop culture from the reference , to the actor and if you like science fiction is definitely worth watching it.</p>
+
+<p>So now let’s dive into the data of this project.</p>
+
+<h1 id="presentation-of-the-dataset">Presentation of the dataset</h1>
+
+<p>So let’s be honest this <a href="https://www.kaggle.com/jeanmidev/doctor-who">dataset</a> has been inspired by <a href="https://www.kaggle.com/wcukierski/the-simpsons-by-the-data/kernels">this other dataset</a> focused on the Simpsons TV show.</p>
+
+<p>I scraped data from different websites:</p>
+<ul>
+  <li>The scripts of the episodes are coming from the website <a href="http://www.chakoteya.net/DoctorWho/">chakoteya</a> where it can be found for each episode all the dialogues etc</li>
+  <li>The rating of each episode of the modern area are coming from <a href="https://www.imdb.com/title/tt0436992/">IMDB</a></li>
+  <li>The information on the episode are coming from the <a href="https://guide.doctorwhonews.net/">doctor who guide</a> and contains details on the episode, the distribution of the cast or the crew.</li>
+</ul>
+
+<p>These dataset is giving different details on the show and can be useful to determine the impact of some specific events in the production that could have impacted the rating on IMDB.</p>
+
+<p>For example in the following figure there is a representation of the rating of the different seasons in the modern area.</p>
+
+<center>
+<img src="/img/posts/dwintro/imdb_season_rating.png" />
+</center>
+
+<p>It seems that all the season have a rating really close to 8 but the last one seems to be less appreciated by the public , I think that they could be two reasons for that:</p>
+<ul>
+  <li>The historical showrunner steven moffat that relaunch the sho in 2005 left the production so the new tone could not fit the audience</li>
+  <li>The new doctor is a woman , it’s the first time in the show and after the announcement there was a shitstorm/bad buzz on the internet on the actress and as the rating on IMDB is based on user the bad buzz can impact the rating (biased by the haters)</li>
+</ul>
+
+<p>Let’s have a look now on the casting of the show, I wanted to see if there was some name that was coming out between the two eras of the show  and quite a big number, on the 3146 actors there is like 1362 actors that seems to be in the two eras , the doctor is the one that seems to have the more returning actors but it’s easy with the anniversary episodes (and the character can travel in time lol)</p>
+
+<p>If we focus this analysis on the actors that are on the two eras , we can see that a good part of these actors are the voice actors for some non human characters like the voice for the Dalek played by Nicholas Briggs for example).</p>
+
+<p>Let’s dive in the scripts of the episodes to start to make some text analysis with NLTK.</p>
+
+<center>
+<img src="https://media.giphy.com/media/ko5lldNfJaaac/giphy.gif" />
+</center>
+
+<h1 id="analysis-of-the-scripts-with-nltk">Analysis of the scripts with NLTK</h1>
+
+<p>To make the analysis of the script , I am going to use the package <a href="https://www.nltk.org/">NLTK</a> that is defined as</p>
+
+<p>“a leading platform for building Python programs to work with human language data. It provides easy-to-use interfaces to <a href="http://nltk.org/nltk_data/">over 50 corpora and lexical resources</a> such as WordNet, along with a suite of text processing libraries for classification, tokenization, stemming, tagging, parsing, and semantic reasoning, wrappers for industrial-strength NLP libraries”</p>
+
+<p>For this part I am going to follow the <a href="https://www.datacamp.com/community/tutorials/text-analytics-beginners-nltk">tutorial</a> on NLTK made by datacamp, to make some processing of the scripts (tokenization, cleaning of the stopwords and lexicon normalisation) before starting to make analysis of the text.</p>
+
+<p>My analysis will be divided into 3 parts:</p>
+<ul>
+  <li>Get the most used words and the concordance or words</li>
+  <li>Draw some wordcloud for some specific character</li>
+  <li>Make some sentiment analysis</li>
+</ul>
+
+<h2 id="most-used-words-and-concordance">Most used words and concordance</h2>
+
+<p>First after the tokenization of the different sentences and words and pass the stopwords filters on the elements we can see that the 10 most popular words are:</p>
+
+<center>
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: center;">
+      <th style="min-width: 50px;"></th>
+      <th style="min-width: 50px;">count</th>
+    </tr>
+    <tr>
+      <th style="min-width: 50px;">word</th>
+      <th style="min-width: 50px;"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>doctor</th>
+      <td>15364</td>
+    </tr>
+    <tr>
+      <th>well</th>
+      <td>14798</td>
+    </tr>
+    <tr>
+      <th>yes</th>
+      <td>14526</td>
+    </tr>
+    <tr>
+      <th>oh</th>
+      <td>13190</td>
+    </tr>
+    <tr>
+      <th>know</th>
+      <td>10152</td>
+    </tr>
+    <tr>
+      <th>right</th>
+      <td>9314</td>
+    </tr>
+    <tr>
+      <th>get</th>
+      <td>8928</td>
+    </tr>
+    <tr>
+      <th>come</th>
+      <td>8821</td>
+    </tr>
+    <tr>
+      <th>one</th>
+      <td>8344</td>
+    </tr>
+    <tr>
+      <th>time</th>
+      <td>7478</td>
+    </tr>
+  </tbody>
+</table>
+
+</center>
+
+<p>And guess what doctor is the most popular words so now let’s investigate the concordance of the word doctor with words before and after and count the occurence. There is the top 20 words that seem the most related to the word doctor.</p>
+
+<center>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: center;">
+      <th style="min-width: 50px;"></th>
+      <th style="min-width: 50px;">count_before</th>
+      <th style="min-width: 50px;">count_after</th>
+      <th style="min-width: 50px;">count_all</th>
+    </tr>
+    <tr>
+      <th style="min-width: 50px;">word</th>
+      <th style="min-width: 50px;"></th>
+      <th style="min-width: 50px;"></th>
+      <th style="min-width: 50px;"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>the</th>
+      <td>4141.0</td>
+      <td>245.0</td>
+      <td>4386.0</td>
+    </tr>
+    <tr>
+      <th>you</th>
+      <td>365.0</td>
+      <td>549.0</td>
+      <td>914.0</td>
+    </tr>
+    <tr>
+      <th>i</th>
+      <td>13.0</td>
+      <td>793.0</td>
+      <td>806.0</td>
+    </tr>
+    <tr>
+      <th>doctor</th>
+      <td>391.0</td>
+      <td>391.0</td>
+      <td>782.0</td>
+    </tr>
+    <tr>
+      <th>it</th>
+      <td>174.0</td>
+      <td>326.0</td>
+      <td>500.0</td>
+    </tr>
+    <tr>
+      <th>what</th>
+      <td>25.0</td>
+      <td>415.0</td>
+      <td>440.0</td>
+    </tr>
+    <tr>
+      <th>s</th>
+      <td>9.0</td>
+      <td>428.0</td>
+      <td>437.0</td>
+    </tr>
+    <tr>
+      <th>and</th>
+      <td>28.0</td>
+      <td>375.0</td>
+      <td>403.0</td>
+    </tr>
+    <tr>
+      <th>we</th>
+      <td>12.0</td>
+      <td>310.0</td>
+      <td>322.0</td>
+    </tr>
+    <tr>
+      <th>is</th>
+      <td>35.0</td>
+      <td>287.0</td>
+      <td>322.0</td>
+    </tr>
+    <tr>
+      <th>oh</th>
+      <td>237.0</td>
+      <td>65.0</td>
+      <td>302.0</td>
+    </tr>
+    <tr>
+      <th>but</th>
+      <td>122.0</td>
+      <td>137.0</td>
+      <td>259.0</td>
+    </tr>
+    <tr>
+      <th>look</th>
+      <td>68.0</td>
+      <td>177.0</td>
+      <td>245.0</td>
+    </tr>
+    <tr>
+      <th>this</th>
+      <td>135.0</td>
+      <td>108.0</td>
+      <td>243.0</td>
+    </tr>
+    <tr>
+      <th>that</th>
+      <td>117.0</td>
+      <td>126.0</td>
+      <td>243.0</td>
+    </tr>
+    <tr>
+      <th>a</th>
+      <td>165.0</td>
+      <td>54.0</td>
+      <td>219.0</td>
+    </tr>
+    <tr>
+      <th>now</th>
+      <td>156.0</td>
+      <td>53.0</td>
+      <td>209.0</td>
+    </tr>
+    <tr>
+      <th>yes</th>
+      <td>193.0</td>
+      <td>12.0</td>
+      <td>205.0</td>
+    </tr>
+    <tr>
+      <th>no</th>
+      <td>146.0</td>
+      <td>51.0</td>
+      <td>197.0</td>
+    </tr>
+    <tr>
+      <th>he</th>
+      <td>6.0</td>
+      <td>168.0</td>
+      <td>174.0</td>
+    </tr>
+  </tbody>
+</table>
+</center>
+
+<p>Funny to see that “the” is a good candidate for the words that are more related to doctor but it sad that “who” is not on the top 20 (it is #34). Let’s now see the words used by some specific characters.</p>
+
+<h2 id="wordcloud">Wordcloud</h2>
+
+<p>In this part I am going to determine the most used word for a selection of characters (with a wordcloud inspired by this <a href="https://www.datacamp.com/community/tutorials/wordcloud-python">article</a>)</p>
+
+<center>
+<img src="/img/posts/dwintro/wordcloud_characters.png" />
+</center>
+
+<p>As we can see doctor is a recurring word in the mouth of a companion of the doctor. Now let’s see the word said by these crazy cans of Dalek.</p>
+
+<center>
+<img src="/img/posts/dwintro/wordcloud_DALEK.png" />
+</center>
+
+<p>Exterminate is one of the most used words by the daleks in the show, they basically want to destroy everything.</p>
+
+<p>Let’s now make a little sentiment analysis on the scripts</p>
+
+<h2 id="use-of-a-sentiment-analyser">Use of a sentiment analyser</h2>
+
+<p>I am going to use the sentiment analyser that can be found on NLTK call Vader sentiment analyser</p>
+
+<center>
+<img src="https://media.giphy.com/media/GIIC4jmmUlXZS/giphy.gif" />
+</center>
+
+<p>The Vader analyser coming from a <a href="https://github.com/cjhutto/vaderSentiment">publication</a> of 2014 and it is referring to the <strong>Valence Aware Dictionary and sEntiment Reasoner</strong>, and you can find an interesting <a href="http://t-redactyl.io/blog/2017/04/using-vader-to-handle-sentiment-analysis-with-social-media-text.html">article</a> on the subject. This analyser ready to use out of the box is very useful, in the following figure there is the evolution of the speech said by the doctor during an episode of the first season.</p>
+
+<center>
+<img src="/img/posts/dwintro/scoreneutrality_doctor.png" />
+</center>
+
+<p>As we can see the doctor quotes are passing by different phase during an episode but most of the time the doctor is neutral on his speech. In the following figure there is another illustration of the sentiment  in the quote of the doctor with a plot of the positivity and negativity of the quote.</p>
+
+<center>
+<img src="/img/posts/dwintro/scoreposneg_doctor.png" />
+</center>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>This article was an introduction to my kaggle <a href="https://www.kaggle.com/jeanmidev/doctor-who">dataset</a> with a very brief hands on NLTK, I have some ideas on things to do with this dataset and I will definitely use it to make some experiment around NLP in the future. Don’t hesitate to contact me if you have any remarks on the dataset, applications etc.</p>
+
+<center>
+<img src="https://media.giphy.com/media/13rmLONp33oWOI/giphy.gif" />
+</center>
+
+
+        </div><!-- main-content/col -->
+    </div> <!--/row -->
+    
+<div id="disqus_thread" class="container"></div>
+<script>
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+// var disqus_config = function () {
+// this.page.url = 'http://localhost:4000/dwintro';
+// this.page.identifier = 'http://localhost:4000/dwintro';
+// };
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jmdaignan.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+</main> <!-- /container -->
+
+
+
+
+
+
+
+
+<footer class="single">
+    <div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="social">
+                <p>Share this article</a>
+                <div class="social-links">
+                    <a class="social-icon" href="#" data-platform="twitter" data-message="" data-url="http://localhost:4000/dwintro"><i class="fa fa-twitter"></i></a>
+
+                    <a class="social-icon" href="#" data-platform="facebook" data-message="" data-url="http://localhost:4000/dwintro"><i class="fa fa-facebook-official"></i></a>
+                    <a class="social-icon" data-platform="mail"  href="mailto:daignanjm@gmail.com?body=http://localhost:4000/dwintro"><i class="fa fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+    </div><!-- end row -->
+</div>
+
+
+    
+</footer>
+
+
+    <script src='/js/vendor/modernizr.custom.32229-2.8-respondjs-1-4-2.js'></script>
+    <script src="/js/vendor/jquery-1.11.2.min.js"></script>
+    <script src='/js/vendor/jquery.jpanelmenu.min.js'></script>
+    <script type='application/javascript' src='/js/vendor/fastclick.min.js'></script>
+    
+    <script src=' /js/main.js'></script>
+  </body>
+
+</html>

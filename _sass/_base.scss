@@ -202,3 +202,13 @@ pre {
         }
     }
 }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+td {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  padding: 0.6rem;
+}

@@ -5,9 +5,354 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 12 Jun 2019 18:47:48 -0400</pubDate>
-    <lastBuildDate>Wed, 12 Jun 2019 18:47:48 -0400</lastBuildDate>
+    <pubDate>Mon, 19 Aug 2019 13:13:16 -0400</pubDate>
+    <lastBuildDate>Mon, 19 Aug 2019 13:13:16 -0400</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>Doctor Who scripts - Overview of the Kaggle dataset and NLTK</title>
+        <description>&lt;p&gt;Hello, I am writing this quick article to:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;present a &lt;a href=&quot;https://www.kaggle.com/jeanmidev/doctor-who&quot;&gt;dataset&lt;/a&gt; that I built during the past weeks&lt;/li&gt;
+  &lt;li&gt;get an overview of some features of nltk&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;who-are-you-&quot;&gt;Who are you ?&lt;/h1&gt;
+
+&lt;p&gt;Doctor Who is a British TV show , a science fiction one that starting in 1963 produced by the BBC , the programme telling the story of the Doctor an alien (with a human form) that is travelling on the universe in his time machine / spaceship called the Tardis (a police box).&lt;/p&gt;
+
+&lt;p&gt;During this travel in space and time, the Doctor is followed by companions from Earth because he has some preference for the planet Earth (that’s very convenient isn’t it). The Doctor is very smart, funny etc but the two main features of the characters (that are coming from his alien race the time lord) are :&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;He is kind of immortal&lt;/li&gt;
+  &lt;li&gt;When he dies he is coming back to life in a new human form (very useful for the end of contract). Each regeneration keeps the memory of the previous form but he has a new look and a new comportment. But this regeneration process is limited in number of iterations&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In terms of show , there is two phases that can be defined (that’s my term so please doctor who fans don’t exterminate me):&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The classic area from 1963  to 1989&lt;/li&gt;
+  &lt;li&gt;The modern area from 2005 to now&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;From my part I discovered Doctor Who around 2010 , so I am more a modern area guy and I am not very familiar with the classic area but what I like with the modern area , it is that  they are reimporting the lore of the classic area and make a refresh and an update (like redesign the enemy of the doctor for example).&lt;/p&gt;
+
+&lt;p&gt;Anyway, this show is a diamond of the british pop culture from the reference , to the actor and if you like science fiction is definitely worth watching it.&lt;/p&gt;
+
+&lt;p&gt;So now let’s dive into the data of this project.&lt;/p&gt;
+
+&lt;h1 id=&quot;presentation-of-the-dataset&quot;&gt;Presentation of the dataset&lt;/h1&gt;
+
+&lt;p&gt;So let’s be honest this &lt;a href=&quot;https://www.kaggle.com/jeanmidev/doctor-who&quot;&gt;dataset&lt;/a&gt; has been inspired by &lt;a href=&quot;https://www.kaggle.com/wcukierski/the-simpsons-by-the-data/kernels&quot;&gt;this other dataset&lt;/a&gt; focused on the Simpsons TV show.&lt;/p&gt;
+
+&lt;p&gt;I scraped data from different websites:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The scripts of the episodes are coming from the website &lt;a href=&quot;http://www.chakoteya.net/DoctorWho/&quot;&gt;chakoteya&lt;/a&gt; where it can be found for each episode all the dialogues etc&lt;/li&gt;
+  &lt;li&gt;The rating of each episode of the modern area are coming from &lt;a href=&quot;https://www.imdb.com/title/tt0436992/&quot;&gt;IMDB&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;The information on the episode are coming from the &lt;a href=&quot;https://guide.doctorwhonews.net/&quot;&gt;doctor who guide&lt;/a&gt; and contains details on the episode, the distribution of the cast or the crew.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;These dataset is giving different details on the show and can be useful to determine the impact of some specific events in the production that could have impacted the rating on IMDB.&lt;/p&gt;
+
+&lt;p&gt;For example in the following figure there is a representation of the rating of the different seasons in the modern area.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dwintro/imdb_season_rating.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;It seems that all the season have a rating really close to 8 but the last one seems to be less appreciated by the public , I think that they could be two reasons for that:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The historical showrunner steven moffat that relaunch the sho in 2005 left the production so the new tone could not fit the audience&lt;/li&gt;
+  &lt;li&gt;The new doctor is a woman , it’s the first time in the show and after the announcement there was a shitstorm/bad buzz on the internet on the actress and as the rating on IMDB is based on user the bad buzz can impact the rating (biased by the haters)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let’s have a look now on the casting of the show, I wanted to see if there was some name that was coming out between the two eras of the show  and quite a big number, on the 3146 actors there is like 1362 actors that seems to be in the two eras , the doctor is the one that seems to have the more returning actors but it’s easy with the anniversary episodes (and the character can travel in time lol)&lt;/p&gt;
+
+&lt;p&gt;If we focus this analysis on the actors that are on the two eras , we can see that a good part of these actors are the voice actors for some non human characters like the voice for the Dalek played by Nicholas Briggs for example).&lt;/p&gt;
+
+&lt;p&gt;Let’s dive in the scripts of the episodes to start to make some text analysis with NLTK.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;https://media.giphy.com/media/ko5lldNfJaaac/giphy.gif&quot; /&gt;
+&lt;/center&gt;
+
+&lt;h1 id=&quot;analysis-of-the-scripts-with-nltk&quot;&gt;Analysis of the scripts with NLTK&lt;/h1&gt;
+
+&lt;p&gt;To make the analysis of the script , I am going to use the package &lt;a href=&quot;https://www.nltk.org/&quot;&gt;NLTK&lt;/a&gt; that is defined as&lt;/p&gt;
+
+&lt;p&gt;“a leading platform for building Python programs to work with human language data. It provides easy-to-use interfaces to &lt;a href=&quot;http://nltk.org/nltk_data/&quot;&gt;over 50 corpora and lexical resources&lt;/a&gt; such as WordNet, along with a suite of text processing libraries for classification, tokenization, stemming, tagging, parsing, and semantic reasoning, wrappers for industrial-strength NLP libraries”&lt;/p&gt;
+
+&lt;p&gt;For this part I am going to follow the &lt;a href=&quot;https://www.datacamp.com/community/tutorials/text-analytics-beginners-nltk&quot;&gt;tutorial&lt;/a&gt; on NLTK made by datacamp, to make some processing of the scripts (tokenization, cleaning of the stopwords and lexicon normalisation) before starting to make analysis of the text.&lt;/p&gt;
+
+&lt;p&gt;My analysis will be divided into 3 parts:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Get the most used words and the concordance or words&lt;/li&gt;
+  &lt;li&gt;Draw some wordcloud for some specific character&lt;/li&gt;
+  &lt;li&gt;Make some sentiment analysis&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;most-used-words-and-concordance&quot;&gt;Most used words and concordance&lt;/h2&gt;
+
+&lt;p&gt;First after the tokenization of the different sentences and words and pass the stopwords filters on the elements we can see that the 10 most popular words are:&lt;/p&gt;
+
+&lt;center&gt;
+
+&lt;table border=&quot;1&quot; class=&quot;dataframe&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr style=&quot;text-align: center;&quot;&gt;
+      &lt;th style=&quot;min-width: 50px;&quot;&gt;&lt;/th&gt;
+      &lt;th style=&quot;min-width: 50px;&quot;&gt;count&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;min-width: 50px;&quot;&gt;word&lt;/th&gt;
+      &lt;th style=&quot;min-width: 50px;&quot;&gt;&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;doctor&lt;/th&gt;
+      &lt;td&gt;15364&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;well&lt;/th&gt;
+      &lt;td&gt;14798&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;yes&lt;/th&gt;
+      &lt;td&gt;14526&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;oh&lt;/th&gt;
+      &lt;td&gt;13190&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;know&lt;/th&gt;
+      &lt;td&gt;10152&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;right&lt;/th&gt;
+      &lt;td&gt;9314&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;get&lt;/th&gt;
+      &lt;td&gt;8928&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;come&lt;/th&gt;
+      &lt;td&gt;8821&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;one&lt;/th&gt;
+      &lt;td&gt;8344&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;time&lt;/th&gt;
+      &lt;td&gt;7478&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;/center&gt;
+
+&lt;p&gt;And guess what doctor is the most popular words so now let’s investigate the concordance of the word doctor with words before and after and count the occurence. There is the top 20 words that seem the most related to the word doctor.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;table border=&quot;1&quot; class=&quot;dataframe&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr style=&quot;text-align: center;&quot;&gt;
+      &lt;th style=&quot;min-width: 50px;&quot;&gt;&lt;/th&gt;
+      &lt;th style=&quot;min-width: 50px;&quot;&gt;count_before&lt;/th&gt;
+      &lt;th style=&quot;min-width: 50px;&quot;&gt;count_after&lt;/th&gt;
+      &lt;th style=&quot;min-width: 50px;&quot;&gt;count_all&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;min-width: 50px;&quot;&gt;word&lt;/th&gt;
+      &lt;th style=&quot;min-width: 50px;&quot;&gt;&lt;/th&gt;
+      &lt;th style=&quot;min-width: 50px;&quot;&gt;&lt;/th&gt;
+      &lt;th style=&quot;min-width: 50px;&quot;&gt;&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;the&lt;/th&gt;
+      &lt;td&gt;4141.0&lt;/td&gt;
+      &lt;td&gt;245.0&lt;/td&gt;
+      &lt;td&gt;4386.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;you&lt;/th&gt;
+      &lt;td&gt;365.0&lt;/td&gt;
+      &lt;td&gt;549.0&lt;/td&gt;
+      &lt;td&gt;914.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;i&lt;/th&gt;
+      &lt;td&gt;13.0&lt;/td&gt;
+      &lt;td&gt;793.0&lt;/td&gt;
+      &lt;td&gt;806.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;doctor&lt;/th&gt;
+      &lt;td&gt;391.0&lt;/td&gt;
+      &lt;td&gt;391.0&lt;/td&gt;
+      &lt;td&gt;782.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;it&lt;/th&gt;
+      &lt;td&gt;174.0&lt;/td&gt;
+      &lt;td&gt;326.0&lt;/td&gt;
+      &lt;td&gt;500.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;what&lt;/th&gt;
+      &lt;td&gt;25.0&lt;/td&gt;
+      &lt;td&gt;415.0&lt;/td&gt;
+      &lt;td&gt;440.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;s&lt;/th&gt;
+      &lt;td&gt;9.0&lt;/td&gt;
+      &lt;td&gt;428.0&lt;/td&gt;
+      &lt;td&gt;437.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;and&lt;/th&gt;
+      &lt;td&gt;28.0&lt;/td&gt;
+      &lt;td&gt;375.0&lt;/td&gt;
+      &lt;td&gt;403.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;we&lt;/th&gt;
+      &lt;td&gt;12.0&lt;/td&gt;
+      &lt;td&gt;310.0&lt;/td&gt;
+      &lt;td&gt;322.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;is&lt;/th&gt;
+      &lt;td&gt;35.0&lt;/td&gt;
+      &lt;td&gt;287.0&lt;/td&gt;
+      &lt;td&gt;322.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;oh&lt;/th&gt;
+      &lt;td&gt;237.0&lt;/td&gt;
+      &lt;td&gt;65.0&lt;/td&gt;
+      &lt;td&gt;302.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;but&lt;/th&gt;
+      &lt;td&gt;122.0&lt;/td&gt;
+      &lt;td&gt;137.0&lt;/td&gt;
+      &lt;td&gt;259.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;look&lt;/th&gt;
+      &lt;td&gt;68.0&lt;/td&gt;
+      &lt;td&gt;177.0&lt;/td&gt;
+      &lt;td&gt;245.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;this&lt;/th&gt;
+      &lt;td&gt;135.0&lt;/td&gt;
+      &lt;td&gt;108.0&lt;/td&gt;
+      &lt;td&gt;243.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;that&lt;/th&gt;
+      &lt;td&gt;117.0&lt;/td&gt;
+      &lt;td&gt;126.0&lt;/td&gt;
+      &lt;td&gt;243.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;a&lt;/th&gt;
+      &lt;td&gt;165.0&lt;/td&gt;
+      &lt;td&gt;54.0&lt;/td&gt;
+      &lt;td&gt;219.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;now&lt;/th&gt;
+      &lt;td&gt;156.0&lt;/td&gt;
+      &lt;td&gt;53.0&lt;/td&gt;
+      &lt;td&gt;209.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;yes&lt;/th&gt;
+      &lt;td&gt;193.0&lt;/td&gt;
+      &lt;td&gt;12.0&lt;/td&gt;
+      &lt;td&gt;205.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;no&lt;/th&gt;
+      &lt;td&gt;146.0&lt;/td&gt;
+      &lt;td&gt;51.0&lt;/td&gt;
+      &lt;td&gt;197.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;he&lt;/th&gt;
+      &lt;td&gt;6.0&lt;/td&gt;
+      &lt;td&gt;168.0&lt;/td&gt;
+      &lt;td&gt;174.0&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/center&gt;
+
+&lt;p&gt;Funny to see that “the” is a good candidate for the words that are more related to doctor but it sad that “who” is not on the top 20 (it is #34). Let’s now see the words used by some specific characters.&lt;/p&gt;
+
+&lt;h2 id=&quot;wordcloud&quot;&gt;Wordcloud&lt;/h2&gt;
+
+&lt;p&gt;In this part I am going to determine the most used word for a selection of characters (with a wordcloud inspired by this &lt;a href=&quot;https://www.datacamp.com/community/tutorials/wordcloud-python&quot;&gt;article&lt;/a&gt;)&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dwintro/wordcloud_characters.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;As we can see doctor is a recurring word in the mouth of a companion of the doctor. Now let’s see the word said by these crazy cans of Dalek.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dwintro/wordcloud_DALEK.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;Exterminate is one of the most used words by the daleks in the show, they basically want to destroy everything.&lt;/p&gt;
+
+&lt;p&gt;Let’s now make a little sentiment analysis on the scripts&lt;/p&gt;
+
+&lt;h2 id=&quot;use-of-a-sentiment-analyser&quot;&gt;Use of a sentiment analyser&lt;/h2&gt;
+
+&lt;p&gt;I am going to use the sentiment analyser that can be found on NLTK call Vader sentiment analyser&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;https://media.giphy.com/media/GIIC4jmmUlXZS/giphy.gif&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;The Vader analyser coming from a &lt;a href=&quot;https://github.com/cjhutto/vaderSentiment&quot;&gt;publication&lt;/a&gt; of 2014 and it is referring to the &lt;strong&gt;Valence Aware Dictionary and sEntiment Reasoner&lt;/strong&gt;, and you can find an interesting &lt;a href=&quot;http://t-redactyl.io/blog/2017/04/using-vader-to-handle-sentiment-analysis-with-social-media-text.html&quot;&gt;article&lt;/a&gt; on the subject. This analyser ready to use out of the box is very useful, in the following figure there is the evolution of the speech said by the doctor during an episode of the first season.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dwintro/scoreneutrality_doctor.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;p&gt;As we can see the doctor quotes are passing by different phase during an episode but most of the time the doctor is neutral on his speech. In the following figure there is another illustration of the sentiment  in the quote of the doctor with a plot of the positivity and negativity of the quote.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;/img/posts/dwintro/scoreposneg_doctor.png&quot; /&gt;
+&lt;/center&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;This article was an introduction to my kaggle &lt;a href=&quot;https://www.kaggle.com/jeanmidev/doctor-who&quot;&gt;dataset&lt;/a&gt; with a very brief hands on NLTK, I have some ideas on things to do with this dataset and I will definitely use it to make some experiment around NLP in the future. Don’t hesitate to contact me if you have any remarks on the dataset, applications etc.&lt;/p&gt;
+
+&lt;center&gt;
+&lt;img src=&quot;https://media.giphy.com/media/13rmLONp33oWOI/giphy.gif&quot; /&gt;
+&lt;/center&gt;
+</description>
+        <pubDate>Mon, 19 Aug 2019 00:00:00 -0400</pubDate>
+        <link>http://localhost:4000/dwintro</link>
+        <guid isPermaLink="true">http://localhost:4000/dwintro</guid>
+        
+        
+        <category>dsml</category>
+        
+      </item>
     
       <item>
         <title>PUBG - Make analytics with AWS and plotly</title>
@@ -2051,7 +2396,7 @@ Make all the data available without downloading everything on my machine&lt;/str
 
 &lt;center&gt;&lt;img src=&quot;https://media.giphy.com/media/k39w535jFPYrK/giphy.gif&quot; /&gt;&lt;/center&gt;
 
-&lt;p&gt;PS : By the way this website is hosting in Github , I am using the service &lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt; with the framework &lt;a href=&quot;https://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt; and the foundation of this blog is a git fork from the &lt;a href=&quot;https://github.com/BlackrockDigital/startbootstrap-clean-blog-jekyll&quot;&gt;repository&lt;/a&gt; that I found after the reading of this &lt;a href=&quot;https://iamtrask.github.io/&quot;&gt;blog&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;PS : By the way this website is hosting in Github , I am using the service &lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt; with the framework &lt;a href=&quot;https://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt; and the template of this blog is coming from &lt;a href=&quot;https://jekyllthemes.io/theme/writer-a-minimal-blog-for-jekyll&quot;&gt;Jekyll themes&lt;/a&gt;.&lt;/p&gt;
 </description>
         <pubDate>Fri, 04 Aug 2017 00:00:00 -0400</pubDate>
         <link>http://localhost:4000/Hello-World</link>

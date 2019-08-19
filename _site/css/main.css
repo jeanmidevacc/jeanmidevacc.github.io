@@ -8211,13 +8211,10 @@ form {
 .no-gutter-right {
   padding-right: 0; }
 
-html,
-body {
-  font-size: 62.5%; }
-  @media (min-width: 992px) {
-    html,
-    body {
-      height: 100%; } }
+@media (min-width: 992px) {
+  html,
+  body {
+    height: 100%; } }
 
 .hide {
   position: absolute !important;

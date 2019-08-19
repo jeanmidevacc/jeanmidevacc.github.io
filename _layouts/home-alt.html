@@ -11,8 +11,8 @@ layout: with-sidebar
         {% if forloop.index <= 4 %}
         <article class="post-favorite col-xs-12 col-sm-6 ">
             <h2><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></h2>
-
-            {{ post.excerpt | truncatewords: 18 }}
+            <p>{{ post.subtitle | truncatewords: 28 }}</p>
+            <!-- {{ post.excerpt | truncatewords: 18 }} -->
         </article>
         <!-- wrap first two posts into their own row and start a new row for post 3 & 4 -->
         {% if forloop.index == 2 %}
